@@ -2,12 +2,6 @@
 [[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.pre.zsh"
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-{{- if eq .chezmoi.os "darwin" }}
-eval "$(/opt/homebrew/bin/brew shellenv)"
-{{- end }}
-{{- if eq .chezmoi.os "linux" }}
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-{{- end }}
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -134,7 +128,7 @@ alias          rn="npx react-native"
 alias         pod="arch -x86_64 pod"
 alias        venv="python3 -m venv"
 alias          ll="exa -lagh --icons --group-directories-first --no-permissions --octal-permissions"
-alias          lt="exa -laghT --icons --group-directories-first --no-permissions --octal-permissions 
+alias          lt="exa -laghT --icons --group-directories-first --no-permissions --octal-permissions
 -L"
 alias         btm="btm -b"
 alias      unlock="ssh -p 2222 root@jabberwocky"
