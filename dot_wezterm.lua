@@ -5,7 +5,7 @@ return {
   font_size = 14,
   color_scheme = 'Atom',
   colors = {
-    scrollbar_thumb = '#efefef',
+    scrollbar_thumb = '#424242',
 },
   hide_tab_bar_if_only_one_tab = true,
   use_fancy_tab_bar = false,
