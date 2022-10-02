@@ -2,4 +2,6 @@ Host *
 	AddKeysToAgent yes
 
 Host jabberwocky
+	{{- if eq .chezmoi.os "darwin" }}
 	Usekeychain yes
+	{{- end }}
