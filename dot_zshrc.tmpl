@@ -31,6 +31,8 @@ ssh-add --apple-load-keychain > /dev/null 2>&1
 {{- end }}
 {{- if eq .chezmoi.os "linux" }}
 eval "$(ssh-agent > /dev/null 2>&1)"
+[ -s "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh"
+[ -s "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm"
 {{- end }}
 
 {{- if eq .chezmoi.os "darwin" }}
