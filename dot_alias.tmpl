@@ -1,0 +1,16 @@
+alias         btm="btm -b"
+alias         cls="clear"
+alias          ll="eza -lagh --icons --group-directories-first --no-permissions --octal-permissions"
+
+dir() {
+	mkdir -p "$1"
+	cd "$1"
+}
+
+testclib() {
+	cmake -S . -B build/
+	cmake --build build/
+	cd build/test/
+	ctest --verbose --build-config Debug
+	cd -
+}
