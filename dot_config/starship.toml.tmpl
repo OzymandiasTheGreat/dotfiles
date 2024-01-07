@@ -1,0 +1,191 @@
+format = """
+$sudo\
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$fill\
+$package\
+$cmake\
+$container\
+$dart\
+$deno\
+$golang\
+$java\
+$kotlin\
+$lua\
+$nodejs\
+$python\
+$rust\
+$swift\
+$env_var\
+$custom\
+$line_break\
+$battery\
+$memory_usage\
+$jobs\
+$status\
+$cmd_duration\
+$time\
+$character""" 
+
+[sudo]
+disabled = false
+format = "[$symbol ]($style)"
+
+[username]
+format = "[$user]($style)@"
+style_user = "bold bright-purple"
+
+[aws]
+disabled = true
+
+[azure]
+disabled = true
+
+[gcloud]
+disabled = true
+
+[openstack]
+disabled = true
+
+[singularity]
+disabled = true
+
+[directory]
+read_only = " "
+fish_style_pwd_dir_length = 3
+
+[vcsh]
+disabled = true
+
+[git_status]
+ignore_submodules = true
+
+[fill]
+symbol = " "
+
+[docker_context]
+disabled = true
+symbol = " "
+
+[package]
+symbol = "📦 "
+format = "[$symbol$version]($style) "
+version_format = "${raw}"
+
+[cobol]
+disabled = true
+
+[dotnet]
+disabled = true
+
+[elixir]
+disabled = true
+
+[elm]
+disabled = true
+
+[erlang]
+disabled = true
+
+[helm]
+disabled = true
+
+[julia]
+disabled = true
+
+[nim]
+disabled = true
+
+[nix_shell]
+disabled = true
+
+[ocaml]
+disabled = true
+
+[perl]
+disabled = true
+
+[php]
+disabled = true
+
+[pulumi]
+disabled = true
+
+[purescript]
+disabled = true
+
+[rlang]
+disabled = true
+
+[red]
+disabled = true
+
+[ruby]
+disabled = true
+
+[scala]
+disabled = true
+
+[terraform]
+disabled = true
+
+[vlang]
+disabled = true
+
+[vagrant]
+disabled = true
+
+[zig]
+disabled = true
+
+[conda]
+disabled = true
+
+[crystal]
+disabled = true
+
+[character]
+error_symbol = "[✗](bold red) "
+
+[memory_usage]
+disabled = false
+threshold = 90
+format = "$symbol[$ram]($style)"
+style = "bold dimmed red"
+
+[status]
+disabled = false
+map_symbol = true
+success_symbol = "✓"
+
+[cmd_duration]
+min_time = 250
+show_milliseconds = true
+show_notifications = false
+min_time_to_notify = 5_000
+
+[time]
+disabled = false
+
+[battery]
+format = "[$symbol]($style)"
+
+[[battery.display]]
+threshold = 10
+style = "bold red"
+
+[[battery.display]]
+threshold = 30
+style = "bold yellow"
+
+[[battery.display]]
+threshold = 99
+style = "bold green"
+
+
