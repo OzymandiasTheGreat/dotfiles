@@ -1,8 +1,12 @@
 Host *
 	AddKeysToAgent yes
+	{{ if eq .chezmoi.os "darwin" }}
 	Usekeychain yes
+	{{ end }}
 	IdentityFile ~/.ssh/id_ed25519
 
+{{ if eq .chezmoi.os "darwin" }}
 # Fig ssh integration. Keep at the bottom of this file.
 Match all
   Include ~/.fig/ssh
+{{ end }}
