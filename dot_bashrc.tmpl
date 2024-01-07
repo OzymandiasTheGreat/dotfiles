@@ -1,0 +1,19 @@
+# Fig pre block. Keep at the top of this file.
+[[ -f "$HOME/.fig/shell/bashrc.pre.bash" ]] && builtin source "$HOME/.fig/shell/bashrc.pre.bash"
+
+export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+
+eval "$(starship init zsh)"
+
+export LANG=en_US.UTF-8
+export EDITOR="micro"
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/24.0.8215888
+export ANDROID_NDK=$ANDROID_HOME/ndk/24.0.8215888
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+source $HOME/.alias
+
+# Fig post block. Keep at the bottom of this file.
+[[ -f "$HOME/.fig/shell/bashrc.post.bash" ]] && builtin source "$HOME/.fig/shell/bashrc.post.bash"
