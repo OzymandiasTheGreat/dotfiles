@@ -1,17 +1,20 @@
-{{ if eq .chezmoi.os "darwin" }}
 # Fig pre block. Keep at the top of this file.
 [[ -f "$HOME/.fig/shell/profile.pre.bash" ]] && builtin source "$HOME/.fig/shell/profile.pre.bash"
 
+{{ if eq .chezmoi.os "darwin" }}
 eval "$(/opt/homebrew/bin/brew shellenv)"
+{{ else }}
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+{{ end }}
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && builtin source "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+{{ if eq .chezmoi.os "darwin" }}
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && builtin source "/opt/homebrew/opt/nvm/nvm.sh"
+{{ else }}
+[ -s "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh" ] && builtin source "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh"
+{{ end }}
 
 builtin source "$HOME/.cargo/env"
 
 # Fig post block. Keep at the bottom of this file.
 [[ -f "$HOME/.fig/shell/profile.post.bash" ]] && builtin source "$HOME/.fig/shell/profile.post.bash"
-{{ end }}
-{{ if eq .chezmoi.os "linux" }}
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-{{ end }}
