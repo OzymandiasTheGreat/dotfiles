@@ -1,9 +1,12 @@
 # Fig pre block. Keep at the top of this file.
 [[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.pre.zsh"
 
-export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
 
-eval "$(starship init zsh)"
+export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 export LANG=en_US.UTF-8
 export EDITOR="micro"
@@ -14,6 +17,8 @@ export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 source $HOME/.alias
+
+eval "$(starship init zsh)"
 
 # Fig post block. Keep at the bottom of this file.
 [[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
