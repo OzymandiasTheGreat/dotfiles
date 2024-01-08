@@ -122,6 +122,10 @@ zstyle ':prezto:module:history' savehist 10000
 # Enable prefixed search.
 zstyle ':prezto:module:history-substring-search' prefixed 'yes'
 
+# Filter by prefix
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
 #
 # macOS
 #
