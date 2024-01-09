@@ -61,8 +61,7 @@ function bgnotify_formatted {
 
 function bgnotify_appid {
   if (( ${+commands[osascript]} )); then
-  	local app_id=$(bgnotify_programid)
-  	if (( ${+app_id} )); then
+  	if [[ "$TERM_PROGRAM" != "WezTerm" ]]; then
   	  osascript -e "tell application id \"$(bgnotify_programid)\"  to get the {id, frontmost, id of front window, visible of front window}" 2>/dev/null
   	else
       osascript -e "tell application \"System Events\" to tell process \"WezTerm\" to get the {id, frontmost, title of every window}" 2>/dev/null
@@ -112,6 +111,7 @@ function bgnotify_programid {
   case "$TERM_PROGRAM" in
     iTerm.app) echo 'com.googlecode.iterm2' ;;
     Apple_Terminal) echo 'com.apple.terminal' ;;
+    WezTerm) echo 'com.github.wez.wezterm' ;;
   esac
 }
 
