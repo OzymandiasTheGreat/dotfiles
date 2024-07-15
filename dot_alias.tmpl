@@ -23,8 +23,10 @@ adbc() {
 		do
 		        IFS=: read -r ip port <<<"$address"
 		        if [ "$ip" = "$CHESHIRE" ]; then
-		        	adb connect "$address"
-		        	echo "$?"
+		        	status=$(adb connect "$address")
+		        	if [[ $status == connected*]]; then
+		        		echo "$status"
+		        	fi
 		        fi
 		done
 	} <<< $(adb mdns services)
