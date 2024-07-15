@@ -14,3 +14,18 @@ testclib() {
 	ctest --verbose --build-config Debug
 	cd -
 }
+
+adbc() {
+	CHESHIRE="192.168.0.138"
+	{
+		read
+		while IFS=$'\t' read -r whatever deviceID address
+		do
+		        IFS=: read -r ip port <<<"$address"
+		        if [ "$ip" = "$CHESHIRE" ]; then
+		        	adb connect "$address"
+		        	echo "$?"
+		        fi
+		done
+	} <<< $(adb mdns services)
+}
