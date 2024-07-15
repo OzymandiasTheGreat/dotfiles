@@ -31,18 +31,3 @@ adbc() {
 		done
 	} <<< $(adb mdns services)
 }
-
-adbp() {
-	CHESHIRE="192.168.0.138"
-	{
-		read
-		while IFS=$'\t' read -r whatever deviceID address
-		do
-		        IFS=: read -r ip port <<<"$address"
-		        if [ "$ip" = "$CHESHIRE" ]; then
-		        	STATUS=$(adb pair "$address" $1 2>&1)
-		        	echo "$STATUS"
-		        fi
-		done
-	} <<< $(adb mdns services)
-}
