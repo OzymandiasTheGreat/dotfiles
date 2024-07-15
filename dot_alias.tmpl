@@ -23,9 +23,9 @@ adbc() {
 		do
 		        IFS=: read -r ip port <<<"$address"
 		        if [ "$ip" = "$CHESHIRE" ]; then
-		        	status=$(adb connect "$address" 2>&1)
-		        	if [[ $status == connected* ]]; then
-		        		echo "$status"
+		        	STATUS=$(adb connect "$address" 2>&1)
+		        	if [[ $STATUS == connected* ]]; then
+		        		echo "$STATUS"
 		        	fi
 		        fi
 		done
