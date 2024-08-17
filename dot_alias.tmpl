@@ -7,14 +7,6 @@ dir() {
 	cd "$1"
 }
 
-testclib() {
-	cmake -S . -B build/
-	cmake --build build/
-	cd build/test/
-	ctest --verbose --build-config Debug
-	cd -
-}
-
 adbc() {
 	CHESHIRE="192.168.0.138"
 	{
