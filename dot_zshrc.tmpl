@@ -23,3 +23,13 @@ eval "$(starship init zsh)"
 
 # Fig post block. Keep at the bottom of this file.
 [[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
+
+
+# ---------------- inshellisense shell plugin ----------------
+if [[ -z "${ISTERM}" && $- = *i* && $- != *c* ]]; then
+  if [[ -o login ]]; then
+    is -s zsh --login ; exit
+  else
+    is -s zsh ; exit
+  fi
+fi
