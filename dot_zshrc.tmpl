@@ -16,8 +16,6 @@ export PATH=$PATH:$(yarn global bin)
 
 source $HOME/.alias
 
-eval "$(starship init zsh)"
-
 # ---------------- inshellisense shell plugin ----------------
 if [[ -z "${ISTERM}" && $- = *i* && $- != *c* ]]; then
   if [[ -o login ]]; then
@@ -26,3 +24,5 @@ if [[ -z "${ISTERM}" && $- = *i* && $- != *c* ]]; then
     is -s zsh ; exit
   fi
 fi
+
+eval "$(starship init zsh)"
