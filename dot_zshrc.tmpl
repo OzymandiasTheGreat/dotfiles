@@ -17,12 +17,4 @@ export PATH="$PATH:/Users/ozymandias/Library/Application Support/pear/bin"
 
 source $HOME/.alias
 
-if [[ -z "${ISTERM}" && $- = *i* && $- != *c* ]]; then
-  if [[ -o login ]]; then
-    is -s zsh --login ; exit
-  else
-    is -s zsh ; exit
-  fi
-fi
-
 eval "$(starship init zsh)"
