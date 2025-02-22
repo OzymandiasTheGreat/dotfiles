@@ -15,6 +15,9 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH=$PATH:$(yarn global bin)
 export PATH="$PATH:/Users/ozymandias/Library/Application Support/pear/bin"
 
+# Enable hidden file completions
+setopt globdots
+
 source $HOME/.alias
 
 eval "$(starship init zsh)"
