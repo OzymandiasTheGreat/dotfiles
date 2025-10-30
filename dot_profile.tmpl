@@ -8,6 +8,7 @@ export NVM_DIR="$HOME/.nvm"
 {{ if eq .chezmoi.os "darwin" }}
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && builtin source "/opt/homebrew/opt/nvm/nvm.sh"
 {{ else }}
+echo "WTF"
 [ -s "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh" ] && builtin source "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh"
 {{ end }}
 
