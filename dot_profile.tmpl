@@ -4,8 +4,8 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 {{ end }}
 
-export NVM_DIR="$HOME/.nvm"
 {{ if eq .chezmoi.os "darwin" }}
+export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && builtin source "/opt/homebrew/opt/nvm/nvm.sh"
 {{ else }}
 [ -s "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh" ] && builtin source "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh"
