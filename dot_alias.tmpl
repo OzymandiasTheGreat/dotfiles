@@ -1,42 +1,9 @@
 alias         btm="btm -b"
 alias         cls="clear"
 alias          ll="eza -lagh --icons --group-directories-first --no-permissions --octal-permissions"
+alias         adb=ADB_MDNS_OPENSCREEN=1 adb
 
 dir() {
 	mkdir -p "$1"
 	cd "$1"
-}
-
-adbc() {
-	CHESHIRE="192.168.0.177"
-	{
-		read
-		while IFS=$'\t' read -r whatever deviceID address
-		do
-		        IFS=: read -r ip port <<<"$address"
-		        if [ "$ip" = "$CHESHIRE" ]; then
-		        	STATUS=$(adb connect "$address" 2>&1)
-		        	if [[ $STATUS == connected* ]]; then
-		        		echo "$STATUS"
-		        	fi
-		        fi
-		done
-	} <<< $(adb mdns services)
-}
-
-adbz() {
-	PIXEL="192.168.0.145"
-	{
-		read
-		while IFS=$'\t' read -r whatever deviceID address
-		do
-		        IFS=: read -r ip port <<<"$address"
-		        if [ "$ip" = "$PIXEL" ]; then
-		        	STATUS=$(adb connect "$address" 2>&1)
-		        	if [[ $STATUS == connected* ]]; then
-		        		echo "$STATUS"
-		        	fi
-		        fi
-		done
-	} <<< $(adb mdns services)
 }
