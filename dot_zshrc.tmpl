@@ -21,6 +21,8 @@ export ANDROID_NDK_HOME=$ANDROID_NDK
 export NDK_HOME=$ANDROID_NDK
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+export ADB_MDNS_OPENSCREEN=1
+export ADB_BURST_MODE=1
 
 # Enable hidden file completions
 setopt globdots
@@ -28,4 +30,3 @@ setopt globdots
 source $HOME/.alias
 
 eval "$(starship init zsh)"
-eval "$(zoxide init --cmd cd zsh)"
