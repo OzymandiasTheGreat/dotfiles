@@ -1,0 +1,19 @@
+{
+	"colorscheme": "atom-dark",
+	"diffgutter": true,
+	"helpsplit": "vsplit",
+	"hlsearch": true,
+	"hltaberrors": true,
+	"hltrailingws": true,
+	"keymenu": true,
+	"matchbracestyle": "highlight",
+	"mkparents": true,
+	"parsecursor": true,
+	"rmtrailingws": true,
+	"scrollbar": true,
+	"softwrap": true,
+	"tabsize": 2,
+	"tabmovement": true,
+	"tabstopspaces": true,
+	"wordwrap": true
+}
