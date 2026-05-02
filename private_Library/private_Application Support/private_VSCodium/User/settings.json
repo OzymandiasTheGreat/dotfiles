@@ -70,4 +70,6 @@
   "js/ts.suggest.autoImports": false,
   "js/ts.suggest.jsdoc.enabled": false,
   "workbench.preferredDarkColorTheme": "Atom One Dark",
+  "git.enableCommitSigning": true,
+  "git.alwaysSignOff": true,
 }
