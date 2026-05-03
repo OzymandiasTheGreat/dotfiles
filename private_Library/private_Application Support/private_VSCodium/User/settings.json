@@ -72,4 +72,18 @@
   "workbench.preferredDarkColorTheme": "Atom One Dark",
   "git.enableCommitSigning": true,
   "git.alwaysSignOff": true,
+  "cSpell.userWords": [
+    "Ravinskas",
+    "worklet",
+    "worklets"
+  ],
+  "cSpell.ignoreWords": [
+    "tomasrav"
+  ],
+  "cSpell.language": "en,lt",
+  "prettier.configPath": ".prettierrc",
+  "prettier.experimentalOperatorPosition": "start",
+  "prettier.printWidth": 96,
+  "prettier.requireConfig": true,
+  "prettier.semi": false,
 }
