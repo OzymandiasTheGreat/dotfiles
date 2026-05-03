@@ -73,11 +73,15 @@
   "git.enableCommitSigning": true,
   "git.alwaysSignOff": true,
   "cSpell.userWords": [
+    "Fira",
+    "Merriweather",
+    "predeploy",
     "Ravinskas",
     "worklet",
     "worklets"
   ],
   "cSpell.ignoreWords": [
+    "nojekyll",
     "tomasrav"
   ],
   "cSpell.language": "en,lt",
@@ -86,4 +90,12 @@
   "prettier.printWidth": 96,
   "prettier.requireConfig": true,
   "prettier.semi": false,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "security.workspace.trust.untrustedFiles": "open",
+  "git.openRepositoryInParentFolders": "never",
 }
