@@ -18,7 +18,6 @@
   "editor.smoothScrolling": true,
   "editor.tabCompletion": "on",
   "editor.wordWrapColumn": 96,
-  "editor.experimentalGpuAcceleration": "on",
   "editor.find.addExtraSpaceOnTop": false,
   "editor.fontLigatures": true,
   "editor.minimap.enabled": false,
