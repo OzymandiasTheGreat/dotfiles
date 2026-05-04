@@ -72,7 +72,10 @@
   "git.enableCommitSigning": true,
   "git.alwaysSignOff": true,
   "cSpell.userWords": [
+    "Bienvenue",
     "Fira",
+    "Holepunch",
+    "Keet",
     "Merriweather",
     "predeploy",
     "Ravinskas",
@@ -97,4 +100,7 @@
   },
   "security.workspace.trust.untrustedFiles": "open",
   "git.openRepositoryInParentFolders": "never",
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
 }
