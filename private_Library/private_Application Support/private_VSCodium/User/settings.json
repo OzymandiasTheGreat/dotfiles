@@ -58,12 +58,10 @@
   "telemetry.feedback.enabled": false,
   "git.autoStash": true,
   "github.gitProtocol": "ssh",
-  "js/ts.preferences.importModuleSpecifierEnding": "js",
   "js/ts.preferences.includePackageJsonAutoImports": "on",
   "js/ts.preferences.quoteStyle": "double",
   "js/ts.format.semicolons": "remove",
   "js/ts.reportStyleChecksAsWarnings": false,
-  "js/ts.implicitProjectConfig.checkJs": true,
   "js/ts.implicitProjectConfig.target": "ES2022",
   "js/ts.preferGoToSourceDefinition": true,
   "js/ts.suggest.autoImports": false,
@@ -76,15 +74,26 @@
     "Fira",
     "Holepunch",
     "Keet",
+    "klembord",
     "Merriweather",
+    "mmkv",
+    "mopidy",
     "predeploy",
+    "pressable",
     "Ravinskas",
+    "viewability",
     "worklet",
     "worklets"
   ],
   "cSpell.ignoreWords": [
+    "FLATLIST",
+    "dasharray",
+    "dashoffset",
+    "fadein",
+    "hexa",
     "nojekyll",
-    "tomasrav"
+    "tomasrav",
+    "ytmusic"
   ],
   "cSpell.language": "en,lt",
   "prettier.configPath": ".prettierrc",
@@ -103,4 +112,12 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "js/ts.preferences.preferTypeOnlyAutoImports": true,
+  "js/ts.implicitProjectConfig.checkJs": true,
+  "git.enableSmartCommit": true,
+  "window.titleBarStyle": "native",
+  "window.customTitleBarVisibility": "never",
 }
