@@ -81,6 +81,8 @@
     "predeploy",
     "pressable",
     "Ravinskas",
+    "rocksdb",
+    "supafetch",
     "viewability",
     "worklet",
     "worklets"
@@ -116,7 +118,6 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "js/ts.preferences.preferTypeOnlyAutoImports": true,
-  "js/ts.implicitProjectConfig.checkJs": true,
   "git.enableSmartCommit": true,
   "window.titleBarStyle": "native",
   "window.customTitleBarVisibility": "never",
