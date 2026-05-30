@@ -11,6 +11,7 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
+export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 export LANG=en_US.UTF-8
