@@ -1,4 +1,7 @@
+{{ $server := and (eq .chezmoi.os "linux") (not (env "DISPLAY")) (not (env "WAYLAND_DISPLAY")) }}
+
 encryption = "age"
+
 [age]
 identity = "~/.config/chezmoi/key.txt"
 recipient = "age19jsjgu29gk245xtxslc62vzygjuafazp2h6gt6k07a6hgchl5ecqy809sg"
@@ -9,3 +12,6 @@ autoPush = true
 
 [keepassxc]
 database = "~/Documents/Security/ozymandias.kdbx"
+
+[data]
+server = {{ $server | toToml }}
