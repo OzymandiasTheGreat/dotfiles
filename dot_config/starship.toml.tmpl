@@ -71,7 +71,7 @@ symbol = "📦 "
 format = "[$symbol$version]($style) "
 version_format = "${raw}"
 
-{{ if (and (eq .chezmoi.hostname "tweedledum") (eq .chezmoi.hostname "tweedledee")) }}
+{{ if .vm }}
 [nodejs]
 symbol = "[⬢](bold green) "
 {{ end }}
