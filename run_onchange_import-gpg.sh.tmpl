@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+echo '{{- keepassxcAttachment "GPG (old)" "shit.asc" -}}' | gpg --import
+echo -e "5\ny\n" | gpg --command-fd 0 --edit-key '{{ keepassxcAttribute "GPG (old)" "key id" }}' trust
