@@ -19,3 +19,15 @@ import-gpg.sh
 {{- if ne .chezmoi.os "darwin" -}}
 Library
 {{- end -}}
+
+{{- if eq .chezmoi.os "windows" -}}
+.alias
+.bashrc
+.profile
+.tmux.conf
+.wezterm.lua
+.zprezto
+.zpreztorc
+.zprofile
+.zshrc
+{{- end -}}
