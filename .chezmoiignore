@@ -1,1 +1,21 @@
 key.txt.age
+**/.DS_Store
+
+{{- if or .server .vm -}}
+.backup
+.config/rclone
+.ssh
+.wezterm.lua
+{{- end -}}
+
+{{- if .server -}}
+.gitconfig
+.npmrc
+.vscode-oss
+Documents
+import-gpg.sh
+{{- end -}}
+
+{{- if ne .chezmoi.os "darwin" -}}
+Library
+{{- end -}}

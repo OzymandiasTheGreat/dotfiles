@@ -1,9 +1,17 @@
 [user]
 name = Tomas Ravinskas
 email = tomas@tomasrav.me
+
 [pull]
 rebase = off
+
 [core]
 editor = micro
+
 [init]
 defaultBranch = main
+
+{{- if eq .chezmoi.os "windows" -}}
+[core]
+longpaths = true
+{{- end -}}
