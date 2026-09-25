@@ -1,4 +1,16 @@
-{{ $server := and (eq .chezmoi.os "linux") (not (env "DISPLAY")) (not (env "WAYLAND_DISPLAY")) }}
+{{- $server := and (eq .chezmoi.os "linux") (not (env "DISPLAY")) (not (env "WAYLAND_DISPLAY")) -}}
+{{- $VM := false -}}
+{{- if eq .chezmoi.os "linux" -}}
+  {{- $nixVM := output "systemd-detect-virt" | trim -}}
+  {{- if and (ne $nixVM "none") (ne $nixVM "") -}}
+    {{- $VM = true -}}
+  {{- end -}}
+{{- else if eq .chezmoi.os "windows" -}}
+  {{- $winVM := output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "Get-CimInstance Win32_ComputerSystem | Select-Object -ExpandProperty Model" | trim -}}
+  {{- if regexMatch "(?i)(virtualbox|vmware|kvm|qemu|virtual machine|hyper-v)" $winVM -}}
+    {{- $VM = true -}}
+  {{- end -}}
+{{- end -}}
 
 encryption = "age"
 
@@ -15,3 +27,4 @@ database = "~/Documents/Security/ozymandias.kdbx"
 
 [data]
 server = {{ $server | toToml }}
+vm = {{ $VM | toToml }}
