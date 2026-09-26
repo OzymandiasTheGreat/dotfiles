@@ -1,33 +1,31 @@
 # Source Prezto.
-
-if type brew &>/dev/null; then
-  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-
-  autoload -Uz compinit
-  compinit
-fi
-
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
-export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+# Enable hidden file completions
+setopt globdots
+
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+  autoload -Uz compinit
+  compinit
+fi
 
 export LANG=en_US.UTF-8
 export EDITOR="micro"
+{{- if eq .chezmoi.os "darwin" }}
 export ANDROID_HOME=$HOME/Library/Android/sdk
-export ANDROID_NDK=$ANDROID_HOME/ndk/28.2.13676358
-export ANDROID_NDK_HOME=$ANDROID_NDK
-export NDK_HOME=$ANDROID_NDK
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-export ADB_MDNS_OPENSCREEN=1
-export ADB_BURST_MODE=1
+{{- else if eq .chezmoi.os "linux" }}
+export ANDROID_HOME=$HOME/Android/Sdk
+{{- end }}
+export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358
 export GPG_TTY=$(tty)
 
-# Enable hidden file completions
-setopt globdots
+export PATH="$(brew --prefix)/opt/rustup/bin:$PATH"
+export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 source $HOME/.alias
 
