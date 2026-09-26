@@ -30,15 +30,13 @@ zstyle ':prezto:*:*' color 'yes'
 # Set the Prezto modules to load (browse modules).
 # The order matters.
 zstyle ':prezto:load' pmodule \
-  'environment' \
   'terminal' \
-  'editor' \
   'history' \
-  'directory' \
   'spectrum' \
   'completion' \
+  'syntax-highlighting' \
   'history-substring-search' \
-  'fzf-tab' \
+  'autosuggestions' \
   'command-not-found'
 
 #
@@ -102,8 +100,6 @@ zstyle ':prezto:module:history' savehist 10000
 #
 # History Substring Search
 #
-
-zstyle ':prezto:module:history-substring-search' color 'no'
 
 # Set the query found color.
 # zstyle ':prezto:module:history-substring-search:color' found ''
@@ -255,19 +251,4 @@ zstyle ':prezto:module:terminal' auto-title 'yes'
 # Enabled safe options. This aliases cp, ln, mv and rm so that they prompt
 # before deleting or overwriting files. Set to 'no' to disable this safer
 # behavior.
-zstyle ':prezto:module:utility' safe-ops 'yes'
-
-
-#
-# Background notify
-#
-
-bgnotify_threshold=3
-
-function bgnotify_formatted {
-  # $1=exit_status, $2=command, $3=elapsed_time
-  [ $1 -eq 0 ] && title="Command Succeeded" || title="Command Failed"
-  bgnotify "$title after ${3}s" "$2";
-}
-
-source ~/.zsh/bgnotify/bgnotify.zsh
+# zstyle ':prezto:module:utility' safe-ops 'yes'
