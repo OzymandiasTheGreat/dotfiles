@@ -1,24 +1,34 @@
 key.txt.age
 **/.DS_Store
+README.md
 
-{{- if or .server .vm -}}
+{{ if or .server .vm }}
 .backup
 .config/rclone
 .ssh
 .wezterm.lua
-{{- end -}}
+{{ end }}
 
-{{- if .server -}}
+{{ if .server }}
 .gitconfig
 .npmrc
 .vscode-oss
 Documents
 import-gpg.sh
-{{- end -}}
+{{ end }}
 
-{{- if ne .chezmoi.os "darwin" -}}
+{{ if ne .chezmoi.os "darwin" }}
+.chezmoiscripts/darwin/**
 Library
-{{- end -}}
+{{ end }}
+
+{{ if ne .chezmoi.os "linux" }}
+.chezmoiscripts/linux/**
+{{ end }}
+
+{{ if ne .chezmoi.os "windows" }}
+.chezmoiscripts/windows/**
+{{ end }}
 
 {{- if eq .chezmoi.os "windows" -}}
 .alias

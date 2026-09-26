@@ -1,0 +1,35 @@
+brew install --yes \
+{{- if eq .chezmoi.os "darwin" }}
+  applesimutils \
+  cliclick \
+  cocoapods \
+  ios-deploy \
+  ruby \
+  xcodegen \
+{{- end }}
+  age \
+  bottom \
+  chezmoi \
+  duf \
+  dust \
+  eza \
+  fd \
+  gh \
+  git-filter-repo \
+  git-gui \
+  gnupg \
+  hf \
+  hyperfine \
+  llama.cpp \
+  micro \
+  nvm \
+  openjdk@21 \
+  python@3.14 \
+  rclone \
+  rustup \
+  starship \
+  tmux \
+  watchman \
+  woff2 \
+  xmlstarlet \
+  zsh-completions

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+sudo apt update
+sudo apt install --yes \
+  build-essential \
+  git \
+  unzip \
+  zsh
+
+chsh -s "$(which zsh)"
+
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+{{- template "unix-formulae" . }}

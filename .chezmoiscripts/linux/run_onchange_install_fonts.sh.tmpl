@@ -1,0 +1,29 @@
+#!/bin/bash
+install_file() {
+  tmp="$(mktemp -d)"
+  filename=$2 || "$(basename $1)"
+
+  curl -L --output "$tmp/$filename" "$1"
+  sudo chown root:root "$tmp/$filename"
+  sudo mv "$tmp/$filename" /usr/local/share/fonts
+  sudo rm -rf "$tmp"
+}
+
+install_archive() {
+  tmp="$(mktemp -d)"
+  archive="$(basename $1)"
+  basedir="$(basename $1 .zip)"
+
+  curl -L --output "$tmp/$archive" "$1"
+  sudo unzip -d "$tmp/$basedir" "$tmp/$archive"
+  sudo mv "$tmp/$basedir/$2"/*.ttf /usr/local/share/fonts
+  sudo rm -rf "$tmp"
+}
+
+install_archive '{{ gitHubLatestReleaseAssetURL "tonsky/FiraCode" "Fira_Code_v*.zip" }}' "ttf"
+install_archive '{{ gitHubLatestReleaseAssetURL "ryanoasis/nerd-fonts" "FiraCode.zip" }}' "."
+install_archive '{{ gitHubLatestReleaseAssetURL "cyrealtype/Podkova" "Podkova-v*.zip" }}' "fonts/ttf"
+
+install_file 'https://fonts.gstatic.com/s/righteous/v18/1cXxaUPXBpj2rGoU7C9mj3uEicG01A.ttf' "Righteous-Regular.ttf"
+
+fc-cache -f -v

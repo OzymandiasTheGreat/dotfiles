@@ -1,0 +1,37 @@
+#!/bin/bash
+
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+{{ template "unix-formulae" . }}
+
+brew install --yes --cask \
+  altserver \
+  android-studio \
+  balenaetcher \
+  calibre \
+  crystalfetch \
+  discord \
+  domzilla-caffeine \
+  firefox \
+  font-fira-code \
+  font-fira-code-nerd-font \
+  font-podkova \
+  font-righteous \
+  gimp \
+  inkscape \
+  keepassxc \
+  logseq-og \
+  nextcloud \
+  openmtp \
+  proton-mail-bridge \
+  protonvpn \
+  spotify \
+  stats \
+  syntax-highlight \
+  transmission \
+  utm \
+  vlc \
+  vscodium \
+  wezterm \
+  xcodesorg/made/xcodes
