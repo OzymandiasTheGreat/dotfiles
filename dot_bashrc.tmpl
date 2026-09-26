@@ -1,16 +1,18 @@
-export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-
-eval "$(starship init bash)"
-
 export LANG=en_US.UTF-8
 export EDITOR="micro"
-{{ if eq .chezmoi.os "darwin" }}
+{{- if eq .chezmoi.os "darwin" }}
 export ANDROID_HOME=$HOME/Library/Android/sdk
-{{ else if eq .chezmoi.os "linux" }}
+{{- else if eq .chezmoi.os "linux" }}
 export ANDROID_HOME=$HOME/Android/Sdk
-{{ end }}
+{{- end }}
 export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358
+export GPG_TTY=$(tty)
+
+export PATH="$(brew --prefix)/opt/rustup/bin:$PATH"
+export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 source $HOME/.alias
+
+eval "$(starship init bash)"
