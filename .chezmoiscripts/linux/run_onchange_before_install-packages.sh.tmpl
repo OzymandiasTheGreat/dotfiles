@@ -111,6 +111,6 @@ flatpak install flathub \
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-{{- template "unix-formulae.tmpl" . }}
+{{- template "unix-formulae" . }}
 
 chsh -s "$(which zsh)"

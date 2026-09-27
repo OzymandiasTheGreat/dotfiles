@@ -8,10 +8,10 @@ install_dmg() {
   volume=`yes qy | diskutil image attach "$tmp/$image" | awk -F'\t' '/\/Volumes/ {print $NF}'`
 
   if [ -e "$volume"/*.app ]; then
-    {{ template "sudo.tmpl" . }} cp -rf "$volume"/*.app /Applications
+    sudo cp -rf "$volume"/*.app /Applications
   elif [ -e "$volume"/*.pkg ]; then
     package=`realpath "$volume"/*.pkg`
-    {{ template "sudo.tmpl" . }} installer -package "$package" -target /
+    sudo installer -package "$package" -target /
   fi
 
   diskutil umount "$volume"
@@ -24,7 +24,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 brew tap wix/brew
 brew trust wix/brew
 
-{{ template "unix-formulae.tmpl" . }}
+{{ template "unix-formulae" . }}
 
 brew install --yes --cask \
   altserver \
