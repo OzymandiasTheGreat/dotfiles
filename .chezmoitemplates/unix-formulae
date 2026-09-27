@@ -6,6 +6,23 @@ brew install --yes \
   ios-deploy \
   ruby \
   xcodegen \
+  xcodesorg/made/xcodes \
+{{- end }}
+{{- if not .server }}
+  gh \
+  git-filter-repo \
+  git-gui \
+  hf \
+  hyperfine \
+  llama.cpp \
+  nvm \
+  openjdk@21 \
+  python@3.14 \
+  rustup \
+  tmux \
+  watchman \
+  woff2 \
+  xmlstarlet \
 {{- end }}
   age \
   bottom \
@@ -14,22 +31,8 @@ brew install --yes \
   dust \
   eza \
   fd \
-  gh \
-  git-filter-repo \
-  git-gui \
   gnupg \
-  hf \
-  hyperfine \
-  llama.cpp \
   micro \
-  nvm \
-  openjdk@21 \
-  python@3.14 \
   rclone \
-  rustup \
   starship \
-  tmux \
-  watchman \
-  woff2 \
-  xmlstarlet \
   zsh-completions

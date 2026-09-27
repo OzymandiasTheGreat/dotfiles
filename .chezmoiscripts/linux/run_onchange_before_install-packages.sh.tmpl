@@ -1,15 +1,116 @@
 #!/bin/bash
+{{- if and (not .server) (not .vm) }}
+while true; do
+  snaps=$(snap list 2>/dev/null | awk 'NR>1 {print $1}')
+  [ -z "$snaps" ] && { break; }
+  removed=0
+  for snap in $snaps; do
+    sudo snap remove --purge "$snap" && removed=1
+  done
+  [ "$removed" -eq 0 ] && { break; }
+done
+
+sudo systemctl daemon-reload
+sudo systemctl stop snapd snapd.socket snapd.seeded.service
+sudo apt purge --assume-yes snapd
+sudo apt autoremove --assume-yes --purge
+sudo apt-mark hold snapd
+sudo tee /etc/apt/preferences.d/no-snapd.pref >/dev/null <<'EOF'
+Package: snapd
+Pin: version *
+Pin-Priority: -10
+EOF
+sudo rm -rf ~/snap ~/.snap /root/snap /root/.snap /snap /var/snap /var/cache/snapd /var/lib/snapd
+{{- else if not .server }}
+sudo tee /etc/apt/preferences.d/mozilla > /dev/null << EOF
+Package: firefox
+Pin: release o=Ubuntu
+Pin-Priority: -1
+EOF
+sudo snap remove --purge firefox
+{{- end }}
 
 sudo apt update
-sudo apt install --yes \
+sudo apt install --assume-yes \
   build-essential \
+  curl \
   git \
   unzip \
+  wget \
   zsh
 
-chsh -s "$(which zsh)"
+{{- if not .server }}
+sudo install -d -m 0755 /etc/apt/keyrings
+wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
+sudo tee /etc/apt/sources.list.d/mozilla.sources > /dev/null << EOF
+Types: deb
+URIs: https://packages.mozilla.org/apt
+Suites: mozilla
+Components: main
+Signed-By: /etc/apt/keyrings/packages.mozilla.org.asc
+EOF
+sudo tee /etc/apt/preferences.d/mozilla > /dev/null << EOF
+Package: *
+Pin: origin packages.mozilla.org
+Pin-Priority: 1000
+EOF
+
+wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg \
+  | gpg --dearmor \
+  | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg
+echo -e 'Types: deb
+URIs: https://download.vscodium.com/debs
+Suites: vscodium
+Components: main
+Architectures: amd64 arm64
+Signed-by: /usr/share/keyrings/vscodium-archive-keyring.gpg' \
+| sudo tee /etc/apt/sources.list.d/vscodium.sources
+
+sudo apt update
+sudo apt install --assume-yes \
+  codium \
+  firefox \
+  flatpak \
+  gnome-software-plugin-flatpak \
+  gnome-sushi \
+  gnome-tweaks \
+  keepassxc-full \
+  numix-icon-theme-circle \
+  pipx
+
+pipx install gnome-extensions-cli --system-site-packages
+gext install \
+  blur-my-shell@aunetx \
+  burn-my-windows@schneegans.github.com \
+  caffeine@patapon.info \
+  compiz-alike-magic-lamp-effect@hermes83.github.com \
+  dash-to-panel@jderose9.github.com \
+  gsconnect@andyholmes.github.io \
+  rounded-window-corners@fxgn
+
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub \
+  {{- if not .vm }}
+  com.google.AndroidStudio \
+  com.calibre_ebook.calibre \
+  com.discordapp.Discord \
+  org.gimp.GIMP \
+  org.inkscape.Inkscape \
+  com.logseq.Logseq \
+  com.nextcloud.desktopclient.nextcloud \
+  ch.protonmail.protonmail-bridge \
+  # me.proton.Mail \
+  com.spotify.Client \
+  com.transmissionbt.Transmission \
+  org.videolan.VLC \
+  {{- end }}
+  com.mattjakeman.ExtensionManager \
+  org.wezfurlong.wezterm
+{{- end }}
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 {{- template "unix-formulae" . }}
+
+chsh -s "$(which zsh)"

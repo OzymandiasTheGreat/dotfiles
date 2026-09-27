@@ -3,7 +3,7 @@
 ## Unix
 
 ```shell
-sh -c "$(curl -fsLS https://get.chezmoi.io)" -- -b '~' init --ssh --apply OzymandiasTheGreat && rm "~/chezmoi"
+sh -c "$(curl -fsLS https://get.chezmoi.io)" -- -b "~" init --ssh --apply OzymandiasTheGreat && rm "~/chezmoi"
 ```
 
 ## Windows

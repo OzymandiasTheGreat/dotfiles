@@ -1,14 +1,34 @@
 #!/bin/bash
+install_dmg() {
+  tmp="$(mktemp -d)"
+  image="$(basename $1)"
+
+  curl -L --output "$tmp/$image" "$1"
+
+  volume=`yes qy | diskutil image attach "$tmp/$image" | awk -F'\t' '/\/Volumes/ {print $NF}'`
+
+  if [ -e "$volume"/*.app ]; then
+    sudo cp -rf "$volume"/*.app /Applications
+  elif [ -e "$volume"/*.pkg ]; then
+    package=`realpath "$volume"/*.pkg`
+    sudo installer -package "$package" -target /
+  fi
+
+  diskutil umount "$volume"
+  rm -rf "$tmp"
+}
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+brew tap wix/brew
+brew trust wix/brew
 
 {{ template "unix-formulae" . }}
 
 brew install --yes --cask \
   altserver \
   android-studio \
-  balenaetcher \
   calibre \
   crystalfetch \
   discord \
@@ -33,5 +53,6 @@ brew install --yes --cask \
   utm \
   vlc \
   vscodium \
-  wezterm \
-  xcodesorg/made/xcodes
+  wezterm
+  
+install_dmg '{{ gitHubLatestReleaseAssetURL "sannidhyaroy/Soduto" "Soduto*.dmg" }}'

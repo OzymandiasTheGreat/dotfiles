@@ -20,10 +20,10 @@ install_archive() {
   sudo rm -rf "$tmp"
 }
 
-install_archive '{{ gitHubLatestReleaseAssetURL "tonsky/FiraCode" "Fira_Code_v*.zip" }}' "ttf"
-install_archive '{{ gitHubLatestReleaseAssetURL "ryanoasis/nerd-fonts" "FiraCode.zip" }}' "."
-install_archive '{{ gitHubLatestReleaseAssetURL "cyrealtype/Podkova" "Podkova-v*.zip" }}' "fonts/ttf"
+install_archive "{{ gitHubLatestReleaseAssetURL "tonsky/FiraCode" "Fira_Code_v*.zip" }}" "ttf"
+install_archive "{{ gitHubLatestReleaseAssetURL "ryanoasis/nerd-fonts" "FiraCode.zip" }}" "."
+install_archive "{{ gitHubLatestReleaseAssetURL "cyrealtype/Podkova" "Podkova-v*.zip" }}" "fonts/ttf"
 
-install_file 'https://fonts.gstatic.com/s/righteous/v18/1cXxaUPXBpj2rGoU7C9mj3uEicG01A.ttf' "Righteous-Regular.ttf"
+install_file "https://fonts.gstatic.com/s/righteous/v18/1cXxaUPXBpj2rGoU7C9mj3uEicG01A.ttf" "Righteous-Regular.ttf"
 
 fc-cache -f -v
