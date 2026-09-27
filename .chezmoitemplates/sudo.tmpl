@@ -1,0 +1,4 @@
+{{ $sudo := cat "echo " (keepassxc .chezmoi.hostname).Username -}} //" | sudo -S " -}}
+{{ if eq .chezmoi.username "root" -}}
+{{   $sudo = "" -}}
+{{ end -}}
