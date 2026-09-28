@@ -1,21 +1,21 @@
-# {{- $server := and (eq .chezmoi.os "linux") (not (env "DISPLAY")) (not (env "WAYLAND_DISPLAY")) -}}
-# {{- $VM := false -}}
-# {{- if eq .chezmoi.os "darwin" -}}
-#   {{- $macVM := output "sysctl" "-n" "hw.model" | trim -}}
-#   {{- if or (contains "Virtual" $macVM) (contains "VMware" $macVM) (contains "QEMU" $macVM) -}}
-#     {{- $VM = true -}}
-#   {{- end -}}
-# {{- else if eq .chezmoi.os "linux" -}}
-#   {{- $nixVM := output "systemd-detect-virt" | trim -}}
-#   {{- if and (ne $nixVM "none") (ne $nixVM "") -}}
-#     {{- $VM = true -}}
-#   {{- end -}}
-# {{- else if eq .chezmoi.os "windows" -}}
-#   {{- $winVM := output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "Get-CimInstance Win32_ComputerSystem | Select-Object -ExpandProperty Model" | trim -}}
-#   {{- if regexMatch "(?i)(virtualbox|vmware|kvm|qemu|virtual machine|hyper-v)" $winVM -}}
-#     {{- $VM = true -}}
-#   {{- end -}}
-# {{- end -}}
+{{- $server := and (eq .chezmoi.os "linux") (not (env "DISPLAY")) (not (env "WAYLAND_DISPLAY")) -}}
+{{- $VM := false -}}
+{{- if eq .chezmoi.os "darwin" -}}
+  {{- $macVM := output "sysctl" "-n" "hw.model" | trim -}}
+  {{- if or (contains "Virtual" $macVM) (contains "VMware" $macVM) (contains "QEMU" $macVM) -}}
+    {{- $VM = true -}}
+  {{- end -}}
+{{- else if eq .chezmoi.os "linux" -}}
+  {{- $nixVM := output "systemd-detect-virt" | trim -}}
+  {{- if and (ne $nixVM "none") (ne $nixVM "") -}}
+    {{- $VM = true -}}
+  {{- end -}}
+{{- else if eq .chezmoi.os "windows" -}}
+  {{- $winVM := output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "Get-CimInstance Win32_ComputerSystem | Select-Object -ExpandProperty Model" | trim -}}
+  {{- if regexMatch "(?i)(virtualbox|vmware|kvm|qemu|virtual machine|hyper-v)" $winVM -}}
+    {{- $VM = true -}}
+  {{- end -}}
+{{- end -}}
 
 encryption: age
 
@@ -54,9 +54,12 @@ data:
   logseq:
     - name: bullet.
       repo: OzymandiasTheGreat/bullet.-graph
+
     - name: notes
       repo: OzymandiasTheGreat/notes
+
     - name: ligo
       repo: OzymandiasTheGreat/ligo-graph
+
     - name: void
       repo: OzymandiasTheGreat/void-graph
