@@ -1,6 +1,11 @@
 {{- $server := and (eq .chezmoi.os "linux") (not (env "DISPLAY")) (not (env "WAYLAND_DISPLAY")) -}}
 {{- $VM := false -}}
-{{- if eq .chezmoi.os "linux" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+  {{- $macVM := output "sysctl" "-n" "hw.model" | trim -}}
+  {{- if or (contains "Virtual" $macVM) (contains "VMware" $macVM) (contains "QEMU" $macVM) -}}
+    {{- $VM = true -}}
+  {{- end -}}
+{{- else if eq .chezmoi.os "linux" -}}
   {{- $nixVM := output "systemd-detect-virt" | trim -}}
   {{- if and (ne $nixVM "none") (ne $nixVM "") -}}
     {{- $VM = true -}}

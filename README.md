@@ -3,11 +3,17 @@
 ## Unix
 
 ```shell
-sh -c "$(curl -fsLS https://get.chezmoi.io)" -- -b "~" init --ssh --apply OzymandiasTheGreat && rm "~/chezmoi"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+brew install age chezmoi --cask keepassxc
+chezmoi init --ssh --apply OzymandiasTheGreat
 ```
 
 ## Windows
 
 ```powershell
-iex "&{$(irm 'https://get.chezmoi.io/ps1')} -b '~' init --ssh --apply OzymandiasTheGreat" && rm "~\chezmoi.exe"
+winget install --id=FiloSottile.age -e --silent
+winget install --id=twpayne.chezmoi -e --silent
+winget install --id=KeePassXCTeam.KeePassXC -e --silent
+chezmoi init --ssh --apply OzymandiasTheGreat
 ```

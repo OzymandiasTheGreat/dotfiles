@@ -1,0 +1,108 @@
+taps:
+{{- if and (eq .chezmoi.os "darwin") (not .vm) }}
+  - wix/brew
+{{- else }}
+ []
+{{- end }}
+
+formulae:
+{{- if and (eq .chezmoi.os "darwin") (not .vm) }}
+  - applesimutils
+  - cliclick
+  - cocoapods
+  - ios-deploy
+  - ruby
+  - xcodegen
+{{- end }}
+{{- if not .server }}
+  - gh
+  - git-filter-repo
+  - git-gui
+  - hf
+  - hyperfine
+  - llama.cpp
+  - nvm
+  - openjdk@21
+  - python@3.14
+  - rustup
+  - tmux
+  - watchman
+  - woff2
+  - xmlstarlet
+{{- end }}
+  - bottom
+  - duf
+  - dust
+  - eza
+  - fd
+  - gnupg
+  - micro
+  - rclone
+  - starship
+  - zsh-completions
+
+casks:
+{{- if not .vm }}
+  - altserver
+  - android-studio
+  - calibre
+  - crystalfetch
+  - discord
+  - gimp
+  - inkscape
+  - logseq-og
+  - nextcloud
+  - openmtp
+  - proton-mail-bridge
+  - spotify
+  - transmission
+  - utm
+  - vlc
+{{- end }}
+  - domzilla-caffeine
+  - firefox
+  - protonvpn
+  - stats
+  - syntax-highlight
+  - vscodium
+  - wezterm
+
+dmg:
+{{- if not .vm }}
+  - {{ gitHubLatestReleaseAssetURL "sannidhyaroy/Soduto" "Soduto*.dmg" }}
+{{- else }}
+ []
+{{- end }}
+
+mas:
+  - com.apple.dt.Xcode
+
+npm:
+  - package: bare
+    version: latest
+
+  - package: bare-make
+    version: latest
+
+codium:
+{{- if not .vm }}
+  - "jeanp413.open-remote-ssh"
+{{- end }}
+{{- if not (and (eq .chezmoi.os "windows") (eq .chezmoi.arch .arm64)) }}
+  - "vadimcn.vscode-lldb"
+{{- end }}
+  - "akamud.vscode-theme-onedark"
+  - "anthropic.claude-code"
+  - "donjayamanne.githistory"
+  - "editorconfig.editorconfig"
+  - "esbenp.prettier-vscode"
+  - "expo.vscode-expo-tools"
+  - "llvm-vs-code-extensions.vscode-clangd"
+  - "openai.chatgpt"
+  - "redhat.vscode-xml"
+  - "redhat.vscode-yaml"
+  - "rust-lang.rust-analyzer"
+  - "streetsidesoftware.code-spell-checker"
+  - "streetsidesoftware.code-spell-checker-lithuanian"
+  - "tauri-apps.tauri-vscode"
+  - "twxs.cmake"

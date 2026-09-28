@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+echo "{{- keepassxcAttachment "GPG" "key.asc" | replaceAllRegex "\"" "\\\"" -}}" | gpg --import
+echo -e "5\ny\n" | gpg --command-fd 0 --edit-key "{{ keepassxcAttribute "GPG" "keyId" | replaceAllRegex "\"" "\\\"" }}" trust
+echo "01 ONCE GPG"

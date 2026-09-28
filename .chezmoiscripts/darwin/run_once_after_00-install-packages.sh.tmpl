@@ -1,0 +1,57 @@
+#!/bin/bash
+
+set -euo pipefail
+
+{{- $pkg := includeTemplate "packages.yml.tmpl" . | fromYaml }}
+
+install_dmg() {
+  tmp="$(mktemp -d)"
+  image="$(basename $1)"
+
+  curl -L --output "$tmp/$image" "$1"
+
+  volume=`yes qy | diskutil image attach "$tmp/$image" | awk -F'\t' '/\/Volumes/ {print $NF}'`
+
+  if [ -e "$volume"/*.app ]; then
+    cp -rf "$volume"/*.app /Applications
+  elif [ -e "$volume"/*.pkg ]; then
+    package=`realpath "$volume"/*.pkg`
+    installer -package "$package" -target /
+  else
+    echo "Failed to install $image from $1"
+  fi
+
+  diskutil umount "$volume"
+  rm -rf "$tmp"
+}
+
+brew bundle --file=/dev/stdin <<EOF
+{{ range ($pkg.taps | sortAlpha | uniq) -}}
+tap "{{ . }}"
+{{ end -}}
+{{ range ($pkg.formulae | sortAlpha | uniq) -}}
+brew "{{ . }}"
+{{ end -}}
+{{ range ($pkg.casks | sortAlpha | uniq) -}}
+cask "{{ . }}"
+{{ end -}}
+{{ range ($pkg.mas | sortAlpha | uniq) -}}
+mas "{{ . }}"
+{{ end -}}
+EOF
+
+{{ if not .vm -}}
+  {{ range ($pkg.dmg | sortAlpha | uniq) -}}
+  install_dmg "{{ . }}"
+  {{ end -}}
+{{ end -}}
+
+source "$(brew --prefix)/opt/nvm/nvm.sh"
+nvm install --lts --latest-npm
+{{ range $pkg.npm -}}
+npm install --global "{{ .package -}}@{{- .version }}"
+{{ end -}}
+
+{{ range ($pkg.codium | sortAlpha | uniq) -}}
+codium --force --install-extension "{{ . }}"
+{{ end -}}

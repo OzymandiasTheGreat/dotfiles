@@ -1,0 +1,46 @@
+{{- $fontDir := "" }}
+{{- if eq .chezmoi.os "darwin" }}
+  {{- /* $fontDir = "Library/Fonts" */}}
+  {{- $fontDir = "Downloads" }}
+{{- else if eq .chezmoi.os "linux" }}
+  {{- $fontDir = ".local/share/fonts" }}
+{{- else if eq .chezmoi.os "windows" }}
+  {{- $fontDir = joinPath (env "LOCALAPPDATA") "Microsoft\\Windows\\Fonts" }}
+{{- end }}
+
+{{- if not .server }}
+FiraCode:
+  type: archive
+  url: {{ gitHubLatestReleaseAssetURL "tonsky/FiraCode" "Fira_Code_v*.zip" }}
+  exact: false
+  stripComponents: 1
+  refreshPeriod: 168h
+  include:
+    - 'ttf/*.ttf'
+  targetPath: {{ $fontDir }}
+
+FiraCodeNerdFont:
+  type: archive
+  url: {{ gitHubLatestReleaseAssetURL "ryanoasis/nerd-fonts" "FiraCode.zip" }}
+  exact: false
+  refreshPeriod: 168h
+  include:
+    - '*.ttf'
+  targetPath: {{ $fontDir }}
+
+Podkova:
+  type: archive
+  url: {{ gitHubLatestReleaseAssetURL "cyrealtype/Podkova" "Podkova-v*.zip" }}
+  exact: false
+  stripComponents: 2
+  refreshPeriod: 168h
+  include:
+    - 'fonts/ttf/*.ttf'
+  targetPath: {{ $fontDir }}
+
+Righteous:
+  type: file
+  url: https://fonts.gstatic.com/s/righteous/v18/1cXxaUPXBpj2rGoU7C9mj3uEicG01A.ttf
+  refreshPeriod: 168h
+  targetPath: {{ joinPath $fontDir "Righteous-Regular.ttf" }}
+{{- end }}

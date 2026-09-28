@@ -1,9 +1,0 @@
-#!/bin/bash
-eval "$(/opt/homebrew/bin/brew shellenv)"
-source "$(brew --prefix)/opt/nvm/nvm.sh"
-nvm install --lts --latest-npm
-npm i -g bare@latest bare-make@latest
-
-XCODES_USERNAME="{{ (keepassxc "Apple ID").UserName | replaceAllRegex "\"" "\\\"" }}" \
-XCODES_PASSWORD="{{ (keepassxc "Apple ID").Password | replaceAllRegex "\"" "\\\"" }}" \
-xcodes install --latest --experimental-unxip

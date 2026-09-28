@@ -1,0 +1,12 @@
+$FontDir = Join-Path $env:LOCALAPPDATA "Microsoft\Windows\Fonts"
+$RegistryPath = "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts"
+
+Get-ChildItem -Path $FontDir -Include *.ttf | ForEach-Object {
+  $RegistryName = $_.BaseName + " (TrueType)"
+
+  $ExistingValue = Get-ItemProperty -Path $RegistryPath -Name $RegistryName -ErrorAction SilentlyContinue
+
+  if (-not $ExistingValue -or $ExistingValue.$RegistryName -ne $_.FullName) {
+      New-ItemProperty -Path $RegistryPath -Name $RegistryName -Value $_.FullName -PropertyType String -Force | Out-Null
+  }
+}
