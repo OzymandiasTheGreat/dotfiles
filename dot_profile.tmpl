@@ -4,7 +4,7 @@ export NVM_DIR="$HOME/.nvm"
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 [ -s "$(brew --prefix)/opt/nvm/nvm.sh" ] && builtin source "$(brew --prefix)/opt/nvm/nvm.sh"
-{{- else }}
+{{- else if eq .chezmoi.os "linux" }}
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 [ -s "$(brew --prefix)/opt/nvm/nvm.sh" ] && builtin source "$(brew --prefix)/opt/nvm/nvm.sh"

@@ -17,19 +17,36 @@
   {{- end -}}
 {{- end -}}
 
-encryption = "age"
+encryption: age
 
-[age]
-identity = "~/.config/chezmoi/key.txt"
-recipient = "age19jsjgu29gk245xtxslc62vzygjuafazp2h6gt6k07a6hgchl5ecqy809sg"
+age:
+  identity: ~/.config/chezmoi/key.txt
+  recipient: age19jsjgu29gk245xtxslc62vzygjuafazp2h6gt6k07a6hgchl5ecqy809sg
 
-[git]
-autoCommit = true
-autoPush = true
+git:
+  autoCommit: true
+  autoPush: true
 
-[keepassxc]
-database = "~/Documents/Security/ozymandias.kdbx"
+keepassxc:
+  database: ~/Documents/Security/ozymandias.kdbx
 
-[data]
-server = {{ $server | toToml }}
-vm = {{ $VM | toToml }}
+edit:
+  command: codium
+  args:
+    - --wait
+
+diff:
+  command: codium
+  args:
+    - --wait
+    - --diff
+
+merge:
+  command: "bash"
+  args:
+    - "-c"
+    - "cp {{ `{{ .Target | quote }} {{ printf \"%s.base\" .Target | quote }} && codium --new-window --wait --merge {{ .Destination | quote }} {{ .Target | quote }} {{ printf \"%s.base\" .Target | quote }} {{ .Source | quote }}` }}"
+
+data:
+  server: {{ $server | toYaml }}
+  vm: {{ $VM | toYaml }}

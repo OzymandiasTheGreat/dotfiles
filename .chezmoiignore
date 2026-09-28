@@ -6,15 +6,12 @@ README.md
 .backup
 .config/rclone
 .ssh
-.wezterm.lua
 {{ end }}
 
 {{ if .server }}
 .gitconfig
 .npmrc
-.vscode-oss
-Documents
-import-gpg.sh
+.wezterm.lua
 {{ end }}
 
 {{ if ne .chezmoi.os "darwin" }}
