@@ -398,4 +398,45 @@
   ],
   "claudeCode.hideOnboarding": true,
   "xml.server.vmargs": "-Xmx128M",
+  "cSpell.enabledNotifications": {
+    "Lines too Long": false,
+    "Maximum Word Length Exceeded": false,
+    "Average Word Length too Long": false
+  },
+  "cSpell.showInRuler": false,
+  "cSpell.menuItemsOnEditorContextMenu": {
+    "showIssues": false,
+    "hideIssues": false
+  },
+  "cSpell.allowCompoundWords": true,
+  "cSpell.allowWordsToBeAddTo": {
+    "workspace": false,
+    "folder": false
+  },
+  "cSpell.menuItemsOnSpellCheckerActionMenu": {
+    "editKeyboardShortcuts": false,
+    "hideIssues": false,
+    "openConfigFiles": false,
+    "editSpellCheckerSettings": false,
+    "createCSpellConfig": false,
+    "openFileInfoView": false,
+    "openIssuesPanel": false,
+    "openSpellCheckerConsole": false,
+    "showIssues": false
+  },
+  "cSpell.menuItemsOnSpellingContextMenu": {
+    "addIgnoreWord": false,
+    "addWordToCSpellConfig": false,
+    "addWordToFolderSettings": false,
+    "addWordToUserSettings": false,
+    "addWordToWorkspaceSettings": false
+  },
+  "cSpell.customDictionaries": {
+    "custom": {
+      "name": "Custom Words",
+      "kind": "words",
+      "path": "${userHome}/.local/share/cspell/custom.dict",
+      "addWords": true
+    }
+  },
 }
