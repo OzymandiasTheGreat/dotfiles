@@ -2,6 +2,13 @@
   "workbench.colorTheme": "Atom One Dark",
   "editor.fontSize": 13,
   "editor.formatOnSave": true,
+  "files.associations": {
+    "*.ps1.tmpl": "powershell",
+    "*.sh.tmpl": "shellscript",
+    "*.yaml.tmpl": "yaml",
+    "*.yml.tmpl": "yaml",
+    "*.tmpl": "go"
+  },
   "files.autoSave": "onFocusChange",
   "editor.fontFamily": "'Fira Code', Menlo, Monaco, 'Courier New', monospace",
   "editor.tabSize": 2,
@@ -248,6 +255,7 @@
     "microsoftedge",
     "milis",
     "mmacosx",
+    "mpoint",
     "msvc",
     "namerecord",
     "nanoemoji",
@@ -300,6 +308,7 @@
     "textlayoutmanager",
     "thiserror",
     "thiz",
+    "tmpl",
     "tomasrav",
     "tursodatabase",
     "typedarray",
@@ -331,7 +340,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "security.workspace.trust.untrustedFiles": "open",
   "git.openRepositoryInParentFolders": "never",
