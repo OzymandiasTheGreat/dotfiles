@@ -5,6 +5,7 @@ README.md
 {{ if or .server .vm }}
 .backup
 .config/rclone
+.logseq
 .ssh
 {{ end }}
 
