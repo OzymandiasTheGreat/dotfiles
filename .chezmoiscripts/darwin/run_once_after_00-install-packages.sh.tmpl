@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -eu
 
 {{- $pkg := includeTemplate "packages.yml.tmpl" . | fromYaml }}
 
@@ -10,13 +10,13 @@ install_dmg() {
 
   curl -L --output "$tmp/$image" "$1"
 
-  volume=`yes qy | diskutil image attach "$tmp/$image" | awk -F'\t' '/\/Volumes/ {print $NF}'`
+  volume="$(yes qy | diskutil image attach "$tmp/$image" | awk -F'\t' '/\/Volumes/ {print $NF}')"
 
   if [ -e "$volume"/*.app ]; then
-    cp -rf "$volume"/*.app /Applications
+    {{ template "sudo.tmpl" . }} cp -rf "$volume"/*.app /Applications
   elif [ -e "$volume"/*.pkg ]; then
     package=`realpath "$volume"/*.pkg`
-    installer -package "$package" -target /
+    {{ template "sudo.tmpl" . }} installer -package "$package" -target /
   else
     echo "Failed to install $image from $1"
   fi
@@ -35,8 +35,8 @@ brew "{{ . }}"
 {{ range ($pkg.casks | sortAlpha | uniq) -}}
 cask "{{ . }}"
 {{ end -}}
-{{ range ($pkg.mas | sortAlpha | uniq) -}}
-mas "{{ . }}"
+{{ range $pkg.mas -}}
+mas "{{- .name -}}", id: {{ .id }}
 {{ end -}}
 EOF
 

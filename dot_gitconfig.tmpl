@@ -1,17 +1,19 @@
 [user]
 name = Tomas Ravinskas
 email = tomas@tomasrav.me
-
-[pull]
-rebase = off
+signingkey = 1AB95841DA714E0CCC8452B29424DCD98F49C581
 
 [core]
 editor = micro
+{{- if eq .chezmoi.os "windows" }}
+longpaths = true
+{{- end }}
 
 [init]
 defaultBranch = main
 
-{{- if eq .chezmoi.os "windows" -}}
-[core]
-longpaths = true
-{{- end -}}
+[commit]
+gpgSign = true
+
+[pull]
+rebase = off
