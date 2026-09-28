@@ -1,0 +1,5 @@
+{:logseq-journals-calendar {:version "v0.11.1", :repo "xyhp915/logseq-journals-calendar", :effect false, :theme false}
+ :logseq-catppuccin {:version "v0.6.4", :repo "catppuccin/logseq", :effect false, :theme true}
+ :logseq-link-preview {:version "v2.3.0", :repo "pengx17/logseq-plugin-link-preview", :effect true, :theme false}
+ :logseq-emoji-shortcodes {:version "v2.0.0", :repo "daviddavo/logseq-emoji-shortcodes", :effect true, :theme false}
+ :logseq-git {:version "v1.7.0", :repo "haydenull/logseq-plugin-git", :effect true, :theme false}}

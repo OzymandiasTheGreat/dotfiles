@@ -1,0 +1,13 @@
+{
+  "buttons": [
+    "Pull Rebase",
+    "Commit & Push",
+    "Show Log"
+  ],
+  "checkWhenDBChanged": true,
+  "autoCheckSynced": true,
+  "autoPush": true,
+  "typeCommitMessage": "Default Message With Date",
+  "customCommitMessage": "",
+  "disabled": false
+}
