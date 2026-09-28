@@ -1,6 +1,6 @@
 "$schema" = "https://starship.rs/config-schema.json"
 
-command_timeout = 512
+command_timeout = 256
 scan_timeout = 64
 
 format = """
@@ -108,7 +108,7 @@ unknown_indicator = 'mystery shell'
 
 [battery]
 format = "[$symbol]($style)"
-{{ if (and (eq .chezmoi.hostname "tweedledum") (eq .chezmoi.hostname "tweedledee")) }}
+{{ if .server }}
 full_symbol = "• "
 charging_symbol = "⇡ "
 discharging_symbol = "⇣ "
