@@ -6,7 +6,7 @@ Target="$2"
 Base="${Target}.base"
 Source="$3"
 
-if [[ "$Destination" =~ ^{{- .chezmoi.homeDir -}}/Documents/Security/ozymandias.kdbx$ ]]; then
+if [[ "$Destination" =~ \.(avif|bmp|gif|heic|heif|ico|icns|jpeg|jpg|kdbx|png|psd|xcf|tiff|tif|webp)$ ]]; then
   cp -f "$Destination" "$Source"
 elif [[ "$Destination" =~ ^{{- .chezmoi.homeDir -}}/[\ a-zA-Z0-9/\._-]+/VSCodium/User/[a-z\._-]+\.json$ ]]; then
   Filename="$(basename "$Destination")"
