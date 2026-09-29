@@ -28,7 +28,7 @@ Library
 .chezmoiscripts/windows/**
 {{ end }}
 
-{{- if eq .chezmoi.os "windows" -}}
+{{ if eq .chezmoi.os "windows" }}
 .chezmoiscripts/unix/**
 .local/bin/chezmoi-merge
 .alias

@@ -31,7 +31,7 @@ git:
 keepassxc:
   database: ~/Documents/Security/ozymandias.kdbx
 
-{{ if not $server }}
+{{- if not $server }}
 edit:
   apply: true
   command: codium
@@ -50,16 +50,16 @@ merge:
     - "{{ `{{ .Destination }}` }}"
     - "{{ `{{ .Source }}` }}"
     - "{{ `{{ .Target }}` }}"
-{{ end }}
+{{- end }}
 
 hooks:
   read-source-state:
     pre:
-{{ if ne .chezmoi.os "windows" }}
+{{- if ne .chezmoi.os "windows" }}
       command: .local/share/chezmoi/.hooks/setup.sh
-{{ else }}
-      command: exit
-{{ end }}
+{{- else }}
+      script: .local/share/chezmoi/.hooks/setup.ps1
+{{- end }}
 
 data:
   server: {{ $server | toYaml }}

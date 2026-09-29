@@ -36,7 +36,7 @@ brew "{{ . }}"
 cask "{{ . }}"
 {{ end -}}
 {{ range $pkg.mas -}}
-mas "{{- .name -}}", id: {{ .id }}
+mas "{{ .name }}", id: {{ .id }}
 {{ end -}}
 EOF
 
@@ -49,7 +49,7 @@ EOF
 source "$(brew --prefix)/opt/nvm/nvm.sh"
 nvm install --lts --latest-npm
 {{ range $pkg.npm -}}
-npm install --global "{{ .package -}}@{{- .version }}"
+npm install --global "{{ .package }}@{{ .version }}"
 {{ end -}}
 
 {{ range ($pkg.codium | sortAlpha | uniq) -}}

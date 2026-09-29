@@ -2,14 +2,14 @@
 
 set -eu
 
-mkdir -p "{{- .chezmoi.homeDir -}}/Notes"
-pushd "{{- .chezmoi.homeDir -}}/Notes"
+mkdir -p "{{ .chezmoi.homeDir }}/Notes"
+pushd "{{ .chezmoi.homeDir }}/Notes"
 {{ range .logseq -}}
 {{ $gitDir := joinPath $.chezmoi.homeDir ".logseq" "git" (printf "%s_Notes_%s" ($.chezmoi.homeDir | replaceAllRegex "/" "_") .name) -}}
-git clone git@github.com:{{- .repo -}}.git "{{- .name -}}"
-ln -s "{{- $.chezmoi.homeDir -}}/Notes/.hooks/post-commit" "./{{- .name -}}/.git/hooks"
-mkdir -p "{{- $gitDir -}}"
-mv "./{{- .name -}}/.git" "{{- $gitDir -}}"
-echo "gitdir: {{ $gitDir -}}/.git" > "./{{- .name -}}/.git"
+git clone git@github.com:{{ .repo }}.git "{{ .name }}"
+ln -s "{{ $.chezmoi.homeDir }}/Notes/.hooks/post-commit" "./{{ .name }}/.git/hooks"
+mkdir -p "{{ $gitDir }}"
+mv "./{{ .name }}/.git" "{{ $gitDir }}"
+echo "gitdir: {{ $gitDir }}/.git" > "./{{ .name }}/.git"
 {{ end -}}
 popd

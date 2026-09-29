@@ -6,16 +6,13 @@ taps:
 {{- end }}
 
 formulae:
-{{- if eq .chezmoi.os "darwin" }}
-{{- if not .vm }}
+{{- if and (eq .chezmoi.os "darwin") (not .vm) }}
   - applesimutils
   - cliclick
   - cocoapods
   - ios-deploy
   - ruby
   - xcodegen
-{{- end }}
-  - pinentry-mac
 {{- end }}
 {{- if not .server }}
   - gh
@@ -38,7 +35,6 @@ formulae:
   - dust
   - eza
   - fd
-  - gnupg
   - micro
   - rclone
   - starship
