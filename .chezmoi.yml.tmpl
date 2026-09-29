@@ -48,6 +48,15 @@ merge:
     - "{{ `{{ .Source }}` }}"
     - "{{ `{{ .Target }}` }}"
 
+hooks:
+  read-source-state:
+    pre:
+{{ if ne .chezmoi.os "windows" -}}
+      command: .local/share/chezmoi/.hooks/setup.sh
+{{ else -}}
+      command: exit
+{{ end -}}
+
 data:
   server: {{ $server | toYaml }}
   vm: {{ $VM | toYaml }}

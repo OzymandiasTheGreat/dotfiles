@@ -3,9 +3,19 @@
 ## macOS
 
 ```shell
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 eval "$(/opt/homebrew/bin/brew shellenv)"
-brew install age chezmoi --cask keepassxc
+brew install age chezmoi keepassxc
+chezmoi init --ssh --apply OzymandiasTheGreat
+```
+
+## Linux
+
+```shell
+sudo apt install --assume-yes build-essential curl file git keepassxc-full procps
+NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+brew install age chezmoi
 chezmoi init --ssh --apply OzymandiasTheGreat
 ```
 
