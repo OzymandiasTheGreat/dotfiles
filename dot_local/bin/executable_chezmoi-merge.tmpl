@@ -1,0 +1,39 @@
+#!/bin/bash
+
+SourceDir="{{- .chezmoi.sourceDir -}}"
+Destination="$1"
+Target="$2"
+Base="${Target}.base"
+Source="$3"
+
+if [[ "$Destination" =~ ^{{ .chezmoi.homeDir -}}/Documents/Security/ozymandias.kdbx$ ]]; then
+  cp -f "$Destination" "$Source"
+elif [[ "$Destination" =~ ^{{ .chezmoi.homeDir -}}/[a-zA-Z0-9/\._-]+?/VSCodium/User/[a-z_\.-]+?\.json$ ]]; then
+  Filename="$(basename "$Destination")"
+  Template="${SourceDir}/.chezmoitemplates/vscodium/${Filename}c.tmpl"
+  Origin="${Template}.base"
+  Temp="${Template}.src"
+
+  cp "$Template" "$Origin"
+  cp "$Template" "$Temp"
+  codium --new-window --wait --merge "$Template" "$Destination" "$Origin" "$Temp"
+  rm "$Origin"
+  mv "$Temp" "$Template"
+  cp -f "$Target" "$Source"
+elif [[ "$Destination" =~ ^{{ .chezmoi.homeDir -}}/[a-zA-Z0-9/\._-]+?/VSCodium/User/snippets/[a-z_\.-]+?\.json$ ]]; then
+  Filename="$(basename "$Destination")"
+  Template="${SourceDir}/.chezmoitemplates/vscodium/snippets/${Filename}c.tmpl"
+  Origin="${Template}.base"
+  Temp="${Template}.src"
+
+  cp "$Template" "$Origin"
+  cp "$Template" "$Temp"
+  codium --new-window --wait --merge "$Template" "$Destination" "$Origin" "$Temp"
+  rm "$Origin"
+  mv "$Temp" "$Template"
+  cp -f "$Target" "$Source"
+else
+  cp "$Target" "$Base"
+  codium --new-window --wait --merge "$Target" "$Destination" "$Base" "$Source"
+fi
+

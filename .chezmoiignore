@@ -29,6 +29,8 @@ Library
 {{ end }}
 
 {{- if eq .chezmoi.os "windows" -}}
+.chezmoiscripts/unix/**
+.local/bin/chezmoi-merge
 .alias
 .bashrc
 .profile
