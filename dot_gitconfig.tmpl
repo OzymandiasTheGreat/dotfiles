@@ -1,7 +1,10 @@
 [user]
 name = Tomas Ravinskas
 email = tomas@tomasrav.me
-signingkey = 1AB95841DA714E0CCC8452B29424DCD98F49C581
+signingkey = ~/.ssh/sign_ed25519.pub
+
+[gpg]
+format = ssh
 
 [core]
 editor = micro
@@ -13,6 +16,9 @@ longpaths = true
 defaultBranch = main
 
 [commit]
+gpgSign = true
+
+[tag]
 gpgSign = true
 
 [pull]

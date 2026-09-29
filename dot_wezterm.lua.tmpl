@@ -1,5 +1,53 @@
 local wezterm = require 'wezterm'
 
+wezterm.on('format-window-title', function(tab, pane, tabs, panes, cfg)
+  local host = ''
+  local cwd = pane.current_working_dir
+  if cwd and cwd.host and cwd.host ~= '' and cwd.host ~= 'localhost' then
+    host = cwd.host:gsub('%.local$', '')
+  end
+
+  local cmd = pane.foreground_process_name
+  if cmd then
+    cmd = cmd:match('[^/\\]+$') or cmd
+    cmd = cmd:gsub('%.exe$', '')
+  else
+    cmd = ''
+  end
+
+  local shell = { 
+    bash = true,
+    cmd = true,
+    fish = true, 
+    sh = true,
+    zsh = true,
+    powershell = true,
+    pwsh = true,
+    tmux = true,
+  }
+
+  local title = ''
+  if cmd == '' or shell[cmd:lower()] then
+    if cwd then
+      local path = cwd.file_path:gsub('[/\\]+$', '')
+      local folder = path:match('[^/\\]+$')
+
+      if not folder or folder == '' then
+        title = path
+      end
+      title = folder
+    end
+  else
+    title = cmd
+  end
+
+  if host ~= '' then
+    title = title .. " - " .. host
+  end
+
+  return title .. " - WezTerm"
+end)
+
 return {
   font = wezterm.font 'FiraCode Nerd Font',
   font_size = 14,
