@@ -2,11 +2,68 @@
 
 set -eu
 
-osascript -e "tell application "System Events"
-  tell current desktop
-    set picture rotation to 1
-    set random order to true
-    set pictures folder to POSIX file \"$wallpapers\"
-    set change interval to 3600.0
-  end tell
-end tell"
+# Wallpaper Location
+folder="{{ .wallpapers }}"
+# Placement
+#   Fill Screen="Crop"
+#   Fit to Screen="SizeToFit"
+#   Stretch to Fill Screen="FillScreen"
+#   Center="Centered"
+#   Tile="Tile"
+placement="Crop"
+# Shuffle Frequency:
+#   "shuffle_on_login"
+#   "shuffle_on_wakeup"
+#   "shuffle_every_5_seconds"
+#   "shuffle_every_1_minute"
+#   "shuffle_every_5_minutes"
+#   "shuffle_every_15_minutes"
+#   "shuffle_every_30_minutes"
+#   "shuffle_every_1_hour"
+#   "shuffle_every_1_day"
+interval="shuffle_every_30_minutes"
+# Shuffle Randomly
+randomly="true"
+
+store_dir="$HOME/Library/Application Support/com.apple.wallpaper/Store"
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+
+plutil -create binary1 "$tmp/config.plist"
+plutil -insert type -string imageFolder "$tmp/config.plist"
+plutil -insert url -dictionary "$tmp/config.plist"
+plutil -insert url.relative -string "file://$folder" "$tmp/config.plist"
+
+plutil -create binary1 "$tmp/options.plist"
+plutil -insert values -json '{
+  "placement": {"picker": {"_0": {"id": "Crop"}}},
+  "shuffleFrequency": {"picker": {"_0": {"id": "'"$interval"'"}}},
+  "shuffleRandomly": {"toggle": {"_0": {"isOn": '"$randomly"'}}}
+}' "$tmp/options.plist"
+
+config=$(base64 -i "$tmp/config.plist")
+options=$(base64 -i "$tmp/options.plist")
+now=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+index="$tmp/Index.plist"
+plutil -create binary1 "$index"
+for top in AllSpacesAndDisplays SystemDefault; do
+  plutil -insert "$top" -json '{
+    "Type": "individual",
+    "Desktop": {"Content": {"Choices": [{"Provider": "com.apple.wallpaper.choice.image", "Files": []}], "Shuffle": "$null"}},
+    "Idle": {"Content": {"Choices": [{"Provider": "default", "Files": []}], "Shuffle": "$null", "EncodedOptionValues": "$null"}}
+  }' "$index"
+  plutil -insert "$top.Desktop.Content.Choices.0.Configuration" -data "$config" "$index"
+  plutil -insert "$top.Desktop.Content.EncodedOptionValues" -data "$options" "$index"
+  plutil -insert "$top.Idle.Content.Choices.0.Configuration" -data "" "$index"
+  for mode in Desktop Idle; do
+    plutil -insert "$top.$mode.LastSet" -date "$now" "$index"
+    plutil -insert "$top.$mode.LastUse" -date "$now" "$index"
+  done
+done
+plutil -insert Displays -dictionary "$index"
+plutil -insert Spaces -dictionary "$index"
+
+mkdir -p "$store_dir"
+cp "$index" "$store_dir/Index.plist"
+killall WallpaperAgent 2>/dev/null || true
