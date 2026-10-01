@@ -66,9 +66,9 @@ casks:
   - vscodium
   - wezterm
 
-dmg:
-{{- if not .vm }}
-  - {{ gitHubLatestReleaseAssetURL "sannidhyaroy/Soduto" "Soduto*.dmg" }}
+github:
+{{- if and (eq .chezmoi.os "darwin") (not .vm) }}
+{{ template "darwin/github-release.yml.tmpl" (dict "vendor" "sannidhyaroy" "package" "Soduto" "arch" .chezmoi.arch) }}
 {{- else }}
  []
 {{- end }}

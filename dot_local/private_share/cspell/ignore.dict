@@ -35,6 +35,7 @@ openmtp
 osascript
 PARAVFS
 pkgs
+plutil
 pmodule
 pycache
 rustls
@@ -53,6 +54,7 @@ venv
 vmargs
 vzygjuafazp
 wdio
+wvous
 xcconfig
 xcframework
 xcrun

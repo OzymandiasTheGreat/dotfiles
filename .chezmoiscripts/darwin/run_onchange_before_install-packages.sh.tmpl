@@ -4,11 +4,35 @@ set -eu
 
 {{- $pkg := includeTemplate "packages.yml.tmpl" . | fromYaml }}
 
-install_dmg() {
-  tmp="$(mktemp -d)"
-  image="$(basename $1)"
+gh_install() {
+  package="$1"
+  installed="$2"
+  latest="$3"
+  update=$4
+  uri="$5"
 
-  curl -L --output "$tmp/$image" "$1"
+  if ! [ $uri ]; then
+    action="$([ $installed ] && echo "update" || echo "install")"
+    >&2 echo "Failed to $action package ${package}@${installed}\nCould not determine download URL"
+    return 0
+  fi
+
+  if [ $installed ]; then
+    echo "Found package ${package}@${installed}"
+
+    if $update; then
+      echo "Updating to ${package}@${latest} from $uri"
+    else
+      echo "$package is already latest version"
+      return 0
+  else
+    echo "Installing package ${package}@${latest} from $uri"
+  fi
+
+  tmp="$(mktemp -d)"
+  image="$(basename $uri)"
+
+  curl -L --output "$tmp/$image" "$uri"
 
   volume="$(yes qy | diskutil image attach "$tmp/$image" | awk -F'\t' '/\/Volumes/ {print $NF}')"
 
@@ -41,8 +65,8 @@ mas "{{ .name }}", id: {{ .id }}
 EOF
 
 {{ if not .vm -}}
-  {{ range ($pkg.dmg | sortAlpha | uniq) -}}
-  install_dmg "{{ . }}"
+  {{ range $pkg.github -}}
+  gh_install "{{ .package }}" "{{ .installed }}" "{{ .latest }}" {{ .update }} "{{ .uri }}"
   {{ end -}}
 {{ end -}}
 

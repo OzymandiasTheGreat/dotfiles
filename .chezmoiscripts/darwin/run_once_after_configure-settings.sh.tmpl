@@ -1,0 +1,52 @@
+#!/bin/bash
+
+set -eu
+
+defaults write -g AppleMenuBarVisibleInFullscreen -int 1
+defaults write -g AppleScrollerPagingBehavior -int 1
+defaults write -g AppleShowAllExtensions -int 1
+defaults write -g AppleSpacesSwitchOnActivate -int 0
+defaults write -g AppleWindowTabbingMode -string always
+defaults write -g SLSMenuBarUseBlurredAppearance -int 1
+defaults write -g WebAutomaticSpellingCorrectionEnabled -int 0
+
+defaults write -g NSAutomaticCapitalizationEnabled -int 0
+defaults write -g NSAutomaticDashSubstitutionEnabled -int 0
+defaults write -g NSAutomaticInlinePredictionEnabled -int 0
+defaults write -g NSAutomaticPeriodSubstitutionEnabled -int 0
+defaults write -g NSAutomaticQuoteSubstitutionEnabled -int 0
+defaults write -g NSAutomaticSpellingCorrectionEnabled -int 0
+defaults write -g NSUserDictionaryReplacementItems '()'
+
+defaults write com.apple.WindowManager AppWindowGroupingBehavior -int 1
+defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -int 0
+defaults write com.apple.WindowManager EnableTiledWindowMargins -int 0
+defaults write com.apple.WindowManager EnableTilingByEdgeDrag -int 0
+defaults write com.apple.WindowManager EnableTopTilingByEdgeDrag -int 0
+defaults write com.apple.WindowManager HideDesktop -int 1
+
+defaults write com.apple.dock enterMissionControlByTopWindowDrag -int 0
+defaults write com.apple.dock largesize -int 79
+defaults write com.apple.dock magnification -int 1
+defaults write com.apple.dock minimize-to-application -int 1
+defaults write com.apple.dock mru-spaces -int 0
+defaults write com.apple.dock orientation -string right
+defaults write com.apple.dock show-recents -int 0
+defaults write com.apple.dock wvous-tr-corner -int 2
+defaults write com.apple.dock wvous-tr-modifier -int 0
+
+defaults write com.apple.loginwindow TALLogoutSavesState -int 0
+
+defaults write com.apple.spaces spans-displays -int 1
+
+defaults write com.apple.finder FXDefaultSearchScope -string SCcf
+defaults write com.apple.finder FXRecentFolders '()'
+defaults write com.apple.finder FXRemoveOldTrashItems -int 1
+defaults write com.apple.finder NewWindowTarget -string PfHm
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -int 0
+defaults write com.apple.finder ShowRecentTags -int 0
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -int 0
+defaults write com.apple.finder WarnOnEmptyTrash -int 0
+defaults write com.apple.finder _FXSortFoldersFirst -int 1
+
+killall SystemUIServer
