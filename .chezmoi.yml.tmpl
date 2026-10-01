@@ -62,6 +62,7 @@ hooks:
 {{- end }}
 
 data:
+  hostname: {{ $email := promptStringOnce . "hostname" "Enter the hostname" }}
   server: {{ $server | toYaml }}
   vm: {{ $VM | toYaml }}
   wallpapers: {{ joinPath .chezmoi.homeDir "Pictures" "Wallpapers" }}

@@ -37,4 +37,5 @@ elif [[ "$Destination" =~ ^/Users/ozymandias/[\ a-zA-Z0-9/\._-]+/VSCodium/User/s
 else
   cp "$Target" "$Base"
   codium --new-window --wait --merge "$Target" "$Destination" "$Base" "$Source"
+  rm "$Base"
 fi
