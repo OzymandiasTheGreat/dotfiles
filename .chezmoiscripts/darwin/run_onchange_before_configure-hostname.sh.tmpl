@@ -4,7 +4,7 @@ set -eu
 
 value="$(hostname)"
 
-if [ value = {{ .hostname }} ]; then
+if [ value = '{{ .hostname }}' ]; then
   echo "Hostname is {{ .hostname }}"
 else
   # FQDN
