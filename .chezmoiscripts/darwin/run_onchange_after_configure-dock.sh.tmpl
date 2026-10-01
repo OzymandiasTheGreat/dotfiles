@@ -23,7 +23,7 @@ trap 'killall Dock' EXIT
   "iPhone Mirroring"
   "System Settings" -}}
 {{ range ($remove | uniq) -}}
-dockutil --remove "{{ . }}" --no-restart || true
+dockutil --remove "{{ . }}" --no-restart &>/dev/null || true
 {{ end -}}
 
 dockutil --add "/Applications/WezTerm.app" --before "Mail" --no-restart &>/dev/null || true
