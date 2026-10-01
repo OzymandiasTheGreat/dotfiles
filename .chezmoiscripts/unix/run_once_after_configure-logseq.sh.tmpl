@@ -2,16 +2,20 @@
 
 set -euo pipefail
 
-mkdir -p "{{ .chezmoi.homeDir }}/Notes"
-pushd "{{ .chezmoi.homeDir }}/Notes"
+{{ $notes := joinPath .chezmoi.homeDir "Notes" -}}
+GIT_SSH_COMMAND="ssh -i /dev/stdin"
+mkdir -p "{{ $notes }}"
+pushd "{{ $notes }}" > /dev/null
 {{ range .logseq -}}
 {{ $gitDir := joinPath $.chezmoi.homeDir ".logseq" "git" (printf "%s_Notes_%s" ($.chezmoi.homeDir | replaceAllRegex "/" "_") .name) -}}
+{{ if not (stat (joinPath $notes .name)) -}}
 {{/* Using redqueen's ssh key because local machine's keys have not been authorized yet */ -}}
-if git -c core.sshCommand="ssh -i <(echo -e '{{ keepassxcAttachment "redqueen" "id_ed25519" }}')" clone git@github.com:{{ .repo }}.git "{{ .name }}" &>/dev/null; then
-  ln -s "{{ $.chezmoi.homeDir }}/Notes/.hooks/post-commit" "./{{ .name }}/.git/hooks"
+if git clone git@github.com:{{ .repo }}.git "{{ .name }}" <<< "{{ keepassxcAttachment "redqueen" "id_ed25519" }}"; then # &>/dev/null; then
+  ln -s "{{ joinPath $notes ".hooks" "post-commit" }}" "{{ joinPath "." .name ".git" "hooks" }}"
   mkdir -p "{{ $gitDir }}"
-  mv "./{{ .name }}/.git" "{{ $gitDir }}"
-  echo "gitdir: {{ $gitDir }}/.git" > "./{{ .name }}/.git"
+  mv "{{ joinPath "." .name ".git" }}" "{{ $gitDir }}"
+  echo "gitdir: {{ $gitDir }}/.git" > "{{ joinPath "." .name ".git" }}"
 fi
 {{ end -}}
-popd
+{{ end -}}
+popd > /dev/null

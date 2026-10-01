@@ -1,0 +1,12 @@
+Host *
+  AddKeysToAgent yes
+  Usekeychain yes
+Host paperspace
+  HostName 127.0.0.1
+  User paperspace
+  ForwardAgent yes
+  ServerAliveInterval 30
+  ServerAliveCountMax 6
+  ControlMaster auto
+  ControlPath ~/.ssh/cm-%r@%h:%p
+  ControlPersist 10m
