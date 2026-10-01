@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-{{- $pkg := includeTemplate "packages.yml.tmpl" . | fromYaml }}
+{{- $pkg := includeTemplate "pkg-darwin.yml.tmpl" . | fromYaml }}
 
-gh_install() {
+manual_install() {
   package="$1"; installed="$2"; latest="$3"; update=$4; uri="$5"
 
   if ! [ $uri ]; then
@@ -46,37 +46,8 @@ gh_install() {
   rm -rf "$tmp"
 }
 
-brew bundle --file=/dev/stdin <<EOF
-{{ range ($pkg.taps | sortAlpha | uniq) -}}
-tap "{{ . }}"
-{{ end -}}
-{{ range ($pkg.formulae | sortAlpha | uniq) -}}
-brew "{{ . }}"
-{{ end -}}
-{{ range ($pkg.casks | sortAlpha | uniq) -}}
-cask "{{ . }}"
-{{ end -}}
-{{ range $pkg.mas -}}
-mas "{{ .name }}", id: {{ .id }}
-{{ end -}}
-EOF
-
 {{ if not .vm -}}
-  {{ range $pkg.github -}}
-  gh_install "{{ .package }}" "{{ .installed }}" "{{ .latest }}" {{ .update }} "{{ .uri }}"
+  {{ range $pkg -}}
+  manual_install "{{ .package }}" "{{ .installed }}" "{{ .latest }}" {{ .update }} "{{ .uri }}"
   {{ end -}}
 {{ end -}}
-
-source "$(brew --prefix)/opt/nvm/nvm.sh"
-nvm install --lts --latest-npm
-{{ $packages := "" -}}
-{{ range $pkg.npm -}}
-  {{ $packages = printf "%s %s@%s" $packages .package .version -}}
-{{ end -}}
-npm install --global {{ $packages }}
-
-{{ $extensions := "" -}}
-{{ range ($pkg.codium | sortAlpha | uniq) -}}
-  {{ $extensions = printf "%s --force --install-extension %s" $extensions . -}}
-{{ end -}}
-codium {{ $extensions }}

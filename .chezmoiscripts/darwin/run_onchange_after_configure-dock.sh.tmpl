@@ -1,0 +1,40 @@
+#!/bin/bash
+
+set -euo pipefail
+
+trap 'killall Dock' EXIT
+
+{{ $remove := list
+  "Apps"
+  "Safari"
+  "Messages"
+  "Maps"
+  "Photos"
+  "FaceTime"
+  "Phone"
+  "Calendar"
+  "Contacts"
+  "Reminders"
+  "Notes"
+  "TV"
+  "Music"
+  "Games"
+  "App Store"
+  "iPhone Mirroring"
+  "System Settings" -}}
+{{ range ($remove | uniq) -}}
+dockutil --remove "{{ . }}" --no-restart || true
+{{ end -}}
+
+dockutil --add "/Applications/WezTerm.app" --before "Mail" --no-restart
+{{ if not .vm -}}
+dockutil --add "/Applications/Spotify.app" --no-restart
+dockutil --add "/Applications/Logseq-OG.app" --no-restart
+{{ end -}}
+dockutil --add "/Applications/Firefox.app" --no-restart
+dockutil --add "/Applications/VSCodium.app" --no-restart
+dockutil --add "/Applications/Xcode.app" --no-restart
+{{ if not .vm -}}
+dockutil --add "/Applications/Xcode.app/Contents/Applications/DeviceHub.app" --no-restart
+dockutil --add "/Applications/Android Studio.app" --no-restart
+{{ end -}}

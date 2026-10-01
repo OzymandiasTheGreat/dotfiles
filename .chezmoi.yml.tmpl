@@ -56,9 +56,16 @@ hooks:
   read-source-state:
     pre:
 {{- if ne .chezmoi.os "windows" }}
-      command: .local/share/chezmoi/.hooks/setup.sh
+      command: .local/share/chezmoi/.hooks/pre-read-source-state.sh
 {{- else }}
-      script: .local/share/chezmoi/.hooks/setup.ps1
+      script: .local/share/chezmoi/.hooks/pre-read-source-state.ps1
+{{- end }}
+  apply:
+    post:
+{{- if ne .chezmoi.os "windows" }}
+      command: .local/share/chezmoi/.hooks/post-apply.sh
+{{- else }}
+      script: .local/share/chezmoi/.hooks/post-apply.ps1
 {{- end }}
 
 data:
@@ -66,12 +73,3 @@ data:
   server: {{ $server | toYaml }}
   vm: {{ $VM | toYaml }}
   wallpapers: {{ joinPath .chezmoi.homeDir "Pictures" "Wallpapers" }}
-  logseq:
-    - name: bullet.
-      repo: OzymandiasTheGreat/bullet.-graph
-    - name: notes
-      repo: OzymandiasTheGreat/notes
-    - name: ligo
-      repo: OzymandiasTheGreat/ligo-graph
-    - name: void
-      repo: OzymandiasTheGreat/void-graph

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -euo pipefail
+
+{{- $ext := includeTemplate "codium.yml.tmpl" . | fromYaml }}
+
+{{ $extensions := "" -}}
+{{ range ($ext | sortAlpha | uniq) -}}
+  {{ $extensions = printf "%s --force --install-extension %s" $extensions . -}}
+{{ end -}}
+codium {{ $extensions }}

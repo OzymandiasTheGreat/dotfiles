@@ -2,9 +2,10 @@
 
 set -euo pipefail
 
+{{ $logseq := includeTemplate "logseq.yml.tmpl" . | fromYaml -}}
 {{ $notes := joinPath .chezmoi.homeDir "Notes" -}}
 {{ $proceed := false -}}
-{{ range .logseq -}}
+{{ range $logseq -}}
 {{ if not (stat (joinPath $notes .name)) -}}
   {{ $proceed = true -}}
 {{ end -}}
@@ -29,7 +30,7 @@ EOF
 export GIT_SSH_COMMAND='ssh -o BatchMode=yes'
 mkdir -p "{{ $notes }}"
 pushd "{{ $notes }}" > /dev/null
-{{ range .logseq -}}
+{{ range $logseq -}}
 {{ if not (stat (joinPath $notes .name)) -}}
 {{ $gitDir := joinPath $.chezmoi.homeDir ".logseq" "git" (printf "%s_Notes_%s" ($.chezmoi.homeDir | replaceAllRegex "/" "_") .name) -}}
 if git clone git@github.com:{{ .repo }}.git "{{ .name }}" &>/dev/null; then

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -euo pipefail
+
+{{- $npm := includeTemplate "npm.yml.tmpl" . | fromYaml }}
+{{- $prefix := "$(brew --prefix)" }}
+{{- if eq .chezmoi.os "darwin" }}
+  {{- $prefix = "/opt/homebrew" }}
+{{- else if eq .chezmoi.os "linux" }}
+  {{- $prefix = "/home/linuxbrew/.linuxbrew" }}
+{{- end }}
+
+source "{{ $prefix }}/opt/nvm/nvm.sh"
+nvm install --lts --latest-npm
+{{ $packages := "" -}}
+{{ range $npm -}}
+  {{ $packages = printf "%s %s@%s" $packages .package .version -}}
+{{ end -}}
+npm install --global {{ $packages }}
