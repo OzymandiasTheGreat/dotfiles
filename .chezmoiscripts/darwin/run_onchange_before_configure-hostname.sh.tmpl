@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -euo pipefail
 
 value="$(hostname)"
 
@@ -8,7 +8,7 @@ if [ value = '{{ .hostname }}' ]; then
   echo 'Hostname is {{ .hostname }}'
 else
   # FQDN
-  sudo scutil --set HostName '{{ .hostname }}.local'
+  sudo scutil --set HostName '{{ .hostname }}'
   # Bonjour
   sudo scutil --set LocalHostName '{{ .hostname }}'
   # Finder

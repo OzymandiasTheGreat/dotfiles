@@ -1,8 +1,0 @@
-{{- if ne .chezmoi.username "root" -}}
-{{- $entry := keepassxc .hostname -}}
-{{- if $entry -}}
-echo "{{ $entry.Password | replaceAllRegex "\"" "\\\"" }}\n" | sudo -S
-{{- else -}}
-sudo
-{{- end -}}
-{{- end -}}

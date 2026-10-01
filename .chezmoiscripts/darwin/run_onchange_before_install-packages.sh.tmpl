@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -euo pipefail
 
 {{- $pkg := includeTemplate "packages.yml.tmpl" . | fromYaml }}
 
@@ -38,10 +38,10 @@ gh_install() {
   volume="$(yes qy | diskutil image attach "$tmp/$image" | awk -F'\t' '/\/Volumes/ {print $NF}')"
 
   if [ -e "$volume"/*.app ]; then
-    {{ template "sudo.tmpl" . }} cp -rf "$volume"/*.app /Applications
+    sudo cp -rf "$volume"/*.app /Applications
   elif [ -e "$volume"/*.pkg ]; then
     package=`realpath "$volume"/*.pkg`
-    {{ template "sudo.tmpl" . }} installer -package "$package" -target /
+    sudo installer -package "$package" -target /
   else
     echo "Failed to install $image from $1"
   fi
