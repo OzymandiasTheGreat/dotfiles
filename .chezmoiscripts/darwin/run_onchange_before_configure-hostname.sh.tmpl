@@ -5,14 +5,14 @@ set -eu
 value="$(hostname)"
 
 if [ value = '{{ .hostname }}' ]; then
-  echo "Hostname is {{ .hostname }}"
+  echo 'Hostname is {{ .hostname }}'
 else
   # FQDN
-  sudo scutil --set HostName "{{ .hostname }}.local"
+  sudo scutil --set HostName '{{ .hostname }}.local'
   # Bonjour
-  sudo scutil --set LocalHostName "{{ .hostname }}"
+  sudo scutil --set LocalHostName '{{ .hostname }}'
   # Finder
-  sudo scutil --set ComputerName "{{ .hostname }}"
+  sudo scutil --set ComputerName '{{ .hostname }}'
   # Flush DNS cache
   dscacheutil -flushcache
 fi
