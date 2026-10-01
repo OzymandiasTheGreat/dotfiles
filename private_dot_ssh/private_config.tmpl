@@ -1,6 +1,7 @@
 Host *
   AddKeysToAgent yes
   Usekeychain yes
+{{- if and (not .server) (not .vm) }}
 Host paperspace
   HostName 127.0.0.1
   User paperspace
@@ -10,3 +11,4 @@ Host paperspace
   ControlMaster auto
   ControlPath ~/.ssh/cm-%r@%h:%p
   ControlPersist 10m
+{{- end }}

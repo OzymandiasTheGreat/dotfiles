@@ -3,14 +3,36 @@
 set -euo pipefail
 
 {{ $notes := joinPath .chezmoi.homeDir "Notes" -}}
-GIT_SSH_COMMAND="ssh -i /dev/stdin"
+{{ $proceed := false -}}
+{{ range .logseq -}}
+{{ if not (stat (joinPath $notes .name)) -}}
+  {{ $proceed = true -}}
+{{ end -}}
+{{ end -}}
+
+{{ if $proceed -}}
+eval "$(ssh-agent -s)" > /dev/null
+askpass="$(mktemp)"
+trap 'ssh-agent -k > /dev/null; rm -f "$askpass"' EXIT
+chmod 700 "$askpass"
+
+cat > "$askpass" <<'EOF'
+#!/bin/sh
+printf '%s\n' "$REDQUEEN_PASSPHRASE"
+EOF
+
+{{/* Using redqueen's ssh key because local machine's keys have not been authorized yet */ -}}
+REDQUEEN_PASSPHRASE={{ (keepassxc "redqueen").Password | replace "'" "'\\''" | squote }} SSH_ASKPASS="$askpass" SSH_ASKPASS_REQUIRE=force ssh-add - &>/dev/null <<EOF
+{{ keepassxcAttachment "redqueen" "id_ed25519" | trim }}
+EOF
+
+export GIT_SSH_COMMAND='ssh -o BatchMode=yes'
 mkdir -p "{{ $notes }}"
 pushd "{{ $notes }}" > /dev/null
 {{ range .logseq -}}
-{{ $gitDir := joinPath $.chezmoi.homeDir ".logseq" "git" (printf "%s_Notes_%s" ($.chezmoi.homeDir | replaceAllRegex "/" "_") .name) -}}
 {{ if not (stat (joinPath $notes .name)) -}}
-{{/* Using redqueen's ssh key because local machine's keys have not been authorized yet */ -}}
-if git clone git@github.com:{{ .repo }}.git "{{ .name }}" <<< "{{ keepassxcAttachment "redqueen" "id_ed25519" }}"; then # &>/dev/null; then
+{{ $gitDir := joinPath $.chezmoi.homeDir ".logseq" "git" (printf "%s_Notes_%s" ($.chezmoi.homeDir | replaceAllRegex "/" "_") .name) -}}
+if git clone git@github.com:{{ .repo }}.git "{{ .name }}" &>/dev/null; then
   ln -s "{{ joinPath $notes ".hooks" "post-commit" }}" "{{ joinPath "." .name ".git" "hooks" }}"
   mkdir -p "{{ $gitDir }}"
   mv "{{ joinPath "." .name ".git" }}" "{{ $gitDir }}"
@@ -19,3 +41,4 @@ fi
 {{ end -}}
 {{ end -}}
 popd > /dev/null
+{{ end -}}
