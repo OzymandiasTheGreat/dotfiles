@@ -1,3 +1,22 @@
+{{- define "darwin-github-release" -}}
+  {{- $plist := printf "/Applications/%s.app/Contents/Info.plist" .package -}}
+  {{- $release := (index (gitHubReleases (printf "%s/%s" .vendor .package)) 0).TagName -}}
+  {{- $arch := "arm64" -}}
+  {{- if eq .arch "amd64" -}}
+    {{- $arch = "x86_64" -}}
+  {{- end -}}
+  {{- $version := output "bash" "-c" (printf "plutil -extract CFBundleShortVersionString raw -expect string -n %s || '0.0.0'" $plist) -}}
+  {{- $uri := gitHubReleaseAssetURL (printf "%s/%s" .vendor .package) $release (printf "%s*%s*dmg" .package $arch) -}}
+  {{- if not $uri -}}
+    {{- $uri = gitHubReleaseAssetURL (printf "%s/%s" .vendor .package) $release (printf "%s*dmg" .package) -}}
+  {{- end }}
+  - package: {{ .package }}
+    installed: {{ $version }}
+    latest: {{ $release}}
+    update: {{ semverCompare (printf ">=%s" $version) $release }}
+    uri: {{ $uri | quote }}
+{{- end }}
+
 taps:
 {{- if and (eq .chezmoi.os "darwin") (not .vm) }}
   - wix/brew
@@ -68,7 +87,7 @@ casks:
 
 github:
 {{- if and (eq .chezmoi.os "darwin") (not .vm) }}
-{{ template "darwin/github-release.yml.tmpl" (dict "vendor" "sannidhyaroy" "package" "Soduto" "arch" .chezmoi.arch) }}
+{{ template "darwin-github-release" (dict "vendor" "sannidhyaroy" "package" "Soduto" "arch" .chezmoi.arch) }}
 {{- else }}
  []
 {{- end }}

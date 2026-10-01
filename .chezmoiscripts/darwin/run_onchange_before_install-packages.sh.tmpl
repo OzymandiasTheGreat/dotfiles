@@ -25,6 +25,7 @@ gh_install() {
     else
       echo "$package is already latest version"
       return 0
+    fi
   else
     echo "Installing package ${package}@${latest} from $uri"
   fi
