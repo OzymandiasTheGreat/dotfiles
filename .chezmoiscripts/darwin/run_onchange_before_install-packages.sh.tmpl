@@ -5,11 +5,7 @@ set -euo pipefail
 {{- $pkg := includeTemplate "packages.yml.tmpl" . | fromYaml }}
 
 gh_install() {
-  package="$1"
-  installed="$2"
-  latest="$3"
-  update=$4
-  uri="$5"
+  package="$1"; installed="$2"; latest="$3"; update=$4; uri="$5"
 
   if ! [ $uri ]; then
     action="$([ $installed ] && echo "update" || echo "install")"
@@ -73,10 +69,14 @@ EOF
 
 source "$(brew --prefix)/opt/nvm/nvm.sh"
 nvm install --lts --latest-npm
+{{ $packages := "" -}}
 {{ range $pkg.npm -}}
-npm install --global "{{ .package }}@{{ .version }}"
+  {{ $packages = printf "%s %s@%s" $packages .package .version -}}
 {{ end -}}
+npm install --global {{ $packages }}
 
+{{ $extensions := "" -}}
 {{ range ($pkg.codium | sortAlpha | uniq) -}}
-codium --force --install-extension "{{ . }}"
+  {{ $extensions = printf "%s --force --install-extension %s" $extensions . -}}
 {{ end -}}
+codium {{ $extensions }}

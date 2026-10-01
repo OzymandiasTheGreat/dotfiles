@@ -6,10 +6,12 @@ mkdir -p "{{ .chezmoi.homeDir }}/Notes"
 pushd "{{ .chezmoi.homeDir }}/Notes"
 {{ range .logseq -}}
 {{ $gitDir := joinPath $.chezmoi.homeDir ".logseq" "git" (printf "%s_Notes_%s" ($.chezmoi.homeDir | replaceAllRegex "/" "_") .name) -}}
-git clone git@github.com:{{ .repo }}.git "{{ .name }}"
-ln -s "{{ $.chezmoi.homeDir }}/Notes/.hooks/post-commit" "./{{ .name }}/.git/hooks"
-mkdir -p "{{ $gitDir }}"
-mv "./{{ .name }}/.git" "{{ $gitDir }}"
-echo "gitdir: {{ $gitDir }}/.git" > "./{{ .name }}/.git"
+{{/* Using redqueen's ssh key because local machine's keys have not been authorized yet */ -}}
+if git -c core.sshCommand="ssh -i <(echo -e '{{ keepassxcAttachment "redqueen" "id_ed25519" }}')" clone git@github.com:{{ .repo }}.git "{{ .name }}" &>/dev/null; then
+  ln -s "{{ $.chezmoi.homeDir }}/Notes/.hooks/post-commit" "./{{ .name }}/.git/hooks"
+  mkdir -p "{{ $gitDir }}"
+  mv "./{{ .name }}/.git" "{{ $gitDir }}"
+  echo "gitdir: {{ $gitDir }}/.git" > "./{{ .name }}/.git"
+fi
 {{ end -}}
 popd

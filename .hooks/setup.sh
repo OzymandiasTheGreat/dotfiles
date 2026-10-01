@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -euo pipefail
 
 type brew >/dev/null 2>&1 && \
 type age >/dev/null 2>&1 && \
