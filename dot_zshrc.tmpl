@@ -6,6 +6,8 @@ fi
 # Enable hidden file completions
 setopt globdots
 
+source $(brew --prefix)/share/zsh-autopair/autopair.zsh
+
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
   autoload -Uz compinit

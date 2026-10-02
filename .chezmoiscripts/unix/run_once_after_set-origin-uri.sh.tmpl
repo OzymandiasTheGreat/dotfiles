@@ -1,0 +1,7 @@
+{{ if and (not .server) (not .vm) -}}
+#!/bin/bash
+
+set -euo pipefail
+
+git -C "{{ .chezmoi.workingTree }}" remote set-url origin git@github.com:OzymandiasTheGreat/dotfiles.git
+{{ end -}}
