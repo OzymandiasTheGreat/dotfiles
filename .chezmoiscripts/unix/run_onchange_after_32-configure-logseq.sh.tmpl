@@ -13,18 +13,12 @@ set -euo pipefail
 
 {{ if $proceed -}}
 eval "$(ssh-agent -s)" > /dev/null
-askpass="$(mktemp)"
-trap 'ssh-agent -k > /dev/null; rm -f "$askpass"' EXIT
-chmod 700 "$askpass"
-
-cat > "$askpass" <<'EOF'
-#!/bin/sh
-printf '%s\n' "$REDQUEEN_PASSPHRASE"
-EOF
+trap 'ssh-agent -k > /dev/null' EXIT
 
 {{/* Using redqueen's ssh key because local machine's keys have not been authorized yet */ -}}
-REDQUEEN_PASSPHRASE={{ (keepassxc "redqueen").Password | replace "'" "'\\''" | squote }} SSH_ASKPASS="$askpass" SSH_ASKPASS_REQUIRE=force ssh-add - &>/dev/null <<EOF
-{{ keepassxcAttachment "redqueen" "id_ed25519" | trim }}
+{{ $redqueen := "System/redqueen" -}}
+{{ template "askpass.tmpl" (list $redqueen "SSH") }} SSH_ASKPASS_REQUIRE=force ssh-add - &>/dev/null <<EOF
+{{ keepassxcAttachment $redqueen "id_ed25519" | trim }}
 EOF
 
 export GIT_SSH_COMMAND='ssh -o BatchMode=yes'

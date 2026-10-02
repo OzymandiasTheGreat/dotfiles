@@ -30,6 +30,7 @@ git:
 
 keepassxc:
   database: ~/Documents/Security/ozymandias.kdbx
+  mode: builtin
 
 {{- if not $server }}
 edit:
@@ -69,7 +70,7 @@ hooks:
 {{- end }}
 
 data:
-  hostname: {{ promptStringOnce . "hostname" "Enter the hostname" }}
+  hostname: {{ promptStringOnce . "hostname" "Enter the hostname" | toYaml }}
   server: {{ $server | toYaml }}
   vm: {{ $VM | toYaml }}
   wallpapers: {{ joinPath .chezmoi.homeDir "Pictures" "Wallpapers" }}

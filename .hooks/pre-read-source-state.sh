@@ -9,13 +9,6 @@ exit
 
 case "$(uname -s)" in
 Darwin)
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-  brew bundle --file=/dev/stdin <<EOF
-brew "age"
-brew "chezmoi"
-cask "keepassxc"
-EOF
   ;;
 Linux)
   sudo apt install --assume-yes build-essential curl file git keepassxc-full procps

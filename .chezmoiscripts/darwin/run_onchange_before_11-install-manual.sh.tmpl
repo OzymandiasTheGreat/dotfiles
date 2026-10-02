@@ -34,10 +34,10 @@ manual_install() {
   volume="$(yes qy | diskutil image attach "$tmp/$image" | awk -F'\t' '/\/Volumes/ {print $NF}')"
 
   if [ -e "$volume"/*.app ]; then
-    sudo cp -rf "$volume"/*.app /Applications
+    {{ template "askpass.tmpl" (list (printf "System/%s" .hostname) "SUDO") }} sudo -A cp -rf "$volume"/*.app /Applications
   elif [ -e "$volume"/*.pkg ]; then
     package=`realpath "$volume"/*.pkg`
-    sudo installer -package "$package" -target /
+    {{ template "askpass.tmpl" (list (printf "System/%s" .hostname) "SUDO") }} sudo -A installer -package "$package" -target /
   else
     echo "Failed to install $image from $1"
   fi

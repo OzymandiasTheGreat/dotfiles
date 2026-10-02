@@ -1,9 +1,0 @@
-#!/bin/sh
-
-set -euo pipefail
-
-if [ ! -f "${HOME}/.config/chezmoi/key.txt" ]; then
-	mkdir -p "${HOME}/.config/chezmoi"
-	chezmoi age decrypt --no-tty --output "${HOME}/.config/chezmoi/key.txt" --passphrase "{{ .chezmoi.sourceDir }}/key.txt.age"
-	chmod 0600 "${HOME}/.config/chezmoi/key.txt"
-fi

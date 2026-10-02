@@ -1,0 +1,1 @@
+OZ_PASSPHRASE={{ (keepassxc (index . 0)).Password | replace "'" "\\'" | squote }} {{ printf "%s_ASKPASS" (index . 1) }}={{ "\"${CHEZMOI_SOURCE_DIR}/askpass.sh\"" -}}
