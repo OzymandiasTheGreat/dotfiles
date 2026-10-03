@@ -4,9 +4,20 @@
 set -euo pipefail
 
 {{- $pkg := includeTemplate "pkg-darwin.yml.tmpl" . | fromYaml }}
+{{- $proceed := false }}
+
+main() {
+  {{ range $pkg -}}
+  {{ if .update -}}
+    {{ $proceed = true -}}
+  {{ end -}}
+  manual_install "{{ .package }}" "{{ .installed }}" "{{ .latest }}" {{ .update }} "{{ .uri }}"
+  {{ end -}}
+}
 
 manual_install() {
-  package="$1"; installed="$2"; latest="$3"; update=$4; uri="$5"
+{{ if $proceed -}}
+  package="$1" installed="$2" latest="$3" update=$4 uri="$5"
 
   if [[ -z "$uri" ]]; then
     action="$([[ -n "$installed" ]] && echo "update" || echo "install")"
@@ -42,11 +53,12 @@ manual_install() {
     package=`realpath "$volume"/*.pkg`
     {{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A installer -package "$package" -target /
   else
-    echo "Failed to install $image from $1"
+    echo "Failed to install $image from $uri"
   fi
+{{ else -}}
+  echo ""
+{{ end -}}
 }
 
-{{ range $pkg -}}
-manual_install "{{ .package }}" "{{ .installed }}" "{{ .latest }}" {{ .update }} "{{ .uri }}"
-{{ end -}}
+main
 {{ end -}}

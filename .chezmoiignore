@@ -8,12 +8,13 @@ README.md
 .config/rclone
 .logseq
 .ssh
+.tmux.conf
+.wezterm.lua
 {{ end }}
 
 {{ if .server }}
 .gitconfig
 .npmrc
-.wezterm.lua
 {{ end }}
 
 {{ if ne .chezmoi.os "darwin" }}
@@ -25,20 +26,18 @@ Library
 .chezmoiscripts/linux/**
 {{ end }}
 
-{{ if ne .chezmoi.os "windows" }}
-.chezmoiscripts/windows/**
-{{ end }}
-
-{{ if eq .chezmoi.os "windows" }}
+{{ if and (ne .chezmoi.os "darwin") (ne .chezmoi.os "linux") }}
 .chezmoiscripts/unix/**
 .local/bin/chezmoi-merge
 .alias
 .bashrc
 .profile
-.tmux.conf
-.wezterm.lua
 .zprezto
 .zpreztorc
 .zprofile
 .zshrc
 {{- end -}}
+
+{{ if ne .chezmoi.os "windows" }}
+.chezmoiscripts/windows/**
+{{ end }}

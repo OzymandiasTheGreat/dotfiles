@@ -1,3 +1,4 @@
+{{ if not (stat (joinPath .chezmoi.homeDir ".config/chezmoi/key.txt")) -}}
 #!/bin/sh
 
 set -euo pipefail
@@ -7,3 +8,4 @@ if [ ! -f "${HOME}/.config/chezmoi/key.txt" ]; then
 	echo "{{ (keepassxc (includeTemplate "entry.tmpl" "chezmoi")).Password }}" | {{ .chezmoi.executable }} age decrypt --no-tty --output "${HOME}/.config/chezmoi/key.txt" --passphrase "{{ .chezmoi.sourceDir }}/key.txt.age"
 	chmod 0600 "${HOME}/.config/chezmoi/key.txt"
 fi
+{{ end -}}
