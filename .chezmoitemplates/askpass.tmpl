@@ -1,1 +1,1 @@
-OZ_PASSPHRASE={{ (keepassxc (includeTemplate "entry.tmpl" (index . 0))).Password | replace "'" "\\'" | squote }} {{ printf "%s_ASKPASS" (index . 1) }}={{ "\"${CHEZMOI_SOURCE_DIR}/askpass.sh\"" -}}
+OZ_PASSPHRASE={{ (keepassxc (includeTemplate "entry.tmpl" (index . 0))).Password | replace "'" "\\'" | squote }} {{ printf "%s_ASKPASS" (index . 1) }}={{ joinPath (env "CHEZMOI_SOURCE_DIR") "askpass.sh" | quote -}}
