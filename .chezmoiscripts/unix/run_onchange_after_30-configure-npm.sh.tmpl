@@ -10,6 +10,7 @@ set -euo pipefail
   {{- $prefix = "/home/linuxbrew/.linuxbrew" }}
 {{- end }}
 
+export NVM_DIR="$HOME/.nvm"
 source "{{ $prefix }}/opt/nvm/nvm.sh"
 nvm install --lts --latest-npm
 {{ $packages := "" -}}

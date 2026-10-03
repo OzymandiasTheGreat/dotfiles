@@ -26,6 +26,8 @@ trap 'killall Dock' EXIT
 dockutil --remove "{{ . }}" --no-restart &>/dev/null || true
 {{ end -}}
 
+killall Dock
+
 dockutil --add "/Applications/WezTerm.app" --before "Mail" --no-restart &>/dev/null || true
 {{ if not .vm -}}
 dockutil --add "/Applications/Spotify.app" --no-restart &>/dev/null || true
@@ -33,8 +35,8 @@ dockutil --add "/Applications/Logseq-OG.app" --no-restart &>/dev/null || true
 {{ end -}}
 dockutil --add "/Applications/Firefox.app" --no-restart &>/dev/null || true
 dockutil --add "/Applications/VSCodium.app" --no-restart &>/dev/null || true
-dockutil --add "/Applications/Xcode.app" --no-restart &>/dev/null|| true
 {{ if not .vm -}}
+dockutil --add "/Applications/Xcode.app" --no-restart &>/dev/null|| true
 dockutil --add "/Applications/Xcode.app/Contents/Applications/DeviceHub.app" --no-restart &>/dev/null || true
 dockutil --add "/Applications/Android Studio.app" --no-restart &>/dev/null || true
 {{ end -}}
