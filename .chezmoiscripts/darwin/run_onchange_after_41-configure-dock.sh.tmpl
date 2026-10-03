@@ -10,6 +10,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
   "Apps"
   "Safari"
   "Messages"
+  "Mail"
   "Maps"
   "Photos"
   "FaceTime"
@@ -25,13 +26,14 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
   "iPhone Mirroring"
   "System Settings" -}}
 {{ range ($remove | uniq) -}}
+  {{ if and (eq . "Mail") (not $.vm) -}}
+    {{ continue -}}
+  {{ end -}}
 dockutil --remove "{{ . }}" --no-restart &>/dev/null || true
 {{ end -}}
 
-killall Dock
-
-dockutil --add "/Applications/WezTerm.app" --before "Mail" --no-restart &>/dev/null || true
 {{ if not .vm -}}
+dockutil --add "/Applications/WezTerm.app" --before "Mail" --no-restart &>/dev/null || true
 dockutil --add "/Applications/Spotify.app" --no-restart &>/dev/null || true
 dockutil --add "/Applications/Logseq-OG.app" --no-restart &>/dev/null || true
 {{ end -}}

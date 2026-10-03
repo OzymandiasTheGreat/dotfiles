@@ -15,10 +15,10 @@ wezterm.on('format-window-title', function(tab, pane, tabs, panes, cfg)
     cmd = ''
   end
 
-  local shell = { 
+  local shell = {
     bash = true,
     cmd = true,
-    fish = true, 
+    fish = true,
     sh = true,
     zsh = true,
     powershell = true,
@@ -65,7 +65,7 @@ return {
   initial_rows = 24,
   scrollback_lines = 10000,
   swallow_mouse_click_on_window_focus = true,
-{{- if eq .chezmoi.os "darwin" -}}
+{{- if eq .chezmoi.os "darwin" }}
   macos_window_background_blur = 20,
   keys = {
     -- Make Option-Left equivalent to Alt-b which many line editors interpret as backward-word
@@ -81,7 +81,5 @@ return {
     -- Make Command-Up jump to file start
     {key="UpArrow", mods="CMD", action=wezterm.action.SendKey {key="Home", mods="CTRL"}},
   },
-{{- end -}}
+{{- end }}
 }
-
-

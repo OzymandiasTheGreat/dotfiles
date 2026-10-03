@@ -1,3 +1,4 @@
+{{ if and (not .server) (not .vm) -}}
 #!/bin/bash
 
 set -euo pipefail
@@ -34,4 +35,5 @@ fi
 {{ end -}}
 {{ end -}}
 popd > /dev/null
+{{ end -}}
 {{ end -}}

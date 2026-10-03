@@ -1,3 +1,4 @@
+{{ if not .vm -}}
 #!/bin/bash
 
 set -euo pipefail
@@ -45,8 +46,7 @@ manual_install() {
   fi
 }
 
-{{ if not .vm -}}
-  {{ range $pkg -}}
-  manual_install "{{ .package }}" "{{ .installed }}" "{{ .latest }}" {{ .update }} "{{ .uri }}"
-  {{ end -}}
+{{ range $pkg -}}
+manual_install "{{ .package }}" "{{ .installed }}" "{{ .latest }}" {{ .update }} "{{ .uri }}"
+{{ end -}}
 {{ end -}}

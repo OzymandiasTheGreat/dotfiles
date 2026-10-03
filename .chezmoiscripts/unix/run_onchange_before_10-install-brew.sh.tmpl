@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -euo pipefail
+
+{{- $pkg := includeTemplate "brew.yml.tmpl" . | fromYaml }}
+{{- $prefix := eq .chezmoi.os "darwin" | ternary "/opt/homebrew" "/home/linuxbrew/.linuxbrew" }}
+
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+eval "$({{ joinPath $prefix "/bin/brew" }} shellenv)"
+brew bundle --file=/dev/stdin <<EOF
+{{ range ($pkg.taps | sortAlpha | uniq) -}}
+tap "{{ . }}"
+{{ end -}}
+{{ range ($pkg.formulae | sortAlpha | uniq) -}}
+brew "{{ . }}"
+{{ end -}}
+{{ if eq .chezmoi.os "darwin" -}}
+{{ range ($pkg.casks | sortAlpha | uniq) -}}
+cask "{{ . }}"
+{{ end -}}
+{{ end -}}
+EOF
+
+{{ if and (eq .chezmoi.os "darwin") (not .vm) -}}
+{{ range $pkg.mas -}}
+{{ template "askpass.tmpl" (list $.hostname "SUDO") }} sudo -A mas install {{ .id }}
+{{ end -}}
+{{ end -}}

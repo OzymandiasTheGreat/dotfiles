@@ -1,8 +1,8 @@
-taps:
 {{- if and (eq .chezmoi.os "darwin") (not .vm) }}
+taps:
   - wix/brew
 {{- else }}
- []
+taps: []
 {{- end }}
 
 formulae:
@@ -67,6 +67,7 @@ casks:
   - transmission
   - utm
   - vlc
+  - wezterm
 {{- end }}
   - domzilla-caffeine
   - firefox
@@ -74,13 +75,8 @@ casks:
   - stats
   - syntax-highlight
   - vscodium
-  - wezterm
 
 mas:
-{{- if and (eq .chezmoi.os "darwin") (not .vm) }}
   - name: Xcode
     id: 497799835
     bundle: com.apple.dt.Xcode
-{{- else }}
- []
-{{- end }}
