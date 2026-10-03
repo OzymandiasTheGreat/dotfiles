@@ -12,21 +12,23 @@ formulae:
   - cliclick
   - cocoapods
   - ios-deploy
+  - mas
   - ruby
   - xcodegen
 {{- end }}
   - dockutil
-  - mas
 {{- end }}
 {{- if not .server }}
+{{- if not .vm }}
+  - llama.cpp
+  - openjdk@21
+{{- end }}
   - gh
   - git-filter-repo
   - git-gui
   - hf
   - hyperfine
-  - llama.cpp
   - nvm
-  - openjdk@21
   - python@3.14
   - rustup
   - tmux
@@ -60,6 +62,7 @@ casks:
   - nextcloud
   - openmtp
   - proton-mail-bridge
+  - protonvpn
   - spotify
   - transmission
   - utm
@@ -68,14 +71,13 @@ casks:
   - domzilla-caffeine
   - firefox
   - keepassxc
-  - protonvpn
   - stats
   - syntax-highlight
   - vscodium
   - wezterm
 
 mas:
-{{- if eq .chezmoi.os "darwin" }}
+{{- if and (eq .chezmoi.os "darwin") (not .vm) }}
   - name: Xcode
     id: 497799835
     bundle: com.apple.dt.Xcode
