@@ -30,6 +30,11 @@ git:
 
 keepassxc:
   database: ~/Documents/Security/ozymandias.kdbx
+  mode: {{ if lookPath "keepassxc-cli" -}}
+    cache-password
+{{- else -}}
+    builtin
+{{- end }}
 
 {{- if not $server }}
 edit:
