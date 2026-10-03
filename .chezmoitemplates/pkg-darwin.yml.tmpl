@@ -1,20 +1,23 @@
 {{- define "package" -}}
-  {{- $plist := printf "/Applications/%s.app/Contents/Info.plist" .package -}}
-  {{- $release := (index (gitHubReleases (printf "%s/%s" .vendor .package)) 0).TagName -}}
+  {{- $release := (index (gitHubReleases .repo) 0).TagName -}}
   {{- $arch := "arm64" -}}
   {{- if eq .arch "amd64" -}}
     {{- $arch = "x86_64" -}}
   {{- end -}}
-  {{- $version := output "bash" "-c" (printf "plutil -extract CFBundleShortVersionString raw -expect string -n %s || '0.0.0'" $plist) -}}
-  {{- $uri := gitHubReleaseAssetURL (printf "%s/%s" .vendor .package) $release (printf "%s*%s*dmg" .package $arch) -}}
+  {{- $version := "" -}}
+  {{- $plist := printf "/Applications/%s.app/Contents/Info.plist" .package -}}
+  {{- if stat $plist -}}
+    {{- $version = output "bash" "-c" (printf "plutil -extract CFBundleShortVersionString raw -expect string -n %s" $plist) -}}
+  {{- end -}}
+  {{- $uri := gitHubReleaseAssetURL .repo $release (printf "%s*%s*dmg" .package $arch) -}}
   {{- if not $uri -}}
-    {{- $uri = gitHubReleaseAssetURL (printf "%s/%s" .vendor .package) $release (printf "%s*dmg" .package) -}}
+    {{- $uri = gitHubReleaseAssetURL .repo $release (printf "%s*dmg" .package) -}}
   {{- end }}
 - package: {{ .package }}
-  installed: {{ $version }}
+  installed: {{ $version | quote }}
   latest: {{ $release}}
-  update: {{ semverCompare (printf ">=%s" $version) $release }}
+  update: {{ or (not $version) (semverCompare (printf ">%s" $version) $release) }}
   uri: {{ $uri | quote }}
 {{- end }}
 
-{{ template "package" (dict "vendor" "sannidhyaroy" "package" "Soduto" "arch" .chezmoi.arch) }}
+{{ template "package" (dict "repo" "sannidhyaroy/Soduto" "package" "Soduto" "arch" .chezmoi.arch) }}

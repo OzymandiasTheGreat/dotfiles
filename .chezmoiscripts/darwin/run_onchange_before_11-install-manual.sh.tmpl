@@ -7,13 +7,13 @@ set -euo pipefail
 manual_install() {
   package="$1"; installed="$2"; latest="$3"; update=$4; uri="$5"
 
-  if ! [ $uri ]; then
-    action="$([ $installed ] && echo "update" || echo "install")"
+  if [[ -z "$uri" ]]; then
+    action="$([[ -n "$installed" ]] && echo "update" || echo "install")"
     >&2 echo "Failed to $action package ${package}@${installed}\nCould not determine download URL"
     return 0
   fi
 
-  if [ $installed ]; then
+  if [[ -n "$installed" ]]; then
     echo "Found package ${package}@${installed}"
 
     if $update; then
@@ -31,7 +31,9 @@ manual_install() {
 
   curl -L --output "$tmp/$image" "$uri"
 
-  volume="$(yes qy | diskutil image attach "$tmp/$image" | awk -F'\t' '/\/Volumes/ {print $NF}')"
+  trap 'diskutil umount "$volume"; rm -rf "$tmp"' EXIT
+
+  volume="$(echo qy | diskutil image attach "$tmp/$image" | awk -F'\t' '/\/Volumes/ {print $NF}')"
 
   if [ -e "$volume"/*.app ]; then
     {{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A cp -rf "$volume"/*.app /Applications
@@ -41,9 +43,6 @@ manual_install() {
   else
     echo "Failed to install $image from $1"
   fi
-
-  diskutil umount "$volume"
-  rm -rf "$tmp"
 }
 
 {{ if not .vm -}}
