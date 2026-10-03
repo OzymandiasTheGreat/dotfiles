@@ -4,6 +4,8 @@ set -euo pipefail
 
 trap 'killall Dock' EXIT
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 {{ $remove := list
   "Apps"
   "Safari"
