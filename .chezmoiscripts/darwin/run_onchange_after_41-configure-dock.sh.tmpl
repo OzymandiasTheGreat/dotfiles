@@ -36,6 +36,8 @@ dockutil --remove "{{ . }}" --no-restart &>/dev/null || true
 dockutil --add "/Applications/WezTerm.app" --before "Mail" --no-restart &>/dev/null || true
 dockutil --add "/Applications/Spotify.app" --no-restart &>/dev/null || true
 dockutil --add "/Applications/Logseq-OG.app" --no-restart &>/dev/null || true
+{{ else -}}
+dockutil --add /System/Applications/Utilities/Terminal.app &>/dev/null || true
 {{ end -}}
 dockutil --add "/Applications/Firefox.app" --no-restart &>/dev/null || true
 dockutil --add "/Applications/VSCodium.app" --no-restart &>/dev/null || true
