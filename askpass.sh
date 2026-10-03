@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "$OZ_PASSPHRASE"
+printf "%s" "$OZ_PASSPHRASE"
