@@ -4,7 +4,7 @@ set -euo pipefail
 
 {{- $brew := includeTemplate "brew.yml.tmpl" . | fromYaml }}
 
-{{ template "askpass.tmpl" (list (printf "System/%s" .hostname) "SUDO") }} NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 eval "$(/opt/homebrew/bin/brew shellenv)"brew bundle --file=/dev/stdin <<EOF
 {{ range ($brew.taps | sortAlpha | uniq) -}}
 tap "{{ . }}"
@@ -18,5 +18,5 @@ cask "{{ . }}"
 EOF
 
 {{ range $brew.mas -}}
-{{ template "askpass.tmpl" (list (printf "System/%s" $.hostname) "SUDO") }} sudo -A mas install {{ .id }}
+{{ template "askpass.tmpl" (list $.hostname "SUDO") }} sudo -A mas install {{ .id }}
 {{ end -}}

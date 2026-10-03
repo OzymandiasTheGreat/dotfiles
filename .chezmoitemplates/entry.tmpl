@@ -1,0 +1,5 @@
+{{- if keepassxc . -}}
+  {{- . -}}
+{{- else -}}
+  {{- printf "System/%s" . -}}
+{{- end -}}

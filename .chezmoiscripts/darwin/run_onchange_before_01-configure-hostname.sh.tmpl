@@ -8,11 +8,11 @@ if [ value = '{{ .hostname }}' ]; then
   echo 'Hostname is {{ .hostname }}'
 else
   # FQDN
-  {{ template "askpass.tmpl" (list (printf "System/%s" .hostname) "SUDO") }} sudo -A scutil --set HostName '{{ .hostname }}'
+  {{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A scutil --set HostName '{{ .hostname }}'
   # Bonjour
-  {{ template "askpass.tmpl" (list (printf "System/%s" .hostname) "SUDO") }} sudo -A scutil --set LocalHostName '{{ .hostname }}'
+  {{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A scutil --set LocalHostName '{{ .hostname }}'
   # Finder
-  {{ template "askpass.tmpl" (list (printf "System/%s" .hostname) "SUDO") }} sudo -A scutil --set ComputerName '{{ .hostname }}'
+  {{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A scutil --set ComputerName '{{ .hostname }}'
   # Flush DNS cache
   dscacheutil -flushcache
 fi

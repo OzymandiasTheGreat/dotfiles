@@ -32,7 +32,7 @@ keepassxc:
 {{- $appliedPath := joinPath .chezmoi.homeDir "Documents" "Security" "ozymandias.kdbx" }}
 {{- $sourcePath := joinPath .chezmoi.sourceDir "private_Documents" "private_Security" "private_ozymandias.kdbx" }}
   database: {{ stat $appliedPath | empty | ternary $sourcePath $appliedPath }}
-  mode: builtin
+  mode: {{ lookPath "keepassxc-cli" | empty | ternary "builtin" "cache-password" }}
 
 {{- if not $server }}
 edit:

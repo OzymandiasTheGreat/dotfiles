@@ -1,2 +1,2 @@
-#!/bin/bash
-printf "%s" "$OZ_PASSPHRASE"
+#!/bin/sh
+printf '%s\n' "$OZ_PASSPHRASE"

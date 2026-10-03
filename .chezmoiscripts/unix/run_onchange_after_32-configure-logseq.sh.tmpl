@@ -15,10 +15,8 @@ set -euo pipefail
 eval "$(ssh-agent -s)" > /dev/null
 trap 'ssh-agent -k > /dev/null' EXIT
 
-{{/* Using redqueen's ssh key because local machine's keys have not been authorized yet */ -}}
-{{ $redqueen := "System/redqueen" -}}
-{{ template "askpass.tmpl" (list $redqueen "SSH") }} SSH_ASKPASS_REQUIRE=force ssh-add - &>/dev/null <<EOF
-{{ keepassxcAttachment $redqueen "id_ed25519" | trim }}
+{{ template "askpass.tmpl" (list .hostname "SSH") }} SSH_ASKPASS_REQUIRE=force ssh-add - &>/dev/null <<EOF
+{{ keepassxcAttachment (includeTemplate "entry.tmpl" .hostname) "id_ed25519" | trim }}
 EOF
 
 export GIT_SSH_COMMAND='ssh -o BatchMode=yes'
