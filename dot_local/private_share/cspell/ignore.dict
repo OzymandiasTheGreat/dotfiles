@@ -15,6 +15,7 @@ esbenp
 Expensi
 fadein
 fexceptions
+gext
 GGUF
 gobject
 hexa
@@ -36,6 +37,7 @@ onwakeup
 openmtp
 osascript
 PARAVFS
+pipx
 pkgs
 plutil
 pmodule

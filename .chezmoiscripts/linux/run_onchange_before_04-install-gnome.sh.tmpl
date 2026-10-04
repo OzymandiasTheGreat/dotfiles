@@ -1,0 +1,7 @@
+{{ $ext := includeTemplate "gnome.yml.tmpl" . | fromYaml -}}
+#!/bin/bash
+
+set -euo pipefail
+
+pipx install gnome-extensions-cli --system-site-packages
+gext install {{ $ext | quoteList | join " " }}

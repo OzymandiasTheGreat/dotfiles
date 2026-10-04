@@ -10,6 +10,7 @@ sh -c "$(curl -fsLS https://get.chezmoi.io)" -- init --force --apply OzymandiasT
 ## Linux
 
 ```shell
+sh -c "$(wget -qO- https://get.chezmoi.io)" -- init --force --apply OzymandiasTheGreat
 ```
 
 ## Windows

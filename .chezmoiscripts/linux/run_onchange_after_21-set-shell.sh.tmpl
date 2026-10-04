@@ -1,0 +1,8 @@
+{{ $zsh = "/usr/bin/zsh" -}}
+{{ if ne (env "SHELL") $zsh -}}
+#!/bin/bash
+
+set -euo pipefail
+
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A chsh -s {{ $zsh }} {{ .chezmoi.username }}
+{{ end -}}

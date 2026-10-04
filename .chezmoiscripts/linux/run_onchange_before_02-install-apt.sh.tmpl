@@ -1,0 +1,49 @@
+{{ $pkg := includeTemplate "apt.yml.tmpl" . | fromYaml -}}
+{{ $missing := false -}}
+{{ range $pkg -}}
+{{ if eq (output "dpkg-query" "--show" "--showformat='${db:Status-Status}\n'") "not-installed" -}}
+  {{ $missing = true -}}
+{{ end -}}
+{{ if $missing -}}
+#!/bin/bash
+
+set -euo pipefail
+
+{{ $mozillaKey := "/etc/apt/keyrings/packages.mozilla.org.asc" -}}
+{{ $mozillaSource := "/etc/apt/sources.list.d/mozilla.sources" -}}
+{{ $mozillaPref := "/etc/apt/preferences.d/mozilla" -}}
+{{ if or (not (stat $mozillaKey)) (not (stat $mozillaSource)) (not (stat $mozillaPref)) -}}
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A install -d -m 0755 /etc/apt/keyrings
+wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | {{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A tee "{{ $mozillaKey }}" > /dev/null
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A tee "{{ $mozillaSource }}" > /dev/null << EOF
+Types: deb
+URIs: https://packages.mozilla.org/apt
+Suites: mozilla
+Components: main
+Signed-By: {{ $mozillaKey }}
+EOF
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A tee "{{ $mozillaPref }}" > /dev/null << EOF
+Package: *
+Pin: origin packages.mozilla.org
+Pin-Priority: 1000
+EOF
+{{ end -}}
+
+{{ $vscodiumKey := "/etc/apt/keyrings/vscodium-archive-keyring.asc" -}}
+{{ $vscodiumSource := "/etc/apt/sources.list.d/vscodium.sources" -}}
+{{ if or (not (stat $vscodiumKey)) (not (stat $vscodiumSource)) -}}
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A install -d -m 0755 /etc/apt/keyrings
+wget -q https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg -O- | {{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A tee "{{ $vscodiumKey }}" > /dev/null
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A tee "{{ $vscodiumSource }}" > /dev/null << EOF
+Types: deb
+URIs: https://download.vscodium.com/debs
+Suites: vscodium
+Components: main
+Architectures: amd64 arm64
+Signed-By: {{ $vscodiumKey }}
+EOF
+{{ end -}}
+
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A apt update
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A apt install --assume-yes {{ $pkg | quoteList | join " " }}
+{{ end -}}

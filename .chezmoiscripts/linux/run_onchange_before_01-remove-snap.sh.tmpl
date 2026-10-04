@@ -1,0 +1,35 @@
+{{ $snapPref := "/etc/apt/preferences.d/no-snapd" -}}
+{{ $firefoxPref := "/etc/apt/preferences.d/no-snap-firefox" -}}
+#!/bin/bash
+
+set -euo pipefail
+{{ if and (not .server) (not .vm) (not (stat $snapPref)) -}}
+while true; do
+  snaps=$(snap list 2>/dev/null | awk 'NR>1 {print $1}')
+  [ -z "$snaps" ] && { break; }
+  removed=0
+  for snap in $snaps; do
+    {{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A snap remove --purge "$snap" && removed=1
+  done
+  [ "$removed" -eq 0 ] && { break; }
+done
+
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A systemctl daemon-reload
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A systemctl stop snapd snapd.socket snapd.seeded.service
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A apt purge --assume-yes snapd
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A apt autoremove --assume-yes --purge
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A apt-mark hold snapd
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A tee "{{ $snapPref }}" >/dev/null <<'EOF'
+Package: snapd
+Pin: version *
+Pin-Priority: -10
+EOF
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A rm -rf ~/snap ~/.snap /root/snap /root/.snap /snap /var/snap /var/cache/snapd /var/lib/snapd
+{{ else if and (not .server) (not (stat $firefoxPref)) -}}
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A tee "{{ $firefoxPref }}" > /dev/null << EOF
+Package: firefox
+Pin: release o=Ubuntu
+Pin-Priority: -1
+EOF
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A snap remove --purge firefox
+{{ end -}}
