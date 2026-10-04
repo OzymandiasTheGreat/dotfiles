@@ -1,4 +1,4 @@
-{{ if ne .hostname (output "hostname" | trim) }}
+{{ if ne .hostname (output "hostname" | trim) -}}
 #!/bin/bash
 
 set -euo pipefail
