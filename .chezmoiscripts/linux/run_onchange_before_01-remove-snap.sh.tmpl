@@ -32,5 +32,5 @@ Pin: release o=Ubuntu
 Pin-Priority: -1
 EOF
 {{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A snap remove --purge firefox
-{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A apt purge firefox
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A apt purge --assume-yes firefox
 {{ end -}}
