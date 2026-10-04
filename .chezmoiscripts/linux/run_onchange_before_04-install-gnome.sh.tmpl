@@ -4,4 +4,4 @@
 set -euo pipefail
 
 pipx install gnome-extensions-cli --system-site-packages
-~/.local/bin/gext install {{ $ext | quoteList | join " " }}
+~/.local/bin/gext --filesystem install {{ $ext | quoteList | join " " }}
