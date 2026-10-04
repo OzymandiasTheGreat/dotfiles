@@ -1,0 +1,9 @@
+{{ $profile := "Ozymandias" -}}
+{{ $filepath := joinPath .chezmoi.sourceDir (printf "%s.terminal" $profile) -}}
+{{ if or (ne (output "defaults" "read" "com.apple.terminal" "Default Window Settings" | trim) $profile) (ne (output "defaults" "read" "com.apple.terminal" "Startup Window Settings" | trim) $profile) -}}
+#!/bin/bash
+
+open {{ $filepath | quote }}
+defaults write com.apple.terminal "Default Window Settings" -string {{ $profile | quote }}
+defaults write com.apple.Terminal "Startup Window Settings" -string {{ $profile | quote }}
+{{ end -}}

@@ -1,6 +1,7 @@
 askpass.sh
 key.txt.age
 **/.DS_Store
+Ozymandias.terminal
 README.md
 
 {{ if or .server .vm }}
