@@ -12,6 +12,6 @@
 set -euo pipefail
 
 {{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A flatpak remote-add --system --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A flatpak install --system --noninteractive flathub {{ $pkg | quoteList | join " " }}
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A flatpak install --system --assumeyes flathub {{ $pkg | quoteList | join " " }}
 {{ end -}}
 {{ end -}}
