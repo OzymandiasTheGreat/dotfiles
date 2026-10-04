@@ -1,7 +1,8 @@
 {{ $pkg := includeTemplate "apt.yml.tmpl" . | fromYaml -}}
+{{ $dpkg := output "dpkg-query" "--show" "--showformat=:${db:Status-Status}:${Package}:\n" -}}
 {{ $missing := false -}}
 {{ range $pkg -}}
-  {{ if eq (output "dpkg-query" "--show" "--showformat=${db:Status-Status}" . | trim) "not-installed" -}}
+  {{ if not (contains (print ":installed:%s:" .) $dpkg) -}}
     {{ $missing = true -}}
   {{ end -}}
 {{ end -}}
