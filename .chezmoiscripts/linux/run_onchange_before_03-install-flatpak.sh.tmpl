@@ -1,9 +1,17 @@
 {{ if not .server -}}
 {{ $pkg := includeTemplate "flatpak.yml.tmpl" . | fromYaml -}}
+{{ $missing := false -}}
+{{ range $pkg -}}
+  {{ if not (exec "flatpak" "info" .) -}}
+    {{ $missing = true -}}
+  {{ end -}}
+{{ end -}}
+{{ if $missing -}}
 #!/bin/bash
 
 set -euo pipefail
 
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-flatpak install flathub {{ $pkg | quoteList | join " " }}
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A flatpak remote-add --system --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A flatpak install --system --noninteractive flathub {{ $pkg | quoteList | join " " }}
+{{ end -}}
 {{ end -}}
