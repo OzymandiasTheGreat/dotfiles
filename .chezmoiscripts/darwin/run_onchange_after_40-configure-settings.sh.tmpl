@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 defaults write -g AppleMenuBarVisibleInFullscreen -int 1
 defaults write -g AppleScrollerPagingBehavior -int 1
 defaults write -g AppleShowAllExtensions -int 1
@@ -9,7 +11,7 @@ defaults write -g AppleSpacesSwitchOnActivate -int 0
 defaults write -g AppleWindowTabbingMode -string always
 defaults write -g SLSMenuBarUseBlurredAppearance -int 1
 defaults write -g WebAutomaticSpellingCorrectionEnabled -int 0
-defaults write -g com.apple.swipescrolldirection -int 0
+defaults write -g com.apple.swipescrolldirection -bool false
 
 defaults write -g NSAutomaticCapitalizationEnabled -int 0
 defaults write -g NSAutomaticDashSubstitutionEnabled -int 0
@@ -41,6 +43,8 @@ defaults write com.apple.loginwindow TALLogoutSavesState -int 0
 defaults write com.apple.spaces spans-displays -int 1
 
 defaults write com.apple.finder FXDefaultSearchScope -string SCcf
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+defaults write com.apple.finder FXPreferredGroupBy -string "Name"
 defaults write com.apple.finder FXRecentFolders '()'
 defaults write com.apple.finder FXRemoveOldTrashItems -int 1
 defaults write com.apple.finder NewWindowTarget -string PfHm
@@ -50,4 +54,6 @@ defaults write com.apple.finder ShowRemovableMediaOnDesktop -int 0
 defaults write com.apple.finder WarnOnEmptyTrash -int 0
 defaults write com.apple.finder _FXSortFoldersFirst -int 1
 
-killall SystemUIServer
+fd -igIH '.DS_Store' / --type file -x rm 2>/dev/null || true
+
+killall SystemUIServer && killall Finder
