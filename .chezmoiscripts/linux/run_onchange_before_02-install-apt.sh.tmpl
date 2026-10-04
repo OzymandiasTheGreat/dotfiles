@@ -4,6 +4,7 @@
 {{ if eq (output "dpkg-query" "--show" "--showformat='${db:Status-Status}\n'") "not-installed" -}}
   {{ $missing = true -}}
 {{ end -}}
+{{ end -}}
 {{ if $missing -}}
 #!/bin/bash
 
