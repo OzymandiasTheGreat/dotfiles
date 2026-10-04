@@ -58,9 +58,7 @@ merge:
 hooks:
   read-source-state:
     pre:
-{{- if ne .chezmoi.os "windows" }}
-      command: .local/share/chezmoi/.hooks/pre-read-source-state.sh
-{{- else }}
+{{- if eq .chezmoi.os "windows" }}
       script: .local/share/chezmoi/.hooks/pre-read-source-state.ps1
 {{- end }}
   apply:
