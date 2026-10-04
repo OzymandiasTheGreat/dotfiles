@@ -1,7 +1,7 @@
 {{ $pkg := includeTemplate "apt.yml.tmpl" . | fromYaml -}}
 {{ $missing := false -}}
 {{ range $pkg -}}
-  {{ if eq (output "dpkg-query" "--show" "--showformat='${db:Status-Status}'" | trim) "not-installed" -}}
+  {{ if eq (output "dpkg-query" "--show" "--showformat=${db:Status-Status}" . | trim) "not-installed" -}}
     {{ $missing = true -}}
   {{ end -}}
 {{ end -}}
