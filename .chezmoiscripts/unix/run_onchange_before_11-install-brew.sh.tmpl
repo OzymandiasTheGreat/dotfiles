@@ -3,12 +3,12 @@
 set -euo pipefail
 
 {{- $pkg := includeTemplate "brew.yml.tmpl" . | fromYaml }}
-{{- $prefix := eq .chezmoi.os "darwin" | ternary "/opt/homebrew" "/home/linuxbrew/.linuxbrew" }}
+{{- $brew := joinPath (eq .chezmoi.os "darwin" | ternary "/opt/homebrew" "/home/linuxbrew/.linuxbrew") "/bin/brew" }}
 
-{{- if not (lookPath "brew") }}
+{{- if not (stat $brew) }}
 {{ template "askpass.tmpl" (list .hostname "SUDO") }} NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 {{- end }}
-eval "$({{ joinPath $prefix "/bin/brew" }} shellenv)"
+eval "$({{ $brew }} shellenv)"
 brew bundle --file=/dev/stdin <<EOF
 {{ range ($pkg.taps | sortAlpha | uniq) -}}
 tap "{{ . }}"
