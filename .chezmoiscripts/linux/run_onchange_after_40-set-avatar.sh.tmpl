@@ -1,4 +1,5 @@
 {{ if not .server -}}
 #!/bin/bash
-{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A cp -f {{ joinPath .chezmoi.sourceDir "avatar-linux.png" }} /var/lib/AccountsService/icons/{{ .chezmoi.username }}
+# {{ include "avatar-linux.png" | sha256sum }}
+busctl call org.freedesktop.Accounts "/org/freedesktop/Accounts/User$(id -u)" org.freedesktop.Accounts.User SetIconFile s {{ joinPath .chezmoi.sourceDir "avatar-linux.png" }}
 {{ end -}}
