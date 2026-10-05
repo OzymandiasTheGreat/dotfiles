@@ -1,0 +1,3 @@
+{{ if not .server -}}
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A cp -f {{ joinPath .chezmoi.sourceDir "avatar-linux.png" }} /var/lib/AccountsService/icons/{{ .chezmoi.username }}
+{{ end -}}
