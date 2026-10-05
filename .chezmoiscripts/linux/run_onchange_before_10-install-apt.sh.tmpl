@@ -2,7 +2,7 @@
 {{ $dpkg := output "dpkg-query" "--show" "--showformat=:${db:Status-Status}:${Package}:\n" -}}
 {{ $missing := false -}}
 {{ range $pkg -}}
-  {{ if not (contains (print ":installed:%s:" .) $dpkg) -}}
+  {{ if not (contains (printf ":installed:%s:" .) $dpkg) -}}
     {{ $missing = true -}}
   {{ end -}}
 {{ end -}}
