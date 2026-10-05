@@ -46,6 +46,20 @@ Signed-By: {{ $vscodiumKey }}
 EOF
 {{ end -}}
 
+{{ $weztermKey := "/etc/apt/keyrings/wezterm-fury.asc" -}}
+{{ $weztermSource := "/etc/apt/sources.list.d/wezterm.sources" -}}
+{{ if and (not .server) (or (not (stat $weztermKey)) (not (stat $weztermSource))) -}}
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A install -d -m 0755 /etc/apt/keyrings
+wget -q https://apt.fury.io/wez/gpg.key -O- | {{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A tee "{{ $weztermKey }}" > /dev/null
+{{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A tee "{{ $weztermSource }}" > /dev/null <<EOF
+Types: deb
+URIs: https://apt.fury.io/wez/
+Suites: *
+Components: *
+Signed-By: /etc/apt/keyrings/wezterm-fury.asc
+EOF
+{{ end -}}
+
 {{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A apt update
 {{ template "askpass.tmpl" (list .hostname "SUDO") }} sudo -A apt install --assume-yes {{ $pkg | quoteList | join " " }}
 {{ end -}}

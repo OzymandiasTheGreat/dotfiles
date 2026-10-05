@@ -8,14 +8,17 @@ README.md
 .backup
 .config/rclone
 .logseq
-.ssh
 .tmux.conf
 .wezterm.lua
+Notes
 {{ end }}
 
 {{ if .server }}
+.ssh
 .gitconfig
 .npmrc
+.wezterm.lua
+Pictures
 {{ end }}
 
 {{ if ne .chezmoi.os "darwin" }}
@@ -25,6 +28,7 @@ Library
 
 {{ if ne .chezmoi.os "linux" }}
 .chezmoiscripts/linux/**
+.config/VSCodium
 {{ end }}
 
 {{ if and (ne .chezmoi.os "darwin") (ne .chezmoi.os "linux") }}
