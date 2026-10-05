@@ -3,6 +3,7 @@ armv
 bfloat
 cdylib
 cliclick
+compiz
 ctest
 ctypes
 diskutil
@@ -15,9 +16,11 @@ esbenp
 Expensi
 fadein
 fexceptions
+fxgn
 gext
 GGUF
 gobject
+gsettings
 hexa
 hgchl
 IPHONEOS
@@ -36,6 +39,7 @@ onidle
 onwakeup
 openmtp
 osascript
+panelbtn
 PARAVFS
 pipx
 pkgs
@@ -49,6 +53,7 @@ simctl
 sorin
 squote
 stdbool
+stockgs
 thiz
 tmpl
 twxs
@@ -66,6 +71,7 @@ xcrun
 xlink
 xsafety
 xtxslc
+Yaru
 ytmusic
 zargs
 zfunction

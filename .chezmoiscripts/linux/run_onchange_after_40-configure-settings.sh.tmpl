@@ -1,0 +1,96 @@
+{{ if not .server -}}
+#!/bin/bash
+
+set -euo pipefail
+
+# Extensions installed by gext keep their schemas next to the extension
+extensions="$HOME/.local/share/gnome-shell/extensions"
+dash_to_panel() {
+  gsettings --schemadir "$extensions/dash-to-panel@jderose9.github.com/schemas" set org.gnome.shell.extensions.dash-to-panel "$@"
+}
+compiz_alike_magic_lamp_effect() {
+  gsettings --schemadir "$extensions/compiz-alike-magic-lamp-effect@hermes83.github.com/schemas" set org.gnome.shell.extensions.com.github.hermes83.compiz-alike-magic-lamp-effect "$@"
+}
+rounded_window_corners_reborn() {
+  gsettings --schemadir "$extensions/rounded-window-corners@fxgn/schemas" set org.gnome.shell.extensions.rounded-window-corners-reborn "$@"
+}
+
+gsettings set org.freedesktop.Tracker3.Miner.Files index-recursive-directories "[]"
+
+gsettings set org.gnome.desktop.background picture-options "'zoom'"
+gsettings set org.gnome.desktop.background picture-uri "'file://{{ .wallpapers }}/Monika-Fiji-2025.jpg'"
+gsettings set org.gnome.desktop.background picture-uri-dark "'file://{{ .wallpapers }}/Monika-Fiji-2025.jpg'"
+
+gsettings set org.gnome.desktop.calendar week-start-day "'monday'"
+
+gsettings set org.gnome.desktop.datetime automatic-timezone true
+
+gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('xkb', 'lt')]"
+gsettings set org.gnome.desktop.input-sources xkb-options "['caps:none', 'eurosign:2', 'lv3:alt_switch']"
+
+gsettings set org.gnome.desktop.interface color-scheme "'prefer-dark'"
+gsettings set org.gnome.desktop.interface enable-hot-corners false
+gsettings set org.gnome.desktop.interface gtk-enable-primary-paste true
+gsettings set org.gnome.desktop.interface gtk-theme "'Yaru-dark'"
+gsettings set org.gnome.desktop.interface icon-theme "'Numix-Circle'"
+gsettings set org.gnome.desktop.interface monospace-font-name "'Fira Code weight=450 11'"
+
+gsettings set org.gnome.desktop.peripherals.mouse natural-scroll {{ .vm | ternary "true" "false" }}
+
+gsettings set org.gnome.desktop.peripherals.touchpad two-finger-scrolling-enabled true
+
+gsettings set org.gnome.desktop.privacy remember-recent-files false
+gsettings set org.gnome.desktop.privacy remove-old-temp-files true
+gsettings set org.gnome.desktop.privacy remove-old-trash-files true
+gsettings set org.gnome.desktop.privacy report-technical-problems false
+
+gsettings set org.gnome.desktop.search-providers disabled "['org.gnome.seahorse.Application.desktop', 'org.gnome.Characters.desktop', 'org.gnome.Contacts.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.clocks.desktop', 'firefox.desktop', 'snap-store_snap-store.desktop']"
+gsettings set org.gnome.desktop.search-providers sort-order "['org.gnome.Calculator.desktop', 'org.gnome.Settings.desktop', 'org.gnome.Software.desktop', 'firefox.desktop', 'snap-store_snap-store.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Contacts.desktop', 'org.gnome.clocks.desktop', 'org.gnome.Characters.desktop', 'org.gnome.seahorse.Application.desktop']"
+
+gsettings set org.gnome.desktop.wm.preferences action-middle-click-titlebar "'none'"
+gsettings set org.gnome.desktop.wm.preferences button-layout "'close,minimize,maximize:'"
+gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
+
+gsettings set org.gnome.mutter attach-modal-dialogs false
+gsettings set org.gnome.mutter center-new-windows false
+gsettings set org.gnome.mutter edge-tiling false
+
+gsettings set org.gnome.shell disabled-extensions "['tiling-assistant@ubuntu.com', 'snapd-search-provider@canonical.com', 'ubuntu-dock@ubuntu.com', 'web-search-provider@ubuntu.com']"
+gsettings set org.gnome.shell enabled-extensions "['compiz-alike-magic-lamp-effect@hermes83.github.com', 'rounded-window-corners@fxgn', 'caffeine@patapon.info', 'burn-my-windows@schneegans.github.com', 'blur-my-shell@aunetx', 'dash-to-panel@jderose9.github.com', 'ding@rastersoft.com']"
+gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'org.wezfurlong.wezterm.desktop', 'firefox.desktop', 'codium.desktop']"
+
+gsettings set org.gnome.shell.app-switcher current-workspace-only true
+
+dash_to_panel animate-appicon-hover true
+dash_to_panel animate-appicon-hover-animation-type "'PLANK'"
+dash_to_panel animate-appicon-hover-animation-zoom "{'SIMPLE': 1.0, 'RIPPLE': 1.25, 'PLANK': 1.3}"
+dash_to_panel appicon-margin 2
+dash_to_panel appicon-padding 2
+dash_to_panel dot-position "'RIGHT'"
+dash_to_panel dot-style-focused "'METRO'"
+dash_to_panel dot-style-unfocused "'DOTS'"
+dash_to_panel focus-highlight false
+dash_to_panel hide-overview-on-startup true
+dash_to_panel highlight-appicon-hover false
+dash_to_panel hot-keys true
+dash_to_panel hotkeys-overlay-combo "'TEMPORARILY'"
+dash_to_panel isolate-workspaces true
+dash_to_panel overview-click-to-exit true
+dash_to_panel panel-element-positions \''{"RHT-0x00000000":[{"element":"showAppsButton","visible":true,"position":"stackedTL"},{"element":"activitiesButton","visible":false,"position":"stackedTL"},{"element":"leftBox","visible":true,"position":"stackedTL"},{"element":"taskbar","visible":true,"position":"centerMonitor"},{"element":"centerBox","visible":true,"position":"stackedBR"},{"element":"rightBox","visible":true,"position":"stackedBR"},{"element":"systemMenu","visible":true,"position":"stackedBR"},{"element":"dateMenu","visible":true,"position":"stackedBR"},{"element":"desktopButton","visible":true,"position":"stackedBR"}]}'\'
+dash_to_panel panel-positions \''{"RHT-0x00000000":"RIGHT"}'\'
+dash_to_panel scroll-icon-action "'NOTHING'"
+dash_to_panel show-showdesktop-hover true
+dash_to_panel status-icon-padding 2
+dash_to_panel stockgs-panelbtn-click-only true
+dash_to_panel trans-use-custom-opacity true
+dash_to_panel tray-padding 2
+
+gsettings set org.gnome.shell.extensions.ding show-home false
+
+compiz_alike_magic_lamp_effect duration 350.0
+compiz_alike_magic_lamp_effect effect "'sine'"
+
+rounded_window_corners_reborn border-width 0
+
+gsettings set org.gnome.system.location enabled true
+{{ end -}}
