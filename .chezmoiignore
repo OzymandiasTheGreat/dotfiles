@@ -4,34 +4,37 @@ key.txt.age
 Ozymandias.terminal
 README.md
 
-{{ if or .server .vm }}
+{{ if or .server .vm -}}
 .backup
 .config/rclone
 .logseq
 .tmux.conf
-.wezterm.lua
 Notes
-{{ end }}
+{{ end -}}
 
-{{ if .server }}
+{{ if .server -}}
 .ssh
 .gitconfig
 .npmrc
 .wezterm.lua
 Pictures
-{{ end }}
+{{ end -}}
 
-{{ if ne .chezmoi.os "darwin" }}
+{{ if and .vm (eq .chezmoi.os "darwin") -}}
+.wezterm.lua
+{{ end -}}
+
+{{ if ne .chezmoi.os "darwin" -}}
 .chezmoiscripts/darwin/**
 Library
-{{ end }}
+{{ end -}}
 
-{{ if ne .chezmoi.os "linux" }}
+{{ if ne .chezmoi.os "linux" -}}
 .chezmoiscripts/linux/**
 .config/VSCodium
-{{ end }}
+{{ end -}}
 
-{{ if and (ne .chezmoi.os "darwin") (ne .chezmoi.os "linux") }}
+{{ if and (ne .chezmoi.os "darwin") (ne .chezmoi.os "linux") -}}
 .chezmoiscripts/unix/**
 .local/bin/chezmoi-merge
 .alias
@@ -41,8 +44,8 @@ Library
 .zpreztorc
 .zprofile
 .zshrc
-{{- end -}}
+{{ end -}}
 
-{{ if ne .chezmoi.os "windows" }}
+{{ if ne .chezmoi.os "windows" -}}
 .chezmoiscripts/windows/**
-{{ end }}
+{{ end -}}
