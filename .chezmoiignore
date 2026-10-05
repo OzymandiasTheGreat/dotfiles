@@ -37,6 +37,7 @@ avatar-linux.png
 
 {{ if and (ne .chezmoi.os "darwin") (ne .chezmoi.os "linux") -}}
 .chezmoiscripts/unix/**
+.chezmoiscripts/run_once_before_00-decrypt-private-key.sh.tmpl
 .local/bin/chezmoi-merge
 .alias
 .bashrc
