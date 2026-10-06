@@ -6,7 +6,7 @@ set -euo pipefail
 # Extensions installed by gext keep their schemas next to the extension
 extensions="$HOME/.local/share/gnome-shell/extensions"
 blur_my_shell() {
-  gsettings --schemadir "$extensions/blur-my-shell@aunetx/schemas" set org/gnome/shell/extensions/blur-my-shell/$1 "$2" "$3"
+  gsettings --schemadir "$extensions/blur-my-shell@aunetx/schemas" set org.gnome.shell.extensions.blur-my-shell.$1 "$2" "$3"
 }
 burn_my_windows() {
   gsettings --schemadir "$extensions/burn-my-windows@schneegans.github.com/schemas" set org.gnome.shell.extensions.burn-my-windows "$@"
