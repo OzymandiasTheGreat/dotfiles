@@ -1,6 +1,8 @@
 Host *
   AddKeysToAgent yes
+{{- if eq .chezmoi.os "darwin" }}
   Usekeychain yes
+{{- end }}
 {{- if and (not .server) (not .vm) }}
 Host paperspace
   HostName 127.0.0.1
