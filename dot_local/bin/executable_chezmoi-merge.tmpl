@@ -10,7 +10,19 @@ Source="$3"
 
 if [[ "$Destination" =~ \.(avif|bmp|gif|heic|heif|ico|icns|jpeg|jpg|kdbx|png|psd|xcf|tiff|tif|webp)$ ]]; then
   cp -f "$Destination" "$Source"
-elif [[ "$Destination" =~ ^"$HOME"/[\ a-zA-Z0-9/\._-]+/(VSCodium/User|keepassxc)/[a-z\._-]+\.(json|ini)$ ]]; then
+elif [[ "$Destination" =~ ^"$HOME"/[\ a-zA-Z0-9/\._-]+/(KeePassXC|keepassxc)/[a-z\._-]+\.ini$ ]]; then
+  Filename="$(basename "$Destination")"
+  Template="${SourceDir}/.chezmoitemplates/vscodium/${Filename}.tmpl"
+  Origin="${Template}.base"
+  Temp="${Template}.src"
+
+  cp "$Template" "$Origin"
+  cp "$Template" "$Temp"
+  codium --new-window --wait --merge "$Template" "$Destination" "$Origin" "$Temp"
+  rm "$Origin"
+  mv "$Temp" "$Template"
+  cp -f "$Target" "$Source"
+elif [[ "$Destination" =~ ^"$HOME"/[\ a-zA-Z0-9/\._-]+/(VSCodium/User)/[a-z\._-]+\.json$ ]]; then
   Filename="$(basename "$Destination")"
   Template="${SourceDir}/.chezmoitemplates/vscodium/${Filename}c.tmpl"
   Origin="${Template}.base"
