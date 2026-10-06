@@ -11,10 +11,12 @@
   "claudeCode.hideOnboarding": true,
   "claudeCode.preferredLocation": "panel",
   "window.autoDetectColorScheme": true,
+  "window.newWindowDimensions": "maximized",
+{{- if .chezmoi.os "darwin" }}
   "window.customTitleBarVisibility": "never",
   "window.nativeTabs": true,
-  "window.newWindowDimensions": "maximized",
   "window.titleBarStyle": "native",
+{{- end }}
   "workbench.colorTheme": "Atom One Dark",
   "workbench.preferredDarkColorTheme": "Atom One Dark",
   "workbench.list.smoothScrolling": true,
@@ -132,6 +134,5 @@
     "Lines too Long": false,
     "Maximum Word Length Exceeded": false,
     "Average Word Length too Long": false
-  },
-  "window.menuStyle": "custom"
+  }
 }
