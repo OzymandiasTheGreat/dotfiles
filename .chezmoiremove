@@ -1,0 +1,2 @@
+.config/burn-my-windows/profiles/*.conf
+!.config/burn-my-windows/profiles/Ozymandias.conf
