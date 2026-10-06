@@ -10,7 +10,7 @@ Source="$3"
 
 if [[ "$Destination" =~ \.(avif|bmp|gif|heic|heif|ico|icns|jpeg|jpg|kdbx|png|psd|xcf|tiff|tif|webp)$ ]]; then
   cp -f "$Destination" "$Source"
-elif [[ "$Destination" =~ ^/Users/ozymandias/[\ a-zA-Z0-9/\._-]+/VSCodium/User/[a-z\._-]+\.json$ ]]; then
+elif [[ "$Destination" =~ ^"$HOME"/[\ a-zA-Z0-9/\._-]+/VSCodium/User/[a-z\._-]+\.json$ ]]; then
   Filename="$(basename "$Destination")"
   Template="${SourceDir}/.chezmoitemplates/vscodium/${Filename}c.tmpl"
   Origin="${Template}.base"
@@ -22,7 +22,7 @@ elif [[ "$Destination" =~ ^/Users/ozymandias/[\ a-zA-Z0-9/\._-]+/VSCodium/User/[
   rm "$Origin"
   mv "$Temp" "$Template"
   cp -f "$Target" "$Source"
-elif [[ "$Destination" =~ ^/Users/ozymandias/[\ a-zA-Z0-9/\._-]+/VSCodium/User/snippets/[a-z\._-]+\.json$ ]]; then
+elif [[ "$Destination" =~ ^"$HOME"/[\ a-zA-Z0-9/\._-]+/VSCodium/User/snippets/[a-z\._-]+\.json$ ]]; then
   Filename="$(basename "$Destination")"
   Template="${SourceDir}/.chezmoitemplates/vscodium/snippets/${Filename}c.tmpl"
   Origin="${Template}.base"
