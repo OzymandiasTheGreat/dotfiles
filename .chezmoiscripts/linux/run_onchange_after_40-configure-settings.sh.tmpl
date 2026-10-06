@@ -5,11 +5,17 @@ set -euo pipefail
 
 # Extensions installed by gext keep their schemas next to the extension
 extensions="$HOME/.local/share/gnome-shell/extensions"
-dash_to_panel() {
-  gsettings --schemadir "$extensions/dash-to-panel@jderose9.github.com/schemas" set org.gnome.shell.extensions.dash-to-panel "$@"
+blur_my_shell() {
+  gsettings --schemadir "$extensions/blur-my-shell@aunetx/schemas" set org/gnome/shell/extensions/blur-my-shell/$1 "$2" "$3"
+}
+burn_my_windows() {
+  gsettings --schemadir "$extensions/burn-my-windows@schneegans.github.com/schemas" set org.gnome.shell.extensions.burn-my-windows "$@"
 }
 compiz_alike_magic_lamp_effect() {
   gsettings --schemadir "$extensions/compiz-alike-magic-lamp-effect@hermes83.github.com/schemas" set org.gnome.shell.extensions.com.github.hermes83.compiz-alike-magic-lamp-effect "$@"
+}
+dash_to_panel() {
+  gsettings --schemadir "$extensions/dash-to-panel@jderose9.github.com/schemas" set org.gnome.shell.extensions.dash-to-panel "$@"
 }
 rounded_window_corners_reborn() {
   gsettings --schemadir "$extensions/rounded-window-corners@fxgn/schemas" set org.gnome.shell.extensions.rounded-window-corners-reborn "$@"
@@ -61,6 +67,18 @@ gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'org
 
 gsettings set org.gnome.shell.app-switcher current-workspace-only true
 
+blur_my_shell applications blur true
+blur_my_shell applications dynamic-opacity false
+blur_my_shell applications opacity 255
+blur_my_shell applications static-blur true
+blur_my_shell applications whitelist "['org.wezfurlong.wezterm']"
+blur_my_shell panel static-blur true
+
+burn_my_windows active-profile "'$HOME/.config/burn-my-windows/profiles/Ozymandias.conf'"
+
+compiz_alike_magic_lamp_effect duration 350.0
+compiz_alike_magic_lamp_effect effect "'sine'"
+
 dash_to_panel animate-appicon-hover true
 dash_to_panel animate-appicon-hover-animation-type "'PLANK'"
 dash_to_panel animate-appicon-hover-animation-zoom "{'SIMPLE': 1.0, 'RIPPLE': 1.25, 'PLANK': 1.3}"
@@ -86,9 +104,6 @@ dash_to_panel trans-use-custom-opacity true
 dash_to_panel tray-padding 2
 
 gsettings set org.gnome.shell.extensions.ding show-home false
-
-compiz_alike_magic_lamp_effect duration 350.0
-compiz_alike_magic_lamp_effect effect "'sine'"
 
 rounded_window_corners_reborn border-width 0
 

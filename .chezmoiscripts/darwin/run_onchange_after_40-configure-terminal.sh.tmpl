@@ -1,4 +1,4 @@
-{{ $profile := "Ozymandias" -}}
+{{ $profile := ".vm" -}}
 {{ $filepath := joinPath .chezmoi.sourceDir (printf "%s.terminal" $profile) -}}
 {{ if or (ne (output "defaults" "read" "com.apple.terminal" "Default Window Settings" | trim) $profile) (ne (output "defaults" "read" "com.apple.terminal" "Startup Window Settings" | trim) $profile) -}}
 #!/bin/bash

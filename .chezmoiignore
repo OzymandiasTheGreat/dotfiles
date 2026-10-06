@@ -1,7 +1,6 @@
 askpass.sh
 key.txt.age
 **/.DS_Store
-Ozymandias.terminal
 README.md
 
 {{ if or .server .vm -}}
@@ -31,6 +30,8 @@ Library
 
 {{ if ne .chezmoi.os "linux" -}}
 .chezmoiscripts/linux/**
+.config/burn-my-windows
+.config/keepassxc
 .config/VSCodium
 .face
 {{ end -}}
