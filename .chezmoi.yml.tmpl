@@ -72,9 +72,9 @@ hooks:
   apply:
     post:
 {{- if ne .chezmoi.os "windows" }}
-      command: .local/share/chezmoi/.chezmoihooks/post-init.sh
+      command: .local/share/chezmoi/.chezmoihooks/post-apply.sh
 {{- else }}
-      script: .local/share/chezmoi/.chezmoihooks/post-init.ps1
+      script: .local/share/chezmoi/.chezmoihooks/post-apply.ps1
 {{- end }}
 
 data:
