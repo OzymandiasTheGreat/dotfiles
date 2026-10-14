@@ -1,5 +1,6 @@
 {{ $npm := findExecutable "npm.cmd" (list (joinPath (env "PROGRAMFILES") "nodejs")) -}}
 {{ if $npm -}}
+  {{ $null := exec "powershell.exe" "-NoProfile" "-Command" `New-Item -ItemType Directory -Path "$env:APPDATA\npm" -Force` -}}
   {{ $installed := (output $npm "ls" "--global" "--json" | fromJson) -}}
   {{ $dependencies := list -}}
   {{ if hasKey $installed "dependencies" -}}
