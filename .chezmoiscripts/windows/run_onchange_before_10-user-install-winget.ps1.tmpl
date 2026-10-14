@@ -2,6 +2,12 @@
 {{ $pkgs := output "winget.exe" "list" "--accept-source-agreements" "--disable-interactivity" -}}
 {{ $script := list -}}
 
+{{ range $wg.user_remove_winget -}}
+  {{ if contains . $pkgs -}}
+    {{ $script = append $script (printf `Run winget uninstall --accept-source-agreements --disable-interactivity --id "%s"` .) -}}
+  {{ end -}}
+{{ end -}}
+
 {{ range $wg.user_install -}}
   {{ if not (contains . $pkgs) -}}
     {{ $script = append $script (printf `Run winget install -e --silent --accept-package-agreements --accept-source-agreements --id "%s"` .) -}}

@@ -24,7 +24,7 @@ function Remove-AppxApp {
   {{ end -}}
 {{ end -}}
 
-{{ range $wg.remove_winget -}}
+{{ range $wg.admin_remove_winget -}}
   {{ if contains . $pkgs -}}
     {{ $script = append $script (printf `Run winget uninstall --accept-source-agreements --disable-interactivity --id "%s"` .) -}}
   {{ end -}}
