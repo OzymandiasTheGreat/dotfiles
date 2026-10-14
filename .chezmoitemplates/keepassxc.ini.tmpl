@@ -25,6 +25,9 @@ ShowTrayIcon=true
 TrayIconAppearance=monochrome{{ if eq .chezmoi.os "linux" }}-light{{ end }}
 
 [PasswordGenerator]
+AdditionalChars=
+ExcludedChars=
+Length=20
 SpecialChars=true
 Type=1
 WordCase=2
