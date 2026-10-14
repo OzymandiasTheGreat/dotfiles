@@ -6,7 +6,7 @@
 {{ template "helpers.ps1.tmpl" . -}}
 Elevate
 
-New-Item -ItemType Directory -Path '{{ dir $dest }}' -Force | Out-Null
+New-Item -ItemType Directory -Path '{{ osDir $dest }}' -Force | Out-Null
 Copy-Item '{{ $avatar }}' '{{ $dest }}' -Force
 New-Item -Path '{{ $path }}' -Force | Out-Null
 foreach ($size in 32, 40, 48, 96, 192, 200, 240, 448) {
