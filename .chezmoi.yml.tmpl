@@ -69,7 +69,7 @@ merge:
 {{- end }}
 
 hooks:
-  apply:
+  init:
     post:
 {{- if ne .chezmoi.os "windows" }}
       command: .local/share/chezmoi/.chezmoihooks/post-init.sh
