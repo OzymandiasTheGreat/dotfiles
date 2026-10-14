@@ -1,0 +1,15 @@
+{{ $wg := includeTemplate "winget.yml.tmpl" . | fromYaml -}}
+{{ $pkgs := output "winget.exe" "list" "--accept-source-agreements" "--disable-interactivity" -}}
+{{ $script := list -}}
+
+{{ range $wg.user_install -}}
+  {{ if not (contains . $pkgs) -}}
+    {{ $script = append $script (printf `Run winget install -e --silent --accept-package-agreements --accept-source-agreements --id "%s"` .) -}}
+  {{ end -}}
+{{ end -}}
+
+{{ if len $script -}}
+  {{ template "helpers.ps1.tmpl" . -}}
+  {{ $script = prepend $script "\r\nUnelevate\r\n" -}}
+  {{ $script | join "\r\n" -}}
+{{ end -}}

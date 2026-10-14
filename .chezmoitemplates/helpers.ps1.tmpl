@@ -1,0 +1,72 @@
+function Test-Admin {
+  ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')
+}
+
+function Elevate {
+  if (Test-Admin) {
+    return
+  }
+
+  $Process = Start-Process -Wait -PassThru -Verb RunAs -FilePath (Get-Process -Id $PID).Path `
+    -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`""
+
+  exit $(if ($Process) { $Process.ExitCode } else { 1 })
+}
+
+function Unelevate {
+  # The marker argument stops a relaunch loop when there is no limited token to drop to (UAC off)
+  if (-not (Test-Admin) -or [Environment]::GetCommandLineArgs() -contains 'Unelevated') {
+    return
+  }
+
+  # A scheduled task is the built-in way to get a limited token, a wait and an exit code
+  $Name = "chezmoi-unelevate-$PID"
+  Register-ScheduledTask -TaskName $Name -Force `
+    -Action (New-ScheduledTaskAction -Execute (Get-Process -Id $PID).Path `
+      -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`" Unelevated") `
+    -Principal (New-ScheduledTaskPrincipal -UserId ([Security.Principal.WindowsIdentity]::GetCurrent().Name) `
+      -LogonType Interactive -RunLevel Limited) `
+    -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries) | Out-Null
+
+  try {
+    Start-ScheduledTask -TaskName $Name
+    # State is also 'Ready' while the task is still queued; 267011 is SCHED_S_TASK_HAS_NOT_RUN
+    $Deadline = (Get-Date).AddSeconds(30)
+    do { Start-Sleep -Seconds 1 } while (
+      (Get-ScheduledTask -TaskName $Name).State -ne 'Ready' -or
+      ((Get-ScheduledTaskInfo -TaskName $Name).LastTaskResult -eq 267011 -and (Get-Date) -lt $Deadline))
+    exit (Get-ScheduledTaskInfo -TaskName $Name).LastTaskResult
+  }
+  finally {
+    Unregister-ScheduledTask -TaskName $Name -Confirm:$false
+  }
+}
+
+function Set-RegistryValue {
+  param(
+    [Parameter(Mandatory)][string]$Path,
+    [Parameter(Mandatory)][string]$Name,
+    [Parameter(Mandatory)][string]$Type,
+    [Parameter(Mandatory)]$Value
+  )
+
+  if (-not (Test-Path $Path)) {
+    New-Item -Path $Path -Force | Out-Null
+  }
+
+  Set-ItemProperty -Path $Path -Name $Name -Type $Type -Value $Value
+}
+
+function Run {
+  $Executable, $Arguments = $args
+
+  & $Executable @Arguments
+
+  if ($LASTEXITCODE -ne 0) {
+    exit $LASTEXITCODE
+  }
+}
+
+$ErrorActionPreference = "Stop"
+
+$env:Path = [Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User')

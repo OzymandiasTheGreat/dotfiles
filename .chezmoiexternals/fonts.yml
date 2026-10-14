@@ -1,13 +1,12 @@
-{{- $fontDir := "" }}
-{{- if eq .chezmoi.os "darwin" }}
-  {{- $fontDir = "Library/Fonts" }}
-{{- else if eq .chezmoi.os "linux" }}
-  {{- $fontDir = ".local/share/fonts" }}
-{{- else if eq .chezmoi.os "windows" }}
-  {{- $fontDir = joinPath (env "LOCALAPPDATA") "Microsoft\\Windows\\Fonts" }}
-{{- end }}
-
-{{- if not .server }}
+# {{- $fontDir := "" }}
+# {{- if eq .chezmoi.os "darwin" }}
+#   {{- $fontDir = "Library/Fonts" }}
+# {{- else if eq .chezmoi.os "linux" }}
+#   {{- $fontDir = ".local/share/fonts" }}
+# {{- else if eq .chezmoi.os "windows" }}
+#   {{- $fontDir = "AppData/Local/Microsoft/Windows/Fonts" }}
+# {{- end }}
+# {{- if not .server }}
 FiraCode:
   type: archive
   url: {{ gitHubLatestReleaseAssetURL "tonsky/FiraCode" "Fira_Code_v*.zip" }}
@@ -41,5 +40,5 @@ Righteous:
   type: file
   url: https://fonts.gstatic.com/s/righteous/v18/1cXxaUPXBpj2rGoU7C9mj3uEicG01A.ttf
   refreshPeriod: 168h
-  targetPath: {{ joinPath $fontDir "Righteous-Regular.ttf" }}
-{{- end }}
+  targetPath: {{ printf "%s/Righteous-Regular.ttf" $fontDir }}
+# {{- end }}

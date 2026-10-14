@@ -1,0 +1,3 @@
+{{ template "helpers.ps1.tmpl" . -}}
+
+Run git -C "{{ .chezmoi.workingTree }}" remote set-url origin 'git@github.com:OzymandiasTheGreat/dotfiles.git'

@@ -1,0 +1,19 @@
+{{ $npm := findExecutable "npm.cmd" (list (joinPath (env "PROGRAMFILES") "nodejs")) -}}
+{{ if $npm -}}
+  {{ $installed := (output $npm "ls" "--global" "--json" | fromJson) -}}
+  {{ $dependencies := list -}}
+  {{ if hasKey $installed "dependencies" -}}
+    {{ $dependencies = concat $dependencies ($installed.dependencies | keys) }}
+  {{ end -}}
+  {{ $pkgs := includeTemplate "npm.yml.tmpl" . | fromYaml -}}
+  {{ $toInstall := list -}}
+  {{ range $pkgs -}}
+    {{ if not (has .package $dependencies) -}}
+      {{ $toInstall = append $toInstall (printf "%s@%s" .package .version) -}}
+    {{ end -}}
+  {{ end -}}
+  {{ if len $toInstall -}}
+    {{ template "helpers.ps1.tmpl" . -}}
+    Run "{{ $npm }}" install --global {{ $toInstall | quoteList | join " " }}
+  {{ end -}}
+{{ end -}}

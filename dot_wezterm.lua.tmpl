@@ -32,10 +32,7 @@ wezterm.on('format-window-title', function(tab, pane, tabs, panes, cfg)
       local path = cwd.file_path:gsub('[/\\]+$', '')
       local folder = path:match('[^/\\]+$')
 
-      if not folder or folder == '' then
-        title = path
-      end
-      title = folder
+      title = folder or path
     end
   else
     title = cmd
@@ -81,5 +78,9 @@ return {
     -- Make Command-Up jump to file start
     {key="UpArrow", mods="CMD", action=wezterm.action.SendKey {key="Home", mods="CTRL"}},
   },
+{{- end }}
+{{- if eq .chezmoi.os "windows" }}
+  prefer_egl = true,
+  default_prog = {"powershell", "-NoLogo"},
 {{- end }}
 }

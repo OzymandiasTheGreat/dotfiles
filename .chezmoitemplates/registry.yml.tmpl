@@ -1,0 +1,755 @@
+system:
+  remove:
+    - 'Registry::HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\ModernSharing'
+    - 'Registry::HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\Sharing'
+    - 'Registry::HKEY_CLASSES_ROOT\Folder\ShellEx\ContextMenuHandlers\Library Location'
+    - 'Registry::HKEY_CLASSES_ROOT\Directory\Background\shellex\ContextMenuHandlers\Sharing'
+    - 'Registry::HKEY_CLASSES_ROOT\Directory\shellex\ContextMenuHandlers\Sharing'
+    - 'Registry::HKEY_CLASSES_ROOT\Drive\shellex\ContextMenuHandlers\Sharing'
+    - 'Registry::HKEY_CLASSES_ROOT\LibraryFolder\background\shellex\ContextMenuHandlers\Sharing'
+    - 'Registry::HKEY_CLASSES_ROOT\UserLibraryFolder\shellex\ContextMenuHandlers\Sharing'
+    - 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}'
+    - 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}'
+
+  modify:
+# {{ $gamebar := `'Registry::HKEY_CLASSES_ROOT\ms-gamebar'` }}
+    - path: {{ $gamebar }}
+      name: '(Default)'
+      type: String
+      value: 'URL:ms-gamebar'
+
+    - path: {{ $gamebar }}
+      name: 'URL Protocol'
+      type: String
+      value: ''
+
+    - path: {{ $gamebar }}
+      name: NoOpenWith
+      type: String
+      value: ''
+
+    - path: 'Registry::HKEY_CLASSES_ROOT\ms-gamebar\shell\open\command'
+      name: '(Default)'
+      type: String
+      value: '%SystemRoot%/System32/systray.exe'
+
+# {{ $gamebarService := `'Registry::HKEY_CLASSES_ROOT\ms-gamebarservices'` }}
+    - path: {{ $gamebarService }}
+      name: '(Default)'
+      type: String
+      value: 'URL:ms-gamebarservices'
+
+    - path: {{ $gamebarService }}
+      name: 'URL Protocol'
+      type: String
+      value: ''
+
+    - path: {{ $gamebarService }}
+      name: NoOpenWith
+      type: String
+      value: ''
+
+    - path: 'Registry::HKEY_CLASSES_ROOT\ms-gamebarservices\shell\open\command'
+      name: '(Default)'
+      type: String
+      value: '%SystemRoot%/System32/systray.exe'
+
+# {{ $policyWindowsAISystem := `'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsAI'` }}
+    - path: {{ $policyWindowsAISystem }}
+      name: DisableAIDataAnalysis
+      type: DWord
+      value: 1
+
+    - path: {{ $policyWindowsAISystem }}
+      name: AllowRecallEnablement
+      type: DWord
+      value: 0
+
+    - path: {{ $policyWindowsAISystem }}
+      name: TurnOffSavingSnapshots
+      type: DWord
+      value: 1
+
+    - path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent'
+      name: DisableConsumerAccountStateContent
+      type: DWord
+      value: 1
+
+    - path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection'
+      name: AllowTelemetry
+      type: DWord
+      value: 0
+
+# {{ $policyEdge := `'HKLM:\SOFTWARE\Policies\Microsoft\Edge'` }}
+    - path: {{ $policyEdge }}
+      name: NewTabPageContentEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: NewTabPageHideDefaultTopSites
+      type: DWord
+      value: 1
+
+    - path: {{ $policyEdge }}
+      name: EdgeShoppingAssistantEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: TabServicesEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: AlternateErrorPagesEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: UserFeedbackAllowed
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: ShowRecommendationsEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: WalletDonationEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: HideFirstRunExperience
+      type: DWord
+      value: 1
+
+    - path: {{ $policyEdge }}
+      name: DefaultBrowserSettingEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: DefaultBrowserSettingsCampaignEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: SpotlightExperiencesAndRecommendationsEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: ShowAcrobatSubscriptionButton
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: CopilotCDPPageContext
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: CopilotPageContext
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: HubsSidebarEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: EdgeEntraCopilotPageContext
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: EdgeHistoryAISearchEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: ComposeInlineEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: GenAILocalFoundationalModelSettings
+      type: DWord
+      value: 1
+
+    - path: {{ $policyEdge }}
+      name: NewTabPageBingChatEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: PersonalizationReportingEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $policyEdge }}
+      name: DiagnosticData
+      type: DWord
+      value: 0
+
+    - path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+      name: SettingsPageVisibility
+      type: String
+      value: 'hide:home'
+
+    - path: 'HKLM:\SOFTWARE\Policies\WindowsNotepad'
+      name: DisableAIFeatures
+      type: DWord
+      value: 1
+
+# {{ $policyPaint := `'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Paint'` }}
+    - path: {{ $policyPaint }}
+      name: DisableCocreator
+      type: DWord
+      value: 1
+
+    - path: {{ $policyPaint }}
+      name: DisableGenerativeFill
+      type: DWord
+      value: 1
+
+    - path: {{ $policyPaint }}
+      name: DisableImageCreator
+      type: DWord
+      value: 1
+
+    - path: {{ $policyPaint }}
+      name: DisableGenerativeErase
+      type: DWord
+      value: 1
+
+    - path: {{ $policyPaint }}
+      name: DisableRemoveBackground
+      type: DWord
+      value: 1
+
+# {{ $policySearch := `'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search'` }}
+    - path: {{ $policySearch }}
+      name: AllowCortana
+      type: DWord
+      value: 0
+
+    - path: {{ $policySearch }}
+      name: CortanaConsent
+      type: DWord
+      value: 0
+
+    - path: 'HKLM:\SOFTWARE\Microsoft\PolicyManager\current\device\Start'
+      name: ConfigureStartPins
+      type: String
+      value: |
+        {
+          "applyOnce": false,
+          "pinnedList": []
+        }
+
+# {{ $policySystem := `'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System'` }}
+    - path: {{ $policySystem }}
+      name: NoLocalPasswordResetQuestions
+      type: DWord
+      value: 1
+
+    - path: {{ $policySystem }}
+      name: PublishUserActivities
+      type: DWord
+      value: 0
+
+    - path: 'HKLM:\SYSTEM\CurrentControlSet\Services\WSAIFabricSvc'
+      name: Start
+      type: DWord
+      value: 3
+
+    - path: 'HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings'
+      name: IsContinuousInnovationOptedIn
+      type: DWord
+      value: 0
+
+user:
+  removeValue:
+    - path: 'HKCU:\Software\Microsoft\Siuf\Rules'
+      name: PeriodInNanoSeconds
+
+  modify:
+# {{ $desktop := `'HKCU:\Control Panel\Desktop'` }}
+# {{ if .vm }}
+    - path: {{ $desktop }}
+      name: WheelScrollLines
+      type: String
+      value: 1
+
+    - path: {{ $desktop }}
+      name: LockScreenAutoLockActive
+      type: String
+      value: 0
+
+    - path: 'HKCU:\Control Panel\Mouse'
+      name: ReverseMouseWheelDirection
+      type: DWord
+      value: 1
+# {{ end }}
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\AppListBackup'
+      name: IsBackupEnabledAndMSAAttached
+      type: DWord
+      value: 0
+
+    - path: {{ $desktop }}
+      name: AutoColorization
+      type: DWord
+      value: 1
+
+    - path: {{ $desktop }}
+      name: WindowArrangementActive
+      type: String
+      value: 0
+
+# {{ $explorerAdvanced := `'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'` }}
+# Resume
+    - path: {{ $explorerAdvanced }}
+      name: IsEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $explorerAdvanced }}
+      name: LastActiveClick
+      type: DWord
+      value: 1
+
+    - path: {{ $explorerAdvanced }}
+      name: ShowCopilotButton
+      type: DWord
+      value: 0
+
+    - path: {{ $explorerAdvanced }}
+      name: ShowTaskViewButton
+      type: DWord
+      value: 1
+
+# Chat button
+    - path: {{ $explorerAdvanced }}
+      name: TaskbarMn
+      type: DWord
+      value: 0
+
+# Window sharing
+    - path: {{ $explorerAdvanced }}
+      name: TaskbarSn
+      type: DWord
+      value: 0
+
+    - path: {{ $explorerAdvanced }}
+      name: Start_TrackProgs
+      type: DWord
+      value: 0
+
+# Hidden files
+    - path: {{ $explorerAdvanced }}
+      name: Hidden
+      type: DWord
+      value: 1
+
+    - path: {{ $explorerAdvanced }}
+      name: HideFileExt
+      type: DWord
+      value: 0
+
+    - path: {{ $explorerAdvanced }}
+      name: AutoCheckSelect
+      type: DWord
+      value: 1
+
+    - path: {{ $explorerAdvanced }}
+      name: SnapAssist
+      type: DWord
+      value: 0
+
+    - path: {{ $explorerAdvanced }}
+      name: EnableSnapBar
+      type: DWord
+      value: 0
+
+    - path: {{ $explorerAdvanced }}
+      name: EnableSnapAssistFlyout
+      type: DWord
+      value: 1
+
+    - path: {{ $explorerAdvanced }}
+      name: Start_IrisRecommendations
+      type: DWord
+      value: 0
+
+    - path: {{ $explorerAdvanced }}
+      name: ShowSyncProviderNotifications
+      type: DWord
+      value: 0
+
+    - path: {{ $explorerAdvanced }}
+      name: Start_AccountNotifications
+      type: DWord
+      value: 0
+
+    - path: {{ $explorerAdvanced }}
+      name: MultiTaskingAltTabFilter
+      type: DWord
+      value: 3
+
+# 1 = This PC, 2 = Home, 3 = Downloads
+    - path: {{ $explorerAdvanced }}
+      name: LaunchTo
+      type: DWord
+      value: 3
+
+# {{ $inputPersonalization := `'HKCU:\Software\Microsoft\InputPersonalization'` }}
+    - path: {{ $inputPersonalization }}
+      name: RestrictImplicitInkCollection
+      type: DWord
+      value: 1
+
+    - path: {{ $inputPersonalization }}
+      name: RestrictImplicitTextCollection
+      type: DWord
+      value: 1
+
+    - path: 'HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore'
+      name: HarvestContacts
+      type: DWord
+      value: 0
+
+# {{ $international := `'HKCU:\Control Panel\International'` }}
+    - path: {{ $international }}
+      name: sDecimal
+      type: String
+      value: '.'
+
+    - path: {{ $international }}
+      name: sMonDecimalSep
+      type: String
+      value: '.'
+
+    - path: 'HKCU:\Control Panel\International\User Profile'
+      name: UserLocaleFromLanguageProfileOptOut
+      type: DWord
+      value: 1
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\DesktopSpotlight\Settings'
+      name: EnabledState
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\CPSS\Store\UserLocationOverridePrivacySetting'
+      name: Value
+      type: DWord
+      value: 1
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Lock Screen'
+      name: SlideshowEnabled
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy'
+      name: HasAccepted
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+      name: HideSCAMeetNow
+      type: DWord
+      value: 1
+
+    - path: 'HKCU:\Software\Microsoft\Personalization\Settings'
+      name: AcceptedPrivacyPolicy
+      type: DWord
+      value: 0
+
+# {{ $policyExplorer := `'HKCU:\Software\Policies\Microsoft\Windows\Explorer'` }}
+    - path: {{ $policyExplorer }}
+      name: StartLayoutFile
+      type: ExpandString
+      value: '{{ joinPath (env "LOCALAPPDATA") `taskbar-layout.xml` }}'
+
+    - path: {{ $policyExplorer }}
+      name: LockedStartLayout
+      type: DWord
+      value: 1
+
+    - path: {{ $policyExplorer }}
+      name: HideRecommendedSection
+      type: DWord
+      value: 1
+
+    - path: {{ $policyExplorer }}
+      name: DisableSearchBoxSuggestions
+      type: DWord
+      value: 1
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Privacy'
+      name: TailoredExperiencesWithDiagnosticDataEnabled
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Search'
+      name: SearchboxTaskbarMode
+      type: DWord
+      value: 0
+
+# {{ $searchSettings := `'HKCU:\Software\Microsoft\Windows\CurrentVersion\SearchSettings'` }}
+    - path: {{ $searchSettings }}
+      name: IsDeviceSearchHistoryEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $searchSettings }}
+      name: IsDynamicSearchBoxEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $searchSettings }}
+      name: IsGlobalWebSearchProviderToggleEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $searchSettings }}
+      name: IsMSACloudSearchEnabled
+      type: DWord
+      value: 0
+
+    - path: {{ $searchSettings }}
+      name: IsAADCloudSearchEnabled
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Siuf\Rules'
+      name: NumberOfSIUFInPeriod
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Control Panel\Accessibility\StickyKeys'
+      name: Flags
+      type: String
+      value: 506
+
+# {{ $themesPersonalize := `'HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize'` }}
+    - path: {{ $themesPersonalize }}
+      name: AppsUseLightTheme
+      type: DWord
+      value: 0
+
+    - path: {{ $themesPersonalize }}
+      name: SystemUsesLightTheme
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings'
+      name: TaskbarEndTask
+      type: DWord
+      value: 1
+
+    - path: 'HKCU:\Software\Microsoft\input\TIPC'
+      name: Enabled
+      type: DWord
+      value: 0
+
+# OneDrive
+    - path: 'HKCU:\Software\Classes\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}'
+      name: 'System.IsPinnedToNameSpaceTree'
+      type: DWord
+      value: 0
+
+# {{ $pinHome := `'HKCU:\Software\Classes\CLSID\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}'` }}
+    - path: {{ $pinHome }}
+      name: '(Default)'
+      type: String
+      value: 'CLSID_MSGraphHomeFolder'
+
+    - path: {{ $pinHome }}
+      name: 'System.IsPinnedToNameSpaceTree'
+      type: DWord
+      value: 0
+
+# Gallery
+    - path: 'HKCU:\Software\Classes\CLSID\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}'
+      name: 'System.IsPinnedToNameSpaceTree'
+      type: DWord
+      value: 0
+
+# {{ $explorer := `'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer'` }}
+    - path: {{ $explorer }}
+      name: ShowRecent
+      type: DWord
+      value: 0
+
+    - path: {{ $explorer }}
+      name: ShowFrequent
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers'
+      name: DisableAutoplay
+      type: DWord
+      value: 1
+
+# {{ $searchPreferences := `'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Search\Preferences'` }}
+    - path: {{ $searchPreferences }}
+      name: AutoWildCard
+      type: DWord
+      value: 1
+
+    - path: {{ $searchPreferences }}
+      name: EnableNaturalQuerySyntax
+      type: DWord
+      value: 0
+
+    - path: {{ $searchPreferences }}
+      name: WholeFileSystem
+      type: DWord
+      value: 0
+
+    - path: {{ $searchPreferences }}
+      name: SystemFolders
+      type: DWord
+      value: 1
+
+    - path: {{ $searchPreferences }}
+      name: ArchivedFiles
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Search\PrimaryProperties\UnindexedLocations'
+      name: SearchOnly
+      type: DWord
+      value: 1
+
+# {{ $policyWindowsAIUser := `HKCU:\Software\Policies\Microsoft\Windows\WindowsAI` }}
+    - path: {{ $policyWindowsAIUser }}
+      name: DisableClickToDo
+      type: DWord
+      value: 1
+
+    - path: {{ $policyWindowsAIUser }}
+      name: DisableAIDataAnalysis
+      type: DWord
+      value: 1
+
+    - path: 'HKCU:\Software\Policies\Microsoft\Windows\WindowsCopilot'
+      name: TurnOffWindowsCopilot
+      type: DWord
+      value: 1
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ApplicationAssociationToasts'
+      name: 'ms-settings_ms-settings'
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.BackupReminder'
+      name: Enabled
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.StartupApp'
+      name: Enabled
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.Suggested'
+      name: Enabled
+      type: DWord
+      value: 0
+
+# {{ $contentDeliveryManager := `'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager'` }}
+    - path: {{ $contentDeliveryManager }}
+      name: 'SubscribedContent-310093Enabled'
+      type: DWord
+      value: 0
+
+    - path: {{ $contentDeliveryManager }}
+      name: 'SubscribedContent-338387Enabled'
+      type: DWord
+      value: 0
+
+    - path: {{ $contentDeliveryManager }}
+      name: 'SubscribedContent-338388Enabled'
+      type: DWord
+      value: 0
+
+    - path: {{ $contentDeliveryManager }}
+      name: 'SubscribedContent-338389Enabled'
+      type: DWord
+      value: 0
+
+    - path: {{ $contentDeliveryManager }}
+      name: 'SubscribedContent-338393Enabled'
+      type: DWord
+      value: 0
+
+    - path: {{ $contentDeliveryManager }}
+      name: 'SubscribedContent-353694Enabled'
+      type: DWord
+      value: 0
+
+    - path: {{ $contentDeliveryManager }}
+      name: 'SubscribedContent-353696Enabled'
+      type: DWord
+      value: 0
+
+    - path: {{ $contentDeliveryManager }}
+      name: 'SubscribedContent-353698Enabled'
+      type: DWord
+      value: 0
+
+    - path: {{ $contentDeliveryManager }}
+      name: 'RotatingLockScreenOverlayEnabled'
+      type: DWord
+      value: 0
+
+    - path: {{ $contentDeliveryManager }}
+      name: 'SilentInstalledAppsEnabled'
+      type: DWord
+      value: 0
+
+    - path: {{ $contentDeliveryManager }}
+      name: 'SoftLandingEnabled'
+      type: DWord
+      value: 0
+
+    - path: {{ $contentDeliveryManager }}
+      name: 'SystemPaneSuggestionsEnabled'
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Mobility'
+      name: OptedIn
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\SystemSettings\AccountNotifications'
+      name: EnableAccountNotifications
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement'
+      name: ScoobeSystemSettingEnabled
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\GameBar'
+      name: UseNexusForGameBarEnabled
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\GameDVR'
+      name: AppCaptureEnabled
+      type: DWord
+      value: 0
+
+    - path: 'HKCU:\System\GameConfigStore'
+      name: 'GameDVR_Enabled'
+      type: DWord
+      value: 0

@@ -1,0 +1,15 @@
+{{ $sid := output "powershell.exe" "-NoProfile" "-Command" "[Security.Principal.WindowsIdentity]::GetCurrent().User.Value" | trim -}}
+{{ $path := printf `HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AccountPicture\Users\%s` $sid -}}
+{{ if ne (output "powershell.exe" "-NoProfile" "-Command" (printf "Test-Path -Path '%s'" $path) | trim) "True" -}}
+{{ $avatar := joinPath .chezmoi.sourceDir ".chezmoiignored" "dot_face" -}}
+{{ $dest := joinPath (env "PUBLIC") "AccountPictures" $sid "face.png" -}}
+{{ template "helpers.ps1.tmpl" . -}}
+Elevate
+
+New-Item -ItemType Directory -Force '{{ dir $dest }}' | Out-Null
+Copy-Item '{{ $avatar }}' '{{ $dest }}' -Force
+New-Item -Path '{{ $path }}' -Force | Out-Null
+foreach ($size in 32, 40, 48, 96, 192, 200, 240, 448) {
+  Set-ItemProperty -Path '{{ $path }}' -Name "Image$size" -Value '{{ $dest }}'
+}
+{{ end -}}

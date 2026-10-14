@@ -1,0 +1,100 @@
+{{ template "helpers.ps1.tmpl" . -}}
+
+# Region Format
+Set-Culture "lt-LT"
+
+# Wallpaper slideshow
+Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+
+[ComImport, Guid("B92B56A9-8B55-4E14-9A89-0199BBB6F93B"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+interface IDesktopWallpaper {
+  // Unused vtable slots, declared only to keep the order
+  void SetWallpaper(); void GetWallpaper(); void GetMonitorDevicePathAt();
+  void GetMonitorDevicePathCount(); void GetMonitorRECT(); void SetBackgroundColor();
+  void GetBackgroundColor(); void SetPosition(); void GetPosition();
+  void SetSlideshow(IntPtr items);
+  void GetSlideshow();
+  void SetSlideshowOptions(uint options, uint tickMs);
+}
+
+public static class Wallpaper {
+  [DllImport("shell32.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
+  static extern void SHParseDisplayName(string name, IntPtr bindCtx, out IntPtr pidl, uint attrsIn, out uint attrsOut);
+  [DllImport("shell32.dll", PreserveSig = false)]
+  static extern void SHCreateShellItemArrayFromIDLists(uint count, ref IntPtr pidls, out IntPtr items);
+
+  public static void SetSlideshow(string folder, uint tickMs, bool shuffle) {
+    IntPtr pidl, items;
+    uint attrs;
+    SHParseDisplayName(folder, IntPtr.Zero, out pidl, 0, out attrs);
+    SHCreateShellItemArrayFromIDLists(1, ref pidl, out items);
+    var wallpaper = (IDesktopWallpaper)Activator.CreateInstance(Type.GetTypeFromCLSID(new Guid("C2CF3110-460E-4FC1-B9D0-8A1C0C9CC4BD")));
+    wallpaper.SetSlideshow(items);
+    wallpaper.SetSlideshowOptions(shuffle ? 1u : 0u, tickMs);
+    Marshal.Release(items);
+    Marshal.FreeCoTaskMem(pidl);
+  }
+}
+'@
+# SetSlideshow(folderPath, intervalMs, shuffle)
+[Wallpaper]::SetSlideshow('{{ .wallpapers }}', 1800000, $true)
+
+# Desktop icons/layout
+Remove-Item -Path '{{ joinPath .chezmoi.homeDir `Desktop\*.lnk` }}'
+$hwnd = 0
+# 0 = CSIDL_DESKTOP, 8 = SWC_DESKTOP, 1 = SWFO_NEEDDISPATCH
+$view = (New-Object -ComObject Shell.Application).Windows().FindWindowSW(0, $null, 8, [ref]$hwnd, 1).Document
+# Sort order, prefix '-' for reverse/descending, e.g. 'prop:-System.DateModified;'
+$view.SortColumns = 'prop:System.ItemNameDisplay;'
+# View flags: FWF_AUTOARRANGE | FWF_SNAPTOGRID
+$view.FolderFlags = $view.FolderFlags -bor 0x1 -bor 0x4
+# Valid sizes: 32 (small), 48 (medium), 96 (large)
+$view.IconSize = 48
+
+Set-Content -Path "{{ joinPath (env "LOCALAPPDATA") `taskbar-layout.xml` }}" -Encoding UTF8 -Value @'
+<?xml version="1.0" encoding="utf-8"?>
+<LayoutModificationTemplate
+    xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification"
+    xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout"
+    xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout"
+    Version="1">
+  <CustomTaskbarLayoutCollection PinListPlacement="Replace">
+    <defaultlayout:TaskbarLayout>
+      <taskbar:TaskbarPinList>
+        <taskbar:DesktopApp DesktopApplicationID="Microsoft.Windows.Explorer" PinGeneration="1" />
+        <taskbar:DesktopApp DesktopApplicationLinkPath="%PROGRAMDATA%\Microsoft\Windows\Start Menu\Programs\WezTerm.lnk" PinGeneration="1" />
+        {{ if not .vm -}}
+        <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\Proton Mail.lnk" PinGeneration="1" />
+        <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\Spotify.lnk" PinGeneration="1" />
+        <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\Logseq.lnk" PinGeneration="1" />
+        {{ end -}}
+        <taskbar:DesktopApp DesktopApplicationLinkPath="%PROGRAMDATA%\Microsoft\Windows\Start Menu\Programs\Firefox.lnk" PinGeneration="1" />
+        <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\VSCodium\VSCodium.lnk" PinGeneration="1" />
+        {{ if not .vm -}}
+        <taskbar:DesktopApp DesktopApplicationLinkPath="%PROGRAMDATA%\Microsoft\Windows\Start Menu\Programs\Android Studio\Android Studio.lnk" PinGeneration="1" />
+        {{ end -}}
+      </taskbar:TaskbarPinList>
+    </defaultlayout:TaskbarLayout>
+  </CustomTaskbarLayoutCollection>
+</LayoutModificationTemplate>
+'@
+
+# Register custom fonts
+$fontPath = 'HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts'
+Get-ChildItem -Path "$env:LOCALAPPDATA\Microsoft\Windows\Fonts" -Recurse -Filter *.ttf | ForEach-Object {
+  Set-RegistryValue -Path $fontPath -Name ($_.BaseName + " (TrueType)") -Type String -Value $_.FullName
+}
+
+{{ $user := (includeTemplate "registry.yml.tmpl" . | fromYaml).user -}}
+
+{{ range $user.removeValue -}}
+if (Get-ItemProperty -Path '{{ .path }}' -Name '{{ .name }}' -ErrorAction Ignore) {
+  Remove-ItemProperty -Path '{{ .path }}' -Name '{{ .name }}'
+}
+{{ end -}}
+
+{{ range $user.modify -}}
+  Set-RegistryValue -Path '{{ .path }}' -Name '{{ .name }}' -Type '{{ .type }}' -Value '{{ .value }}'
+{{ end -}}

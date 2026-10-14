@@ -1,0 +1,15 @@
+{{ $codium := findExecutable "codium.cmd" (list (joinPath (env "LOCALAPPDATA") `Programs\VSCodium\bin`)) -}}
+{{ if $codium }}
+  {{ $installed := output $codium "--list-extensions" -}}
+  {{ $ext := includeTemplate "codium.yml.tmpl" . | fromYaml -}}
+  {{ $toInstall := list -}}
+  {{ range $ext -}}
+    {{ if not (contains (lower .) (lower $installed)) -}}
+      {{ $toInstall = concat $toInstall (list "--force" "--install-extension" .) -}}
+    {{ end -}}
+  {{ end -}}
+  {{ if len $toInstall -}}
+    {{ template "helpers.ps1.tmpl" . -}}
+    Run "{{ $codium }}" {{ $toInstall | quoteList | join " " }}
+  {{ end -}}
+{{ end -}}

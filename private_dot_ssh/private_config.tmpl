@@ -3,7 +3,7 @@ Host *
 {{- if eq .chezmoi.os "darwin" }}
   Usekeychain yes
 {{- end }}
-{{- if and (not .server) (not .vm) }}
+{{ if and (not .server) (not .vm) (ne .chezmoi.os "windows") -}}
 Host paperspace
   HostName 127.0.0.1
   User paperspace

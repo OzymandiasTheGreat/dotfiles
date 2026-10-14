@@ -1,0 +1,6 @@
+{{ if ne (lower .hostname) (lower .chezmoi.hostname) -}}
+{{ template "helpers.ps1.tmpl" . -}}
+Elevate
+
+Rename-Computer -NewName '{{ .hostname }}' -Force
+{{ end -}}

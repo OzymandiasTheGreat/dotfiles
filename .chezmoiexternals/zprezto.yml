@@ -1,3 +1,4 @@
+# {{- if or (eq .chezmoi.os "darwin") (eq .chezmoi.os "linux") }}
 .zprezto:
   type: git-repo
   refreshPeriod: 168h
@@ -5,3 +6,4 @@
   clone:
     args:
       - --recursive
+# {{- end }}

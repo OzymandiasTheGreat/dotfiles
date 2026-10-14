@@ -1,0 +1,62 @@
+<# :
+@echo off
+setlocal
+set "MergeScript=%~f0"
+set "MergeDestination=%~1"
+set "MergeTarget=%~2"
+set "MergeSource=%~3"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& ([scriptblock]::Create((Get-Content -Raw -LiteralPath $env:MergeScript)))"
+exit /b %ERRORLEVEL%
+#>
+
+{{ template "helpers.ps1.tmpl" . -}}
+
+$SourceDir = "$HOME\.local\share\chezmoi"
+$Destination = $env:MergeDestination
+$Target = $env:MergeTarget
+$Base = "$Target.base"
+$Source = $env:MergeSource
+
+function Merge-Template {
+  param([Parameter(Mandatory)][string]$Template)
+
+  $Origin = "$Template.base"
+  $Temp = "$Template.src"
+
+  try {
+    Copy-Item -LiteralPath $Template -Destination $Origin
+    Copy-Item -LiteralPath $Template -Destination $Temp
+    Run codium --new-window --wait --merge $Template $Destination $Origin $Temp
+    Move-Item -LiteralPath $Temp -Destination $Template -Force
+  }
+  finally {
+    Remove-Item -LiteralPath $Origin, $Temp -ErrorAction SilentlyContinue
+  }
+}
+
+# chezmoi passes forward slashes, $HOME has backslashes
+$Path = $Destination -replace '\\', '/'
+$Parent = [regex]::Escape($HOME -replace '\\', '/') + '/[ a-zA-Z0-9/._-]+'
+
+if ($Path -match '\.(avif|bmp|gif|heic|heif|ico|icns|jpeg|jpg|kdbx|png|psd|xcf|tiff|tif|webp)$') {
+  Copy-Item -LiteralPath $Destination -Destination $Source -Force
+}
+elseif ($Path -match "^$Parent/keepassxc/([a-z._-]+\.ini)$") {
+  Merge-Template "$SourceDir\.chezmoitemplates\$($Matches[1]).tmpl"
+}
+elseif ($Path -match "^$Parent/rclone/rclone\.conf$") {
+  # --output because redirection in Windows PowerShell re-encodes the output as UTF-16
+  Run chezmoi encrypt --output "$SourceDir\.chezmoiignored\rclone.conf.age" $Destination
+}
+elseif ($Path -match "^$Parent/VSCodium/User/((snippets/)?[a-z._-]+\.json)$") {
+  Merge-Template "$SourceDir\.chezmoitemplates\vscodium\$($Matches[1])c.tmpl"
+}
+else {
+  try {
+    Copy-Item -LiteralPath $Target -Destination $Base
+    Run codium --new-window --wait --merge $Target $Destination $Base $Source
+  }
+  finally {
+    Remove-Item -LiteralPath $Base -ErrorAction SilentlyContinue
+  }
+}

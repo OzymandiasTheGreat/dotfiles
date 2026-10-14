@@ -5,6 +5,7 @@ FaviconDownloadTimeout=30
 HideWindowOnCopy=true
 MinimizeOnCopy=false
 NumberOfRememberedLastDatabases=3
+UpdateCheckMessageShown=true
 UseAtomicSaves=false
 
 [Browser]
@@ -31,6 +32,9 @@ WordCount=6
 
 [SSHAgent]
 Enabled=true
+{{- if eq .chezmoi.os "windows" }}
+UseOpenSSH=true
+{{- end }}
 
 [Security]
 ClearClipboardTimeout=30

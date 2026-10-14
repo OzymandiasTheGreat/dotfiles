@@ -1,0 +1,34 @@
+{{ $logseq := findExecutable "Logseq.exe" (list (joinPath (env "LOCALAPPDATA") `Programs\Logseq`)) -}}
+{{ if $logseq -}}
+  {{ $ls := includeTemplate "logseq.yml.tmpl" . | fromYaml -}}
+  {{ $notes := joinPath .chezmoi.homeDir "Notes" -}}
+  {{ $clone := list -}}
+  {{ range $ls -}}
+    {{ if not (stat (joinPath $notes .name)) -}}
+      {{ $clone = append $clone . -}}
+    {{ end -}}
+  {{ end -}}
+  {{ if len $clone -}}
+    {{ template "helpers.ps1.tmpl" . -}}
+$env:OZ_PASSPHRASE = '{{ (keepassxc (includeTemplate "entry.tmpl" .hostname)).Password | replace "'" "''" }}'
+$env:SSH_ASKPASS = '{{ joinPath .chezmoi.sourceDir ".chezmoiignored" "askpass.cmd" }}'
+$env:SSH_ASKPASS_REQUIRE = 'force'
+$env:GIT_SSH_COMMAND = "'$((Get-Command ssh.exe).Source)' -o BatchMode=yes" -replace '\\', '/'
+$key = @'
+{{ keepassxcAttachment (includeTemplate "entry.tmpl" .hostname) "id_ed25519" | trim }}
+'@
+$before = ssh-add -L
+try {
+  ($key -replace "`r") + "`n" | ssh-add -q -
+  if ($LASTEXITCODE) { exit $LASTEXITCODE }
+{{- range $clone }}
+{{- $name := .name | trimSuffix "." }}
+{{- $gitDir := joinPath $.chezmoi.homeDir ".logseq" "git" (joinPath $notes $name | replaceAllRegex `[/\\]` "_" | replace ":" "comma") }}
+  New-Item -ItemType Directory -Force '{{ $gitDir }}' | Out-Null
+  Run git clone --quiet --separate-git-dir '{{ joinPath $gitDir ".git" }}' -c 'core.hooksPath={{ joinPath $notes ".hooks" }}' 'git@github.com:{{ .repo }}.git' '{{ joinPath $notes $name }}'
+{{- end }}
+} finally {
+  ssh-add -L | Where-Object { $_ -notin $before } | ssh-add -q -d -
+}
+  {{ end -}}
+{{ end -}}

@@ -6,10 +6,16 @@ signingkey = ~/.ssh/sign_ed25519.pub
 [gpg]
 format = ssh
 
+{{ if eq .chezmoi.os "windows" -}}
+[gpg "ssh"]
+program = "C:/Windows/System32/OpenSSH/ssh-keygen.exe"
+{{- end }}
+
 [core]
 editor = micro
 {{- if eq .chezmoi.os "windows" }}
 longpaths = true
+sshCommand = "C:/Windows/System32/OpenSSH/ssh.exe"
 {{- end }}
 
 [init]

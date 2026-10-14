@@ -1,0 +1,76 @@
+remove_appx:
+  - Microsoft.Windows.DevHome
+  - Microsoft.BingSearch
+  - Clipchamp.Clipchamp
+  - Microsoft.BingNews
+  - Microsoft.MicrosoftStickyNotes
+  - Microsoft.Todos
+  - Microsoft.BingWeather
+  - MicrosoftCorporationII.QuickAssist_2
+  - Microsoft.MicrosoftSolitaireCollection
+  - Microsoft.StartExperiencesApp
+  - Microsoft.WidgetsPlatformRuntime
+  - Microsoft.WindowsAlarms
+  - MicrosoftWindows.Client.WebExperience
+  - MicrosoftWindows.CrossDevice
+  - Microsoft.YourPhone
+# {{ if .vm }}
+  - Microsoft.XboxGamingOverlay
+  - Microsoft.XboxSpeechToTextOverlay
+  - Microsoft.XboxIdentityProvider
+  - Microsoft.Edge.GameAssist
+  - Microsoft.Paint
+  - Microsoft.WindowsCamera
+# {{ end }}
+
+remove_winget:
+  - Microsoft.365Copilot
+  - Microsoft.OneDrive
+  - Microsoft.Teams
+  - Microsoft.Outlook
+
+admin_install:
+# {{ if not .vm }}
+  - calibre.calibre
+  - EclipseAdoptium.Temurin.21.JDK
+  - GIMP.GIMP
+  - Google.AndroidStudio
+  - Inkscape.Inkscape
+  - KDE.KDEConnect
+  - Nextcloud.NextcloudDesktop
+  - Proton.ProtonVPN
+  - Transmission.Transmission
+  - VideoLAN.VLC
+# {{ end }}
+  - Clement.bottom
+  - facebook.watchman
+  - Git.Git
+  - GitHub.cli
+  - KeePassXCTeam.KeePassXC
+  - Mozilla.Firefox
+  - OpenJS.NodeJS.LTS
+  - sharkdp.fd
+  - sharkdp.hyperfine
+  - Starship.Starship
+  - wez.wezterm
+
+user_install:
+# {{ if not .vm }}
+  - Discord.Discord
+  - ggml.llamacpp
+  - Logseq.Logseq
+  # - Proton.ProtonMailBridge
+  - Proton.ProtonMail
+  - Spotify.Spotify
+# {{ end }}
+  - bootandy.dust
+  - cURL.cURL
+  - eza-community.eza
+  - FiloSottile.age
+  - muesli.duf
+  - Python.Python.3.14
+  - Rclone.Rclone
+  - Rustlang.Rustup
+  - twpayne.chezmoi
+  - VSCodium.VSCodium
+  - zyedidia.micro

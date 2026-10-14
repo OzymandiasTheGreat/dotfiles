@@ -16,4 +16,8 @@ sh -c "$(wget -qO- https://get.chezmoi.io)" -- init --force --apply OzymandiasTh
 ## Windows
 
 ```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+# iex "&{$(irm 'https://get.activated.win')} /HWID"
+iex "&{$(irm 'https://get.chezmoi.io/ps1')} init --apply OzymandiasTheGreat"
+Restart-Computer -Force
 ```

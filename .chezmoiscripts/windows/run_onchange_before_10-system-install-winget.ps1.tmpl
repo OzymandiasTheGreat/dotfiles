@@ -1,0 +1,73 @@
+function Remove-AppxApp {
+    param([string]$app)
+    $pattern = '*' + $app + '*'
+
+    try {
+            foreach ($pkg in @(Get-AppxPackage -Name $pattern -AllUsers -ErrorAction SilentlyContinue)) {
+                Remove-AppxPackage -Package $pkg.PackageFullName -AllUsers -ErrorAction SilentlyContinue
+            }
+
+            foreach ($pkg in @(Get-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue | Where-Object { $_.PackageName -like $pattern })) {
+                Remove-ProvisionedAppxPackage -Online -AllUsers -PackageName $pkg.PackageName -ErrorAction SilentlyContinue
+            }
+    }
+    catch { }
+}
+
+{{ $wg := includeTemplate "winget.yml.tmpl" . | fromYaml -}}
+{{ $pkgs := output "winget.exe" "list" "--accept-source-agreements" "--disable-interactivity" -}}
+{{ $script := list -}}
+
+{{ range $wg.remove_appx -}}
+  {{ if contains . $pkgs -}}
+    {{ $script = append $script (printf `Remove-AppxApp "%s"` .) -}}
+  {{ end -}}
+{{ end -}}
+
+{{ range $wg.remove_winget -}}
+  {{ if contains . $pkgs -}}
+    {{ $script = append $script (printf `Run winget uninstall --accept-source-agreements --disable-interactivity --id "%s"` .) -}}
+  {{ end -}}
+{{ end -}}
+
+{{ if ne (output "powershell.exe" "-NoProfile" "-Command" "[bool](Get-Command ssh -ErrorAction SilentlyContinue)" | trim) "True" -}}
+  {{ $script = append $script `Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0` -}}
+{{ end -}}
+
+{{ if ne (output "powershell.exe" "-NoProfile" "-Command" "(Get-Service ssh-agent -ErrorAction SilentlyContinue).Status" | trim) "Running" -}}
+  {{ $script = append $script `Set-Service -Name ssh-agent -StartupType 'Automatic'` -}}
+  {{ $script = append $script `Start-Service ssh-agent` -}}
+{{ end -}}
+
+{{ if and .vm (ne (output "powershell.exe" "-NoProfile" "-Command" "[bool](Get-Command sshd -ErrorAction SilentlyContinue)" | trim) "True") -}}
+  {{ $script = append $script `Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0` -}}
+  {{ $script = append $script `Set-Service -Name sshd -StartupType 'Automatic'` -}}
+  {{ $script = append $script `Start-Service sshd` -}}
+{{ end -}}
+
+{{ range $wg.admin_install -}}
+  {{ if not (contains . $pkgs) -}}
+    {{ $script = append $script (printf `Run winget install -e --silent --accept-package-agreements --accept-source-agreements --id "%s"` .) -}}
+  {{ end -}}
+{{ end -}}
+
+{{ if not (contains "Microsoft.VisualStudio.BuildTools" $pkgs) -}}
+  {{ $arguments := list
+    "--quiet"
+    "--norestart"
+    "--removeOos true"
+    "--add Microsoft.VisualStudio.Component.Windows11SDK.26100"
+  -}}
+  {{ if eq .chezmoi.arch "arm64" -}}
+    {{ $arguments = append $arguments "--add Microsoft.VisualStudio.Component.VC.Tools.ARM64" -}}
+  {{ else -}}
+    {{ $arguments = append $arguments "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64" -}}
+  {{ end -}}
+  {{ $script = append $script (printf `Run winget install -e --id Microsoft.VisualStudio.BuildTools --override "%s"` ($arguments | join " ")) -}}
+{{ end -}}
+
+{{ if len $script -}}
+  {{ template "helpers.ps1.tmpl" . -}}
+  {{ $script = prepend $script "\r\nElevate\r\n" -}}
+  {{ $script | join "\r\n" -}}
+{{ end -}}

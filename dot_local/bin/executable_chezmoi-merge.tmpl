@@ -8,6 +8,8 @@ Target="$2"
 Base="${Target}.base"
 Source="$3"
 
+trap 'rm -f "$Base" "${Origin:-}" "${Temp:-}"' EXIT
+
 if [[ "$Destination" =~ \.(avif|bmp|gif|heic|heif|ico|icns|jpeg|jpg|kdbx|png|psd|xcf|tiff|tif|webp)$ ]]; then
   cp -f "$Destination" "$Source"
 elif [[ "$Destination" =~ ^"$HOME"/[\ a-zA-Z0-9/\._-]+/(KeePassXC|keepassxc)/[a-z\._-]+\.ini$ ]]; then
@@ -19,9 +21,9 @@ elif [[ "$Destination" =~ ^"$HOME"/[\ a-zA-Z0-9/\._-]+/(KeePassXC|keepassxc)/[a-
   cp "$Template" "$Origin"
   cp "$Template" "$Temp"
   codium --new-window --wait --merge "$Template" "$Destination" "$Origin" "$Temp"
-  rm "$Origin"
   mv "$Temp" "$Template"
-  cp -f "$Target" "$Source"
+elif [[ "$Destination" =~ ^"$HOME"/[\ a-zA-Z0-9/\._-]+/rclone/rclone\.conf$ ]]; then
+  chezmoi encrypt --output "${SourceDir}/.chezmoiignored/rclone.conf.age" "$Destination"
 elif [[ "$Destination" =~ ^"$HOME"/[\ a-zA-Z0-9/\._-]+/VSCodium/User/[a-z\._-]+\.json$ ]]; then
   Filename="$(basename "$Destination")"
   Template="${SourceDir}/.chezmoitemplates/vscodium/${Filename}c.tmpl"
@@ -31,9 +33,7 @@ elif [[ "$Destination" =~ ^"$HOME"/[\ a-zA-Z0-9/\._-]+/VSCodium/User/[a-z\._-]+\
   cp "$Template" "$Origin"
   cp "$Template" "$Temp"
   codium --new-window --wait --merge "$Template" "$Destination" "$Origin" "$Temp"
-  rm "$Origin"
   mv "$Temp" "$Template"
-  cp -f "$Target" "$Source"
 elif [[ "$Destination" =~ ^"$HOME"/[\ a-zA-Z0-9/\._-]+/VSCodium/User/snippets/[a-z\._-]+\.json$ ]]; then
   Filename="$(basename "$Destination")"
   Template="${SourceDir}/.chezmoitemplates/vscodium/snippets/${Filename}c.tmpl"
@@ -43,11 +43,8 @@ elif [[ "$Destination" =~ ^"$HOME"/[\ a-zA-Z0-9/\._-]+/VSCodium/User/snippets/[a
   cp "$Template" "$Origin"
   cp "$Template" "$Temp"
   codium --new-window --wait --merge "$Template" "$Destination" "$Origin" "$Temp"
-  rm "$Origin"
   mv "$Temp" "$Template"
-  cp -f "$Target" "$Source"
 else
   cp "$Target" "$Base"
   codium --new-window --wait --merge "$Target" "$Destination" "$Base" "$Source"
-  rm "$Base"
 fi

@@ -1,0 +1,12 @@
+{{ if not (stat (joinPath .chezmoi.homeDir `.config\chezmoi\key.txt`)) -}}
+$ErrorActionPreference = "Stop"
+
+$key = "$HOME\.config\chezmoi\key.txt"
+if (-not (Test-Path $key)) {
+  New-Item -ItemType Directory -Force -Path (Split-Path $key) | Out-Null
+  '{{ (keepassxc (includeTemplate "entry.tmpl" "chezmoi")).Password | replace "'" "''" }}' | & '{{ .chezmoi.executable }}' age decrypt --no-tty --output $key --passphrase '{{ .chezmoi.sourceDir }}\.chezmoiignored\key.txt.age'
+  if ($LASTEXITCODE -ne 0) {
+    exit $LASTEXITCODE
+  }
+}
+{{ end -}}

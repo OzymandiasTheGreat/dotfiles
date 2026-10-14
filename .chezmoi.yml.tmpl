@@ -1,21 +1,22 @@
-{{- $server := and (eq .chezmoi.os "linux") (not (env "DISPLAY")) (not (env "WAYLAND_DISPLAY")) -}}
-{{- $VM := false -}}
-{{- if eq .chezmoi.os "darwin" -}}
-  {{- $macVM := output "sysctl" "-n" "hw.model" | trim -}}
-  {{- if or (contains "Virtual" $macVM) (contains "VMware" $macVM) (contains "QEMU" $macVM) -}}
-    {{- $VM = true -}}
-  {{- end -}}
-{{- else if eq .chezmoi.os "linux" -}}
-  {{- $nixVM := output "systemd-detect-virt" | trim -}}
-  {{- if and (ne $nixVM "none") (ne $nixVM "") -}}
-    {{- $VM = true -}}
-  {{- end -}}
-{{- else if eq .chezmoi.os "windows" -}}
-  {{- $winVM := output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "Get-CimInstance Win32_ComputerSystem | Select-Object -ExpandProperty Model" | trim -}}
-  {{- if regexMatch "(?i)(virtualbox|vmware|kvm|qemu|virtual machine|hyper-v)" $winVM -}}
-    {{- $VM = true -}}
-  {{- end -}}
-{{- end -}}
+# {{- $server := and (eq .chezmoi.os "linux") (not (env "DISPLAY")) (not (env "WAYLAND_DISPLAY")) -}}
+# {{- $VM := false -}}
+# {{- if eq .chezmoi.os "darwin" -}}
+#   {{- $macVM := output "sysctl" "-n" "hw.model" | trim -}}
+#   {{- if or (contains "Virtual" $macVM) (contains "VMware" $macVM) (contains "QEMU" $macVM) -}}
+#     {{- $VM = true -}}
+#   {{- end -}}
+# {{- else if eq .chezmoi.os "linux" -}}
+#   {{- $nixVM := output "systemd-detect-virt" | trim -}}
+#   {{- if and (ne $nixVM "none") (ne $nixVM "") -}}
+#     {{- $VM = true -}}
+#   {{- end -}}
+# {{- else if eq .chezmoi.os "windows" -}}
+#   {{- $winVM := output "powershell.exe" "-NoProfile" "-NonInteractive" "-Command" "Get-CimInstance Win32_ComputerSystem | ForEach-Object { $_.Manufacturer + ' ' + $_.Model }" | trim -}}
+#   {{- if regexMatch `(?i)(virtual|vmware|qemu|parallels|\b(kvm|xen)\b)` $winVM -}}
+#     {{- $VM = true -}}
+#   {{- end -}}
+# {{- end -}}
+#
 
 encryption: age
 
@@ -27,6 +28,14 @@ git:
   autoAdd: true
   autoCommit: true
   autoPush: true
+
+interpreters:
+  ps1:
+    command: powershell
+    args:
+    - -NoLogo
+    - -NoProfile
+    - -File
 
 keepassxc:
 {{- $appliedPath := joinPath .chezmoi.homeDir "Documents" "Security" "ozymandias.kdbx" }}
@@ -48,25 +57,24 @@ diff:
     - --diff
 
 merge:
+{{- if ne .chezmoi.os "windows" }}
   command: chezmoi-merge
+{{- else }}
+  command: {{ .chezmoi.homeDir }}/.local/bin/chezmoi-merge.cmd
+{{- end }}
   args:
     - "{{ `{{ .Destination }}` }}"
-    - "{{ `{{ .Source }}` }}"
     - "{{ `{{ .Target }}` }}"
+    - "{{ `{{ .Source }}` }}"
 {{- end }}
 
 hooks:
-  read-source-state:
-    pre:
-{{- if eq .chezmoi.os "windows" }}
-      script: .local/share/chezmoi/.hooks/pre-read-source-state.ps1
-{{- end }}
-  apply:
+  init:
     post:
 {{- if ne .chezmoi.os "windows" }}
-      command: .local/share/chezmoi/.hooks/post-apply.sh
+      command: .local/share/chezmoi/.chezmoihooks/post-init.sh
 {{- else }}
-      script: .local/share/chezmoi/.hooks/post-apply.ps1
+      script: .local/share/chezmoi/.chezmoihooks/post-init.ps1
 {{- end }}
 
 data:

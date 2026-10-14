@@ -1,7 +1,7 @@
 {{- if not .vm }}
 - "jeanp413.open-remote-ssh"
 {{- end }}
-{{- if not (and (eq .chezmoi.os "windows") (eq .chezmoi.arch .arm64)) }}
+{{- if not (and (eq .chezmoi.os "windows") (eq .chezmoi.arch "arm64")) }}
 - "vadimcn.vscode-lldb"
 {{- end }}
 - "akamud.vscode-theme-onedark"

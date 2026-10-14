@@ -1,0 +1,15 @@
+{{ $shortcuts := `C:\Users\Public\Desktop\*.lnk` -}}
+{{ $system := (includeTemplate "registry.yml.tmpl" . | fromYaml).system -}}
+{{ template "helpers.ps1.tmpl" . -}}
+
+Elevate
+
+Remove-Item -Path '{{ $shortcuts }}'
+
+{{ range $system.remove -}}
+  Remove-Item -LiteralPath '{{ . }}' -Recurse -ErrorAction Ignore
+{{ end -}}
+
+{{ range $system.modify -}}
+  Set-RegistryValue -Path '{{ .path }}' -Name '{{ .name }}' -Type '{{ .type }}' -Value '{{ .value | toString | trim }}'
+{{ end -}}
