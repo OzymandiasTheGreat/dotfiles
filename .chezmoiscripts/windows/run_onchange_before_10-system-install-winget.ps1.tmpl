@@ -56,7 +56,8 @@ function Remove-AppxApp {
     "--quiet"
     "--norestart"
     "--removeOos true"
-    "--add Microsoft.VisualStudio.Component.Windows11SDK.26100"
+    "--add Microsoft.VisualStudio.Component.Windows10SDK"
+    "--add Microsoft.VisualStudio.Component.Windows11SDK.28000"
   -}}
   {{ if eq .chezmoi.arch "arm64" -}}
     {{ $arguments = append $arguments "--add Microsoft.VisualStudio.Component.VC.Tools.ARM64" -}}
