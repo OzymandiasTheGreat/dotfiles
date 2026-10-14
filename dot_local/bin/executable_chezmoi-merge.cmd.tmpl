@@ -36,7 +36,7 @@ function Merge-Template {
 
 # chezmoi passes forward slashes, $HOME has backslashes
 $Path = $Destination -replace '\\', '/'
-$Parent = [regex]::Escape($HOME -replace '\\', '/') + '/[ a-zA-Z0-9/._-]+'
+$Parent = [regex]::Escape(($HOME -replace '\\', '/')) + '/[ a-zA-Z0-9/._-]+'
 
 if ($Path -match '\.(avif|bmp|gif|heic|heif|ico|icns|jpeg|jpg|kdbx|png|psd|xcf|tiff|tif|webp)$') {
   Copy-Item -LiteralPath $Destination -Destination $Source -Force
