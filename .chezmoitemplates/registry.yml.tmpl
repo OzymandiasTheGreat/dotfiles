@@ -246,11 +246,7 @@ system:
     - path: 'HKLM:\SOFTWARE\Microsoft\PolicyManager\current\device\Start'
       name: ConfigureStartPins
       type: String
-      value: |
-        {
-          "applyOnce": false,
-          "pinnedList": []
-        }
+      value: '{"applyOnce":false,"pinnedList":[]}'
 
 # {{ $policySystem := `'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System'` }}
     - path: {{ $policySystem }}
