@@ -1,23 +1,22 @@
 $prompt = ""
 function Invoke-Starship-PreCommand {
-    $current_location = $executionContext.SessionState.Path.CurrentLocation
-    if ($current_location.Provider.Name -eq "FileSystem") {
-        $ansi_escape = [char]27
-        $provider_path = $current_location.ProviderPath -replace "\\", "/"
-        $prompt = "$ansi_escape]7;file://${env:COMPUTERNAME}/${provider_path}$ansi_escape\"
-    }
-    $host.ui.Write($prompt)
+  $current_location = $executionContext.SessionState.Path.CurrentLocation
+  if ($current_location.Provider.Name -eq "FileSystem") {
+    $ansi_escape = [char]27
+    $provider_path = $current_location.ProviderPath -replace "\\", "/"
+    $prompt = "$ansi_escape]7;file://${env:COMPUTERNAME}/${provider_path}$ansi_escape\"
+  }
+  $host.ui.Write($prompt)
 }
 
-$vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
 if (Test-Path $vswhere) {
-    $vsPath = & $vswhere -latest -products * -property installationPath
-    if ($vsPath) {
-        $arch = if ($env:PROCESSOR_ARCHITEW6432) { $env:PROCESSOR_ARCHITEW6432 } else { $env:PROCESSOR_ARCHITECTURE }
-        $arch = $arch.ToLower()
-        Import-Module "$vsPath\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
-        Enter-VsDevShell -VsInstallPath $vsPath -SkipAutomaticLocation -DevCmdArguments "-Arch $arch -HostArch $arch -NoLogo"
-    }
+  $vsPath = & $vswhere -latest -products * -property installationPath
+  if ($vsPath) {
+    $Identifier = Get-ItemPropertyValue -Path "HKLM:\HARDWARE\DESCRIPTION\System\CentralProcessor\0" -Name "Identifier"
+    $Arch = if ($Identifier -like "*ARM*") { "arm64" } else { "amd64" }
+    Import-Module "$vsPath\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
+    Enter-VsDevShell -VsInstallPath $vsPath -SkipAutomaticLocation -DevCmdArguments "-arch=$Arch -host_arch=$Arch -no_logo"
+  }
 }
 
 Invoke-Expression (&starship init powershell)
