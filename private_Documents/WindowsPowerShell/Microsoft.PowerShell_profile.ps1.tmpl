@@ -15,7 +15,7 @@ if (Test-Path $vswhere) {
     if ($vsPath) {
         $arch = $env:PROCESSOR_ARCHITECTURE.ToLower()
         Import-Module "$vsPath\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
-        Enter-VsDevShell -VsInstallPath $vsPath -SkipAutomaticLocation -DevCmdArguments "-arch=$arch -host_arch=$arch" # -no_logo"
+        Enter-VsDevShell -VsInstallPath $vsPath -SkipAutomaticLocation -DevCmdArguments "-Arch=$arch" # host_arch=$arch no_logo"
     }
 }
 
