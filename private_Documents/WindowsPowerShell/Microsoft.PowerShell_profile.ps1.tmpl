@@ -9,6 +9,7 @@ function Invoke-Starship-PreCommand {
   $host.ui.Write($prompt)
 }
 
+$vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
 if (Test-Path $vswhere) {
   $vsPath = & $vswhere -latest -products * -property installationPath
   if ($vsPath) {
